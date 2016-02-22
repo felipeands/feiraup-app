@@ -3215,6 +3215,7 @@
 	    }
 	    MyApp = __decorate([
 	        ionic_1.App({
+	            // templateUrl: 'build/app.html',
 	            template: '<ion-nav [root]="rootPage"></ion-nav>',
 	            config: {} // http://ionicframework.com/docs/v2/api/config/Config/
 	        }), 
