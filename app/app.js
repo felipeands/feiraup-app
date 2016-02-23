@@ -1,24 +1,25 @@
-import {App, IonicApp, Platform} from 'ionic/ionic';
-import {TabsPage} from './pages/tabs/tabs';
-// import {Http} from 'angular2/http';
+import {App, IonicApp, Platform} from 'ionic-framework/ionic';
+import {Inject} from 'angular2/core';
+import {LocationPage} from './pages/location/location';
 
 
 @App({
-  // templateUrl: 'build/app.html',
-  template: '<ion-nav [root]="rootPage"></ion-nav>',
-  config: {} // http://ionicframework.com/docs/v2/api/config/Config/
+  template: '<ion-nav [root]="rootPage" swipe-back-enabled="false"></ion-nav>',
+  config: {
+    // mode: 'ios'
+  } // http://ionicframework.com/docs/v2/api/config/Config/
 })
 export class MyApp {
-  constructor(platform: Platform) {
-    this.rootPage = TabsPage;
 
-    // this.http = http;
+  constructor(app: IonicApp, @Inject(Platform) platform) {
 
+    this.app = app;
+    this.rootPage = LocationPage;
+
+    // root.config.set('ios','url','teste');
+    // alert(platform.config.get('url'));
 
     platform.ready().then(() => {
-
-      // this.http.get('teste.json').subscribe((res:Response) => console.log(res) );
-      // console.log('get');
       // The platform is now ready. Note: if this callback fails to fire, follow
       // the Troubleshooting guide for a number of possible solutions:
       //
@@ -35,5 +36,4 @@ export class MyApp {
       // StatusBar.setStyle(StatusBar.LIGHT_CONTENT)
     });
   }
-
 }

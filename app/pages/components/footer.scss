@@ -1,0 +1,36 @@
+footer {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+
+  [fab-center] {
+    position: absolute;
+    margin-left: -37px;
+    top: -34px;
+    border-radius: 50%;
+    min-height: 70px;
+    font-size: 26px;
+    background: rgba(255,255,255,1);
+  }
+
+  [fab-left] {
+    // padding-left: 0;
+    left: 0px;
+  }
+
+  [fab-right] {
+    position: absolute;
+    // padding-right: 0;
+    right: 3px;
+  }
+
+  .toolbar {
+    overflow: initial;
+  }
+
+  .toolbar-background {
+    // background: none;
+    // border: none;
+  }
+
+}

@@ -1,34 +1,28 @@
-import {Page} from 'ionic/ionic';
-import {PlaceModel} from '../../models/place-model';
-import {Settings} from '../../settings';
-// import {Http} from 'angular2/http';
+import {Page} from 'ionic-framework/ionic';
+import {Http, HTTP_PROVIDERS, Response} from 'angular2/http';
+// import {Settings} from './../../settings';
 
 @Page({
   templateUrl: 'build/pages/page1/page1.html'
 })
+
 export class Page1 {
-  constructor() {
+  constructor(http: Http) {
+    this.http = http;
 
-    // this.http = http;
+    // this.settings = new Settings();
 
-    var place = new PlaceModel('nova feira');
+    // var url = this.settings.url;
 
-    place.getAll();
+    // alert(url);
 
-    this.doGet();
+    fetch('http://feiraup.ngrok.com/testes', {
+      method: 'get'
+    }).then(function(response) {
+      console.log('respondeu');
+    }).catch(function(err) {
+      console.log('erro');
+    })
 
-    // var item = {name: 'opa'};
-
-    // place.addItem(item);
-
-    // console.log(Settings.url);
-
-    // console.log(place);
-
-    // console.log('PAGE 1');
-  }
-
-  doGet() {
-    // this.http.get('teste.json').subscribe((res:Response) => console.log(res) );
   }
 }
