@@ -2,23 +2,25 @@ footer {
   position: fixed;
   bottom: 0;
   width: 100%;
+  z-index: 99;
 
-  [fab-center] {
+  button:nth-child(2) {
     position: absolute;
-    margin-left: -37px;
+    margin-left: -45px;
     top: -34px;
+    left: 50%;
     border-radius: 50%;
-    min-height: 70px;
-    font-size: 26px;
+    min-height: 80px;
+    font-size: 2em;
     background: rgba(255,255,255,1);
   }
 
-  [fab-left] {
+  button:nth-child(1) {
     // padding-left: 0;
     left: 0px;
   }
 
-  [fab-right] {
+  button:nth-child(3) {
     position: absolute;
     // padding-right: 0;
     right: 3px;

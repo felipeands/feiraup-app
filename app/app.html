@@ -1,0 +1,7 @@
+<ion-nav id="nav" [root]="root" #content swipe-back-enabled="false"></ion-nav>
+
+<footer>
+  <ion-toolbar position="bottom">
+    <button clear master *ngFor="#p of footerPages" (click)="openPage(p)"><ion-icon [name]="p.icon"></ion-icon>{{p.title}}</button>
+  </ion-toolbar>
+</footer>

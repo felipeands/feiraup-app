@@ -1,39 +1,49 @@
-import {App, IonicApp, Platform} from 'ionic-framework/ionic';
+import {App, IonicApp, Events} from 'ionic-framework/ionic';
+import {NavController} from 'ionic-framework/ionic';
 import {Inject} from 'angular2/core';
+import {RandomPage} from './pages/random/random';
+import {CartPage} from './pages/cart/cart';
 import {LocationPage} from './pages/location/location';
 
 
 @App({
-  template: '<ion-nav [root]="rootPage" swipe-back-enabled="false"></ion-nav>',
+  templateUrl: './build/app.html',
+  // template: '<ion-nav [root]="rootPage" swipe-back-enabled="false"></ion-nav>',
+  prodivers: [],
   config: {
     // mode: 'ios'
   } // http://ionicframework.com/docs/v2/api/config/Config/
 })
+
 export class MyApp {
 
-  constructor(app: IonicApp, @Inject(Platform) platform) {
+  static get parameters() {
+    return [[IonicApp], [Events]]
+  }
 
+  constructor(app, events) {
     this.app = app;
-    this.rootPage = LocationPage;
+    this.events = events;
+    this.loggedIn = false;
+
+    this.root = LocationPage;
+
+    this.footerPages = [
+      {title: 'Aleatório', component: RandomPage, icon: 'sync', fab: 'fab-left'},
+      {title: '', component: CartPage, icon: 'cart', fab: 'fab-center'},
+      {title: 'Localização', component: LocationPage, icon: 'navigate', fab: 'fab-right'}
+    ];
 
     // root.config.set('ios','url','teste');
     // alert(platform.config.get('url'));
 
-    platform.ready().then(() => {
-      // The platform is now ready. Note: if this callback fails to fire, follow
-      // the Troubleshooting guide for a number of possible solutions:
-      //
-      // Okay, so the platform is ready and our plugins are available.
-      // Here you can do any higher level native things you might need.
-      //
-      // First, let's hide the keyboard accessory bar (only works natively) since
-      // that's a better default:
-      //
-      // Keyboard.setAccessoryBarVisible(false);
-      //
-      // For example, we might change the StatusBar color. This one below is
-      // good for dark backgrounds and light text:
-      // StatusBar.setStyle(StatusBar.LIGHT_CONTENT)
-    });
+    // platform.ready().then(() => {
+
+    // });
+  }
+
+  openPage(page) {
+    let nav = this.app.getComponent('nav');
+    nav.setRoot(page.component);
   }
 }

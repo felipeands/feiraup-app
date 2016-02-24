@@ -1,5 +1,4 @@
 import {Page} from 'ionic-framework/ionic';
-import {Component} from 'angular2/core';
 import {Footer} from '../components/footer';
 
 @Page ({
@@ -10,6 +9,6 @@ import {Footer} from '../components/footer';
 export class LocationPage {
   constructor() {
     // this.footer = footer;
-    console.log('run');
+    // console.log('run');
   }
 }
