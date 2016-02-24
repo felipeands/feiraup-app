@@ -9604,18 +9604,20 @@ body {
 footer {
   position: fixed;
   bottom: 0;
-  width: 100%; }
-  footer [fab-center] {
+  width: 100%;
+  z-index: 99; }
+  footer button:nth-child(2) {
     position: absolute;
-    margin-left: -37px;
+    margin-left: -45px;
     top: -34px;
+    left: 50%;
     border-radius: 50%;
-    min-height: 70px;
-    font-size: 26px;
+    min-height: 80px;
+    font-size: 2em;
     background: white; }
-  footer [fab-left] {
+  footer button:nth-child(1) {
     left: 0px; }
-  footer [fab-right] {
+  footer button:nth-child(3) {
     position: absolute;
     right: 3px; }
   footer .toolbar {

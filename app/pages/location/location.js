@@ -1,9 +1,7 @@
 import {Page} from 'ionic-framework/ionic';
-import {Footer} from '../components/footer';
 
 @Page ({
-  templateUrl: 'build/pages/location/location.html',
-  directives: [Footer]
+  templateUrl: 'build/pages/location/location.html'
 })
 
 export class LocationPage {

@@ -1,3 +1,33 @@
-<ion-content>
-  <footer></footer>
+<ion-navbar *navbar>
+  <button menuToggle>
+    <ion-icon name="menu"></ion-icon>
+  </button>
+  <ion-title>Localização</ion-title>
+</ion-navbar>
+
+<ion-content padding class="location">
+
+  <p>Escolha a localização</p>
+
+  <ion-list>
+    <ion-item>
+      <ion-label>Cidade</ion-label>
+      <ion-select [(ngModel)]="city">
+        <ion-option value="1">Goiânia</ion-option>
+        <ion-option value="2">Brasília</ion-option>
+      </ion-select>
+    </ion-item>
+
+    <ion-item>
+      <ion-label>Local</ion-label>
+      <ion-select [(ngModel)]="place">
+        <ion-option value="1">Feira Hippie</ion-option>
+        <ion-option value="2">Feira da Estação</ion-option>
+      </ion-select>
+    </ion-item>
+
+  </ion-list>
+
+      <button block large>ATUALIZAR</button>
+
 </ion-content>

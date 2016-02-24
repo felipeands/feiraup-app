@@ -3,7 +3,7 @@
     <preference name="loglevel" value="DEBUG" />
     <allow-intent href="market:*" />
     <name>FEIRA UP</name>
-    <description>An Ionic Framework and Cordova project.</description>
+    <description>Encontre o que deseja para sua próxima viagem.</description>
     <author email="felipe.andrada@gmail.com" href="http://felipeandrada.com.br/">Felipe A</author>
     <content src="index.html" />
     <access origin="*" />

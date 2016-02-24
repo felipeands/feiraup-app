@@ -1,4 +1,4 @@
-import {App, IonicApp, Events} from 'ionic-framework/ionic';
+import {App, IonicApp, Events, Platform} from 'ionic-framework/ionic';
 import {NavController} from 'ionic-framework/ionic';
 import {Inject} from 'angular2/core';
 import {RandomPage} from './pages/random/random';

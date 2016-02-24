@@ -3184,42 +3184,45 @@
 	var __metadata = (this && this.__metadata) || function (k, v) {
 	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 	};
-	var __param = (this && this.__param) || function (paramIndex, decorator) {
-	    return function (target, key) { decorator(target, key, paramIndex); }
-	};
 	var ionic_1 = __webpack_require__(5);
-	var core_1 = __webpack_require__(7);
-	var location_1 = __webpack_require__(358);
+	var random_1 = __webpack_require__(358);
+	var cart_1 = __webpack_require__(359);
+	var location_1 = __webpack_require__(360);
 	var MyApp = (function () {
-	    function MyApp(app, platform) {
+	    function MyApp(app, events) {
 	        this.app = app;
-	        this.rootPage = location_1.LocationPage;
+	        this.events = events;
+	        this.loggedIn = false;
+	        this.root = location_1.LocationPage;
+	        this.footerPages = [
+	            { title: 'Aleatório', component: random_1.RandomPage, icon: 'sync', fab: 'fab-left' },
+	            { title: '', component: cart_1.CartPage, icon: 'cart', fab: 'fab-center' },
+	            { title: 'Localização', component: location_1.LocationPage, icon: 'navigate', fab: 'fab-right' }
+	        ];
 	        // root.config.set('ios','url','teste');
 	        // alert(platform.config.get('url'));
-	        platform.ready().then(function () {
-	            // The platform is now ready. Note: if this callback fails to fire, follow
-	            // the Troubleshooting guide for a number of possible solutions:
-	            //
-	            // Okay, so the platform is ready and our plugins are available.
-	            // Here you can do any higher level native things you might need.
-	            //
-	            // First, let's hide the keyboard accessory bar (only works natively) since
-	            // that's a better default:
-	            //
-	            // Keyboard.setAccessoryBarVisible(false);
-	            //
-	            // For example, we might change the StatusBar color. This one below is
-	            // good for dark backgrounds and light text:
-	            // StatusBar.setStyle(StatusBar.LIGHT_CONTENT)
-	        });
+	        // platform.ready().then(() => {
+	        // });
 	    }
+	    Object.defineProperty(MyApp, "parameters", {
+	        get: function () {
+	            return [[ionic_1.IonicApp], [ionic_1.Events]];
+	        },
+	        enumerable: true,
+	        configurable: true
+	    });
+	    MyApp.prototype.openPage = function (page) {
+	        var nav = this.app.getComponent('nav');
+	        nav.setRoot(page.component);
+	    };
 	    MyApp = __decorate([
 	        ionic_1.App({
-	            template: '<ion-nav [root]="rootPage" swipe-back-enabled="false"></ion-nav>',
+	            templateUrl: './build/app.html',
+	            // template: '<ion-nav [root]="rootPage" swipe-back-enabled="false"></ion-nav>',
+	            prodivers: [],
 	            config: {} // http://ionicframework.com/docs/v2/api/config/Config/
-	        }),
-	        __param(1, core_1.Inject(ionic_1.Platform)), 
-	        __metadata('design:paramtypes', [ionic_1.IonicApp, Object])
+	        }), 
+	        __metadata('design:paramtypes', [Object, Object])
 	    ], MyApp);
 	    return MyApp;
 	})();
@@ -62141,22 +62144,31 @@
 	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 	};
 	var ionic_1 = __webpack_require__(5);
-	var footer_1 = __webpack_require__(359);
-	var LocationPage = (function () {
-	    function LocationPage() {
-	        // this.footer = footer;
-	        console.log('run');
+	// import {Footer} from '../components/footer';
+	// import {Http, HTTP_PROVIDERS, Response} from 'angular2/http';
+	var RandomPage = (function () {
+	    function RandomPage() {
+	        // this.http = http;
+	        // this.settings = new Settings();
+	        // var url = this.settings.url;
+	        // alert(url);
+	        // fetch('http://feiraup.ngrok.com/testes', {
+	        //   method: 'get'
+	        // }).then(function(response) {
+	        //   console.log('respondeu');
+	        // }).catch(function(err) {
+	        //   console.log('erro');
+	        // })
 	    }
-	    LocationPage = __decorate([
+	    RandomPage = __decorate([
 	        ionic_1.Page({
-	            templateUrl: 'build/pages/location/location.html',
-	            directives: [footer_1.Footer]
+	            templateUrl: 'build/pages/random/random.html',
 	        }), 
 	        __metadata('design:paramtypes', [])
-	    ], LocationPage);
-	    return LocationPage;
+	    ], RandomPage);
+	    return RandomPage;
 	})();
-	exports.LocationPage = LocationPage;
+	exports.RandomPage = RandomPage;
 
 
 /***/ },
@@ -62173,29 +62185,69 @@
 	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 	};
 	var ionic_1 = __webpack_require__(5);
-	var core_1 = __webpack_require__(7);
-	// @View ({
-	//   template: `foooter`
-	// })
-	var Footer = (function () {
-	    function Footer() {
+	// import {Footer} from '../components/footer';
+	// import {Http, HTTP_PROVIDERS, Response} from 'angular2/http';
+	var CartPage = (function () {
+	    function CartPage(nav) {
+	        this.nav = nav;
+	        // this.http = http;
+	        // this.settings = new Settings();
+	        // var url = this.settings.url;
+	        // alert(url);
+	        // fetch('http://feiraup.ngrok.com/testes', {
+	        //   method: 'get'
+	        // }).then(function(response) {
+	        //   console.log('respondeu');
+	        // }).catch(function(err) {
+	        //   console.log('erro');
+	        // })
 	    }
-	    Footer = __decorate([
-	        core_1.Component({
-	            selector: 'footer',
-	            template: "\n  <ion-toolbar *navbar position=\"bottom\">\n    <button fab-left clear master><ion-icon name=\"sync\"></ion-icon>Aleat\u00F3rio</button>\n    <button fab-center fab-top master outline round large><ion-icon name=\"cart\"></ion-icon></button>\n    <button fab-right clear master><ion-icon name=\"navigate\"></ion-icon>Localiza\u00E7\u00E3o</button>\n  </ion-toolbar>\n  ",
-	            directives: [ionic_1.IONIC_DIRECTIVES]
+	    Object.defineProperty(CartPage, "parameters", {
+	        get: function () {
+	            return [[ionic_1.NavController]];
+	        },
+	        enumerable: true,
+	        configurable: true
+	    });
+	    CartPage = __decorate([
+	        ionic_1.Page({
+	            templateUrl: 'build/pages/cart/cart.html',
+	        }), 
+	        __metadata('design:paramtypes', [Object])
+	    ], CartPage);
+	    return CartPage;
+	})();
+	exports.CartPage = CartPage;
+
+
+/***/ },
+/* 360 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+	    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+	    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+	    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+	    return c > 3 && r && Object.defineProperty(target, key, r), r;
+	};
+	var __metadata = (this && this.__metadata) || function (k, v) {
+	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+	};
+	var ionic_1 = __webpack_require__(5);
+	var LocationPage = (function () {
+	    function LocationPage() {
+	        // this.footer = footer;
+	        // console.log('run');
+	    }
+	    LocationPage = __decorate([
+	        ionic_1.Page({
+	            templateUrl: 'build/pages/location/location.html'
 	        }), 
 	        __metadata('design:paramtypes', [])
-	    ], Footer);
-	    return Footer;
+	    ], LocationPage);
+	    return LocationPage;
 	})();
-	exports.Footer = Footer;
-	(function () {
-	    constructor();
-	    {
-	    }
-	});
+	exports.LocationPage = LocationPage;
 
 
 /***/ }

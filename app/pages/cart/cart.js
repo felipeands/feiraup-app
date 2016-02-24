@@ -1,4 +1,4 @@
-import {Page} from 'ionic-framework/ionic';
+import {NavController, Page} from 'ionic-framework/ionic';
 // import {Footer} from '../components/footer';
 // import {Http, HTTP_PROVIDERS, Response} from 'angular2/http';
 
@@ -8,7 +8,14 @@ import {Page} from 'ionic-framework/ionic';
 })
 
 export class CartPage {
-  constructor() {
+
+  static get parameters() {
+    return [[NavController]];
+  }
+
+  constructor(nav) {
+
+    this.nav = nav;
     // this.http = http;
 
     // this.settings = new Settings();
