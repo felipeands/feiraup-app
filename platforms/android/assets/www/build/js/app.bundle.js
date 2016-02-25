@@ -3220,7 +3220,9 @@
 	            templateUrl: './build/app.html',
 	            // template: '<ion-nav [root]="rootPage" swipe-back-enabled="false"></ion-nav>',
 	            prodivers: [],
-	            config: {} // http://ionicframework.com/docs/v2/api/config/Config/
+	            config: {
+	                mode: 'md'
+	            } // http://ionicframework.com/docs/v2/api/config/Config/
 	        }), 
 	        __metadata('design:paramtypes', [Object, Object])
 	    ], MyApp);

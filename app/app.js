@@ -11,7 +11,7 @@ import {LocationPage} from './pages/location/location';
   // template: '<ion-nav [root]="rootPage" swipe-back-enabled="false"></ion-nav>',
   prodivers: [],
   config: {
-    // mode: 'ios'
+    mode: 'md'
   } // http://ionicframework.com/docs/v2/api/config/Config/
 })
 

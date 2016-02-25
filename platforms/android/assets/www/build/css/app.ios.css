@@ -7646,6 +7646,12 @@ body {
   font-size: 1.4rem;
   background-color: #fff; }
 
+.platform-ios footer button:nth-child(2) {
+  font-size: 1.5em;
+  min-height: 65px;
+  margin-left: -40px;
+  top: -25px; }
+
 footer {
   position: fixed;
   bottom: 0;
@@ -7653,13 +7659,14 @@ footer {
   z-index: 99; }
   footer button:nth-child(2) {
     position: absolute;
-    margin-left: -45px;
-    top: -34px;
+    margin-left: -40px;
+    top: -40px;
     left: 50%;
     border-radius: 50%;
     min-height: 80px;
     font-size: 2em;
-    background: white; }
+    background: white;
+    border: 1px solid #387ef5; }
   footer button:nth-child(1) {
     left: 0px; }
   footer button:nth-child(3) {
