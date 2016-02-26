@@ -5,11 +5,12 @@ import {RandomPage} from './pages/random/random';
 import {CartPage} from './pages/cart/cart';
 import {LocationPage} from './pages/location/location';
 import {CityData} from './services/city-data';
+import {PlaceData} from './services/place-data';
 
 
 @App({
   templateUrl: './build/app.html',
-  providers: [CityData],
+  providers: [CityData, PlaceData],
   config: {
     mode: 'md'
   }

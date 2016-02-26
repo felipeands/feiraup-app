@@ -12,16 +12,15 @@
   <ion-list>
     <ion-item>
       <ion-label>Cidade</ion-label>
-      <ion-select [(ngModel)]="city">
+      <ion-select [(ngModel)]="cityModel" (change)="onUpdateCity()">
         <ion-option *ngFor="#c of cities" [value]="c.id">{{c.name}}</ion-option>
       </ion-select>
     </ion-item>
 
     <ion-item>
       <ion-label>Local</ion-label>
-      <ion-select [(ngModel)]="place">
-        <ion-option value="1">Feira Hippie</ion-option>
-        <ion-option value="2">Feira da Estação</ion-option>
+      <ion-select [(ngModel)]="placeModel" [disabled]="!currentCity">
+        <ion-option *ngFor="#p of places" [value]="p.id">{{p.name}}</ion-option>
       </ion-select>
     </ion-item>
 

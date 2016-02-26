@@ -2,7 +2,7 @@ import {Injectable, Inject} from 'angular2/core';
 import {Http} from 'angular2/http';
 
 @Injectable()
-export class CityData {
+export class PlaceData {
 
   static get parameters() {
     return [[Http]];
@@ -12,13 +12,13 @@ export class CityData {
     this.http = http;
   }
 
-  load() {
+  loadFromCity(city_id) {
     if (this.data) {
-      return Promise.resolve(this.data);
+      // return Promise.resolve(this.data);
     }
 
     return new Promise(resolve => {
-      this.http.get('http://feiraup.ngrok.com/cities').subscribe(res => {
+      this.http.get('http://feiraup.ngrok.com/places/city/'+ city_id).subscribe(res => {
         this.data = this.processData(res.json());
         resolve(this.data);
       });
@@ -29,9 +29,9 @@ export class CityData {
     return data;
   }
 
-  getCities() {
-    return this.load().then(data => {
-      return data.cities;
+  getPlacesFromCity(city_id) {
+    return this.loadFromCity(city_id).then(data => {
+      return data.places;
     });
   }
 
