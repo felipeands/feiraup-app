@@ -5,7 +5,7 @@ import {Http} from 'angular2/http';
 export class CityData {
 
   static get parameters() {
-    return [[Http], [UserData]];
+    return [[Http]];
   }
 
   constructor(http) {
@@ -18,7 +18,7 @@ export class CityData {
     }
 
     return new Promise(resolve => {
-      this.http.get('http://feiraup.ngrok.com').subscribe(res => {
+      this.http.get('http://feiraup.ngrok.com/cities').subscribe(res => {
         this.data = this.processData(res.json());
         resolve(this.data);
       });
@@ -26,7 +26,15 @@ export class CityData {
   }
 
   processData(data) {
+    return data;
+  }
 
+  getCities() {
+    return this.load().then(data => {
+      // console.log(data);
+      return data.cities;
+      // return data.
+    });
   }
 
 }

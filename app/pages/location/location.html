@@ -13,8 +13,7 @@
     <ion-item>
       <ion-label>Cidade</ion-label>
       <ion-select [(ngModel)]="city">
-        <ion-option value="1">Goiânia</ion-option>
-        <ion-option value="2">Brasília</ion-option>
+        <ion-option *ngFor="#c of cities" [value]="c.id">{{c.name}}</ion-option>
       </ion-select>
     </ion-item>
 

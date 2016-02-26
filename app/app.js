@@ -4,24 +4,24 @@ import {Inject} from 'angular2/core';
 import {RandomPage} from './pages/random/random';
 import {CartPage} from './pages/cart/cart';
 import {LocationPage} from './pages/location/location';
+import {CityData} from './services/city-data';
 
 
 @App({
   templateUrl: './build/app.html',
-  // template: '<ion-nav [root]="rootPage" swipe-back-enabled="false"></ion-nav>',
-  prodivers: [],
+  providers: [CityData],
   config: {
     mode: 'md'
-  } // http://ionicframework.com/docs/v2/api/config/Config/
+  }
 })
 
 export class MyApp {
 
   static get parameters() {
-    return [[IonicApp], [Events]]
+    return [[IonicApp], [Events], [CityData]];
   }
 
-  constructor(app, events) {
+  constructor(app, events, cityData) {
     this.app = app;
     this.events = events;
     this.loggedIn = false;
@@ -33,13 +33,6 @@ export class MyApp {
       {title: '', component: CartPage, icon: 'cart', fab: 'fab-center'},
       {title: 'Localização', component: LocationPage, icon: 'navigate', fab: 'fab-right'}
     ];
-
-    // root.config.set('ios','url','teste');
-    // alert(platform.config.get('url'));
-
-    // platform.ready().then(() => {
-
-    // });
   }
 
   openPage(page) {
