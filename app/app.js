@@ -26,6 +26,7 @@ export class MyApp {
     this.app = app;
     this.events = events;
     this.loggedIn = false;
+    this.cityData = cityData;
 
     this.root = LocationPage;
 
@@ -37,6 +38,7 @@ export class MyApp {
   }
 
   openPage(page) {
+    console.log(this.cityData.getCurrent());
     let nav = this.app.getComponent('nav');
     nav.setRoot(page.component);
   }

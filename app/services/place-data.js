@@ -12,13 +12,13 @@ export class PlaceData {
     this.http = http;
   }
 
-  loadFromCity(city_id) {
+  loadFromCity(cityId) {
     if (this.data) {
       // return Promise.resolve(this.data);
     }
 
     return new Promise(resolve => {
-      this.http.get('http://feiraup.ngrok.com/places/city/'+ city_id).subscribe(res => {
+      this.http.get('http://feiraup.ngrok.com/places/city/' + cityId).subscribe(res => {
         this.data = this.processData(res.json());
         resolve(this.data);
       });
@@ -29,8 +29,8 @@ export class PlaceData {
     return data;
   }
 
-  getPlacesFromCity(city_id) {
-    return this.loadFromCity(city_id).then(data => {
+  getPlacesFromCity(cityId) {
+    return this.loadFromCity(cityId).then(data => {
       return data.places;
     });
   }

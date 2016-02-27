@@ -1,4 +1,5 @@
 import {Injectable, Inject} from 'angular2/core';
+import {Storage, LocalStorage, Events} from 'ionic-framework/ionic';
 import {Http} from 'angular2/http';
 
 @Injectable()
@@ -10,6 +11,8 @@ export class CityData {
 
   constructor(http) {
     this.http = http;
+    this.storage = new Storage(LocalStorage);
+    this.cityId = false;
   }
 
   load() {
@@ -32,6 +35,17 @@ export class CityData {
   getCities() {
     return this.load().then(data => {
       return data.cities;
+    });
+  }
+
+  setCurrent(cityId) {
+    this.cityId = cityId;
+    this.storage.set('cityId', cityId);
+  }
+
+  getCurrent() {
+    this.storage.get('cityId').then((cityId) => {
+      return cityId;
     });
   }
 

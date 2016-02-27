@@ -3188,8 +3188,10 @@
 	var random_1 = __webpack_require__(358);
 	var cart_1 = __webpack_require__(359);
 	var location_1 = __webpack_require__(360);
+	var city_data_1 = __webpack_require__(361);
+	var place_data_1 = __webpack_require__(362);
 	var MyApp = (function () {
-	    function MyApp(app, events) {
+	    function MyApp(app, events, cityData) {
 	        this.app = app;
 	        this.events = events;
 	        this.loggedIn = false;
@@ -3199,14 +3201,10 @@
 	            { title: '', component: cart_1.CartPage, icon: 'cart', fab: 'fab-center' },
 	            { title: 'Localização', component: location_1.LocationPage, icon: 'navigate', fab: 'fab-right' }
 	        ];
-	        // root.config.set('ios','url','teste');
-	        // alert(platform.config.get('url'));
-	        // platform.ready().then(() => {
-	        // });
 	    }
 	    Object.defineProperty(MyApp, "parameters", {
 	        get: function () {
-	            return [[ionic_1.IonicApp], [ionic_1.Events]];
+	            return [[ionic_1.IonicApp], [ionic_1.Events], [city_data_1.CityData]];
 	        },
 	        enumerable: true,
 	        configurable: true
@@ -3218,13 +3216,12 @@
 	    MyApp = __decorate([
 	        ionic_1.App({
 	            templateUrl: './build/app.html',
-	            // template: '<ion-nav [root]="rootPage" swipe-back-enabled="false"></ion-nav>',
-	            prodivers: [],
+	            providers: [city_data_1.CityData, place_data_1.PlaceData],
 	            config: {
 	                mode: 'md'
-	            } // http://ionicframework.com/docs/v2/api/config/Config/
+	            }
 	        }), 
-	        __metadata('design:paramtypes', [Object, Object])
+	        __metadata('design:paramtypes', [Object, Object, Object])
 	    ], MyApp);
 	    return MyApp;
 	})();
@@ -62236,20 +62233,160 @@
 	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 	};
 	var ionic_1 = __webpack_require__(5);
+	var city_data_1 = __webpack_require__(361);
+	var place_data_1 = __webpack_require__(362);
 	var LocationPage = (function () {
-	    function LocationPage() {
-	        // this.footer = footer;
-	        // console.log('run');
+	    function LocationPage(cityData, placeData) {
+	        this.cityData = cityData;
+	        this.cities = [];
+	        this.currentCity = false;
+	        this.placeData = placeData;
+	        this.places = [];
+	        this.currentPlace = false;
+	        this.loadCities();
 	    }
+	    Object.defineProperty(LocationPage, "parameters", {
+	        get: function () {
+	            return [[city_data_1.CityData], [place_data_1.PlaceData]];
+	        },
+	        enumerable: true,
+	        configurable: true
+	    });
+	    LocationPage.prototype.loadCities = function () {
+	        var _this = this;
+	        this.cityData.getCities().then(function (cities) {
+	            _this.cities = cities;
+	        });
+	    };
+	    LocationPage.prototype.onUpdateCity = function () {
+	        console.log(this.cityModel);
+	        this.currentCity = this.cityModel;
+	        this.loadPlaces();
+	    };
+	    LocationPage.prototype.loadPlaces = function () {
+	        var _this = this;
+	        this.placeData.getPlacesFromCity(this.currentCity).then(function (places) {
+	            _this.places = places;
+	        });
+	    };
 	    LocationPage = __decorate([
 	        ionic_1.Page({
 	            templateUrl: 'build/pages/location/location.html'
 	        }), 
-	        __metadata('design:paramtypes', [])
+	        __metadata('design:paramtypes', [Object, Object])
 	    ], LocationPage);
 	    return LocationPage;
 	})();
 	exports.LocationPage = LocationPage;
+
+
+/***/ },
+/* 361 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+	    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+	    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+	    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+	    return c > 3 && r && Object.defineProperty(target, key, r), r;
+	};
+	var __metadata = (this && this.__metadata) || function (k, v) {
+	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+	};
+	var core_1 = __webpack_require__(7);
+	var http_1 = __webpack_require__(145);
+	var CityData = (function () {
+	    function CityData(http) {
+	        this.http = http;
+	    }
+	    Object.defineProperty(CityData, "parameters", {
+	        get: function () {
+	            return [[http_1.Http]];
+	        },
+	        enumerable: true,
+	        configurable: true
+	    });
+	    CityData.prototype.load = function () {
+	        var _this = this;
+	        if (this.data) {
+	            return Promise.resolve(this.data);
+	        }
+	        return new Promise(function (resolve) {
+	            _this.http.get('http://feiraup.ngrok.com/cities').subscribe(function (res) {
+	                _this.data = _this.processData(res.json());
+	                resolve(_this.data);
+	            });
+	        });
+	    };
+	    CityData.prototype.processData = function (data) {
+	        return data;
+	    };
+	    CityData.prototype.getCities = function () {
+	        return this.load().then(function (data) {
+	            return data.cities;
+	        });
+	    };
+	    CityData = __decorate([
+	        core_1.Injectable(), 
+	        __metadata('design:paramtypes', [Object])
+	    ], CityData);
+	    return CityData;
+	})();
+	exports.CityData = CityData;
+
+
+/***/ },
+/* 362 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+	    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+	    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+	    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+	    return c > 3 && r && Object.defineProperty(target, key, r), r;
+	};
+	var __metadata = (this && this.__metadata) || function (k, v) {
+	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+	};
+	var core_1 = __webpack_require__(7);
+	var http_1 = __webpack_require__(145);
+	var PlaceData = (function () {
+	    function PlaceData(http) {
+	        this.http = http;
+	    }
+	    Object.defineProperty(PlaceData, "parameters", {
+	        get: function () {
+	            return [[http_1.Http]];
+	        },
+	        enumerable: true,
+	        configurable: true
+	    });
+	    PlaceData.prototype.loadFromCity = function (city_id) {
+	        var _this = this;
+	        if (this.data) {
+	        }
+	        return new Promise(function (resolve) {
+	            _this.http.get('http://feiraup.ngrok.com/places/city/' + city_id).subscribe(function (res) {
+	                _this.data = _this.processData(res.json());
+	                resolve(_this.data);
+	            });
+	        });
+	    };
+	    PlaceData.prototype.processData = function (data) {
+	        return data;
+	    };
+	    PlaceData.prototype.getPlacesFromCity = function (city_id) {
+	        return this.loadFromCity(city_id).then(function (data) {
+	            return data.places;
+	        });
+	    };
+	    PlaceData = __decorate([
+	        core_1.Injectable(), 
+	        __metadata('design:paramtypes', [Object])
+	    ], PlaceData);
+	    return PlaceData;
+	})();
+	exports.PlaceData = PlaceData;
 
 
 /***/ }

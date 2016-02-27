@@ -1,4 +1,5 @@
 import {Page} from 'ionic-framework/ionic';
+import {NavController} from 'ionic-framework/ionic';
 import {CityData} from '../../services/city-data';
 import {PlaceData} from '../../services/place-data';
 
@@ -18,7 +19,7 @@ export class LocationPage {
 
     this.cityData = cityData;
     this.cities = [];
-    this.currentCity = false;
+    this.currentCity = this.cityData.getCurrent();
 
     this.placeData = placeData;
     this.places = [];
@@ -35,7 +36,6 @@ export class LocationPage {
   }
 
   onUpdateCity() {
-    console.log(this.cityModel);
     this.currentCity = this.cityModel;
     this.loadPlaces();
   }
@@ -44,5 +44,10 @@ export class LocationPage {
     this.placeData.getPlacesFromCity(this.currentCity).then(places => {
       this.places = places;
     });
+  }
+
+  save() {
+    this.cityData.setCurrent(this.currentCity);
+    // this.placeData.setCurrent(this.currentPlace);
   }
 }
