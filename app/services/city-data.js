@@ -13,17 +13,18 @@ export class CityData {
     this.http = http;
     this.storage = new Storage(LocalStorage);
     this.cityId = false;
+    this.cities = false;
   }
 
   load() {
-    if (this.data) {
-      return Promise.resolve(this.data);
+    if (this.cities) {
+      return Promise.resolve(this.cities);
     }
 
     return new Promise(resolve => {
       this.http.get('http://feiraup.ngrok.com/cities').subscribe(res => {
-        this.data = this.processData(res.json());
-        resolve(this.data);
+        this.cities = this.processData(res.json());
+        resolve(this.cities);
       });
     });
   }

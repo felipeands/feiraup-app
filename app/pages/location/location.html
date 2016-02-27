@@ -19,7 +19,7 @@
 
     <ion-item>
       <ion-label>Local</ion-label>
-      <ion-select [(ngModel)]="placeModel" [disabled]="!currentCity">
+      <ion-select [(ngModel)]="placeModel" [disabled]="!cityModel">
         <ion-option *ngFor="#p of places" [value]="p.id">{{p.name}}</ion-option>
       </ion-select>
     </ion-item>

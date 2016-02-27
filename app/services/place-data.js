@@ -1,4 +1,5 @@
 import {Injectable, Inject} from 'angular2/core';
+import {Storage, LocalStorage, Events} from 'ionic-framework/ionic';
 import {Http} from 'angular2/http';
 
 @Injectable()
@@ -10,17 +11,20 @@ export class PlaceData {
 
   constructor(http) {
     this.http = http;
+    this.storage = new Storage(LocalStorage);
+    this.placeId = false;
+    this.places = [];
   }
 
   loadFromCity(cityId) {
-    if (this.data) {
+    if (this.places) {
       // return Promise.resolve(this.data);
     }
 
     return new Promise(resolve => {
       this.http.get('http://feiraup.ngrok.com/places/city/' + cityId).subscribe(res => {
-        this.data = this.processData(res.json());
-        resolve(this.data);
+        this.places = this.processData(res.json());
+        resolve(this.places);
       });
     });
   }
@@ -32,6 +36,17 @@ export class PlaceData {
   getPlacesFromCity(cityId) {
     return this.loadFromCity(cityId).then(data => {
       return data.places;
+    });
+  }
+
+  setCurrent(placeId) {
+    this.placeId = placeId;
+    this.storage.set('placeId', placeId);
+  }
+
+  getCurrent() {
+    this.storage.get('placeId').then((placeId) => {
+      return placeId;
     });
   }
 

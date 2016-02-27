@@ -18,14 +18,18 @@ export class LocationPage {
   constructor(cityData, placeData) {
 
     this.cityData = cityData;
+    this.cityModel = this.cityData.getCurrent();
     this.cities = [];
-    this.currentCity = this.cityData.getCurrent();
 
     this.placeData = placeData;
+    this.placeModel = this.placeData.getCurrent();
     this.places = [];
-    this.currentPlace = false;
 
     this.loadCities();
+
+    if(this.cityModel) {
+      this.loadPlaces();
+    }
 
   }
 
@@ -36,18 +40,18 @@ export class LocationPage {
   }
 
   onUpdateCity() {
-    this.currentCity = this.cityModel;
+    this.cityModel = this.cityModel;
     this.loadPlaces();
   }
 
   loadPlaces() {
-    this.placeData.getPlacesFromCity(this.currentCity).then(places => {
+    this.placeData.getPlacesFromCity(this.cityModel).then(places => {
       this.places = places;
     });
   }
 
   save() {
-    this.cityData.setCurrent(this.currentCity);
-    // this.placeData.setCurrent(this.currentPlace);
+    this.cityData.setCurrent(this.cityModel);
+    this.placeData.setCurrent(this.currentPlace);
   }
 }
