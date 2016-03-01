@@ -38,7 +38,6 @@ export class MyApp {
   }
 
   openPage(page) {
-    // console.log(this.cityData.getCurrent());
     let nav = this.app.getComponent('nav');
     nav.setRoot(page.component);
   }

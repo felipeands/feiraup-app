@@ -25,13 +25,12 @@ export class LocationPage {
     this.placeData = placeData;
     setTimeout(function(){
         $this.placeModel = $this.placeData.getCurrent();
-      },1000);
+      }, 1300);
     this.places = [];
 
     this.loadCities();
 
     if(this.cityModel) {
-      console.log(this.placeModel);
       this.loadPlaces();
     }
 
@@ -51,6 +50,7 @@ export class LocationPage {
 
   loadPlaces() {
     this.placeData.getPlacesFromCity(this.cityModel).then(places => {
+      this.placeModel = null;
       this.places = places;
     });
   }
@@ -73,7 +73,6 @@ export class LocationPage {
         text: 'OK',
         handler: () => {
           // this.nav.push();
-          // console.log(this.cityData.getCurrent());
         }
       }]
     });

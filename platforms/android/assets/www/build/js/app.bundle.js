@@ -3195,6 +3195,7 @@
 	        this.app = app;
 	        this.events = events;
 	        this.loggedIn = false;
+	        this.cityData = cityData;
 	        this.root = location_1.LocationPage;
 	        this.footerPages = [
 	            { title: 'Aleatório', component: random_1.RandomPage, icon: 'sync', fab: 'fab-left' },
@@ -62236,18 +62237,25 @@
 	var city_data_1 = __webpack_require__(361);
 	var place_data_1 = __webpack_require__(362);
 	var LocationPage = (function () {
-	    function LocationPage(cityData, placeData) {
+	    function LocationPage(nav, cityData, placeData) {
+	        var $this = this;
+	        this.nav = nav;
 	        this.cityData = cityData;
+	        this.cityModel = this.cityData.getCurrent();
 	        this.cities = [];
-	        this.currentCity = false;
 	        this.placeData = placeData;
+	        setTimeout(function () {
+	            $this.placeModel = $this.placeData.getCurrent();
+	        }, 1300);
 	        this.places = [];
-	        this.currentPlace = false;
 	        this.loadCities();
+	        if (this.cityModel) {
+	            this.loadPlaces();
+	        }
 	    }
 	    Object.defineProperty(LocationPage, "parameters", {
 	        get: function () {
-	            return [[city_data_1.CityData], [place_data_1.PlaceData]];
+	            return [[ionic_1.NavController], [city_data_1.CityData], [place_data_1.PlaceData]];
 	        },
 	        enumerable: true,
 	        configurable: true
@@ -62259,21 +62267,52 @@
 	        });
 	    };
 	    LocationPage.prototype.onUpdateCity = function () {
-	        console.log(this.cityModel);
-	        this.currentCity = this.cityModel;
+	        this.cityModel = this.cityModel;
 	        this.loadPlaces();
 	    };
 	    LocationPage.prototype.loadPlaces = function () {
 	        var _this = this;
-	        this.placeData.getPlacesFromCity(this.currentCity).then(function (places) {
+	        this.placeData.getPlacesFromCity(this.cityModel).then(function (places) {
+	            _this.placeModel = null;
 	            _this.places = places;
 	        });
+	    };
+	    LocationPage.prototype.onUpdateLocation = function (form) {
+	        if (form.valid) {
+	            this.cityData.setCurrent(this.cityModel);
+	            this.placeData.setCurrent(this.placeModel);
+	            this.doSuccessAlert();
+	        }
+	        else {
+	            this.doValidateAlert();
+	        }
+	    };
+	    LocationPage.prototype.doSuccessAlert = function () {
+	        var alert = ionic_1.Alert.create({
+	            title: 'OK',
+	            message: 'Dados atualizados',
+	            buttons: [{
+	                    text: 'OK',
+	                    handler: function () {
+	                        // this.nav.push();
+	                    }
+	                }]
+	        });
+	        this.nav.present(alert);
+	    };
+	    LocationPage.prototype.doValidateAlert = function () {
+	        var alert = ionic_1.Alert.create({
+	            title: 'Ops.. Verifique',
+	            message: 'Precisa selecionar Cidade e Local',
+	            buttons: ['OK']
+	        });
+	        this.nav.present(alert);
 	    };
 	    LocationPage = __decorate([
 	        ionic_1.Page({
 	            templateUrl: 'build/pages/location/location.html'
 	        }), 
-	        __metadata('design:paramtypes', [Object, Object])
+	        __metadata('design:paramtypes', [Object, Object, Object])
 	    ], LocationPage);
 	    return LocationPage;
 	})();
@@ -62294,10 +62333,17 @@
 	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 	};
 	var core_1 = __webpack_require__(7);
+	var ionic_1 = __webpack_require__(5);
 	var http_1 = __webpack_require__(145);
 	var CityData = (function () {
 	    function CityData(http) {
+	        var _this = this;
 	        this.http = http;
+	        this.storage = new ionic_1.Storage(ionic_1.LocalStorage);
+	        this.storage.get('cityId').then(function (value) {
+	            _this.cityId = JSON.parse(value);
+	        });
+	        this.cities = false;
 	    }
 	    Object.defineProperty(CityData, "parameters", {
 	        get: function () {
@@ -62308,13 +62354,13 @@
 	    });
 	    CityData.prototype.load = function () {
 	        var _this = this;
-	        if (this.data) {
-	            return Promise.resolve(this.data);
+	        if (this.cities) {
+	            return Promise.resolve(this.cities);
 	        }
 	        return new Promise(function (resolve) {
 	            _this.http.get('http://feiraup.ngrok.com/cities').subscribe(function (res) {
-	                _this.data = _this.processData(res.json());
-	                resolve(_this.data);
+	                _this.cities = _this.processData(res.json());
+	                resolve(_this.cities);
 	            });
 	        });
 	    };
@@ -62325,6 +62371,13 @@
 	        return this.load().then(function (data) {
 	            return data.cities;
 	        });
+	    };
+	    CityData.prototype.setCurrent = function (cityId) {
+	        this.cityId = cityId;
+	        this.storage.set('cityId', cityId);
+	    };
+	    CityData.prototype.getCurrent = function () {
+	        return this.cityId;
 	    };
 	    CityData = __decorate([
 	        core_1.Injectable(), 
@@ -62349,10 +62402,17 @@
 	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 	};
 	var core_1 = __webpack_require__(7);
+	var ionic_1 = __webpack_require__(5);
 	var http_1 = __webpack_require__(145);
 	var PlaceData = (function () {
 	    function PlaceData(http) {
+	        var _this = this;
 	        this.http = http;
+	        this.storage = new ionic_1.Storage(ionic_1.LocalStorage);
+	        this.storage.get('placeId').then(function (value) {
+	            _this.placeId = JSON.parse(value);
+	        });
+	        this.places = false;
 	    }
 	    Object.defineProperty(PlaceData, "parameters", {
 	        get: function () {
@@ -62361,24 +62421,31 @@
 	        enumerable: true,
 	        configurable: true
 	    });
-	    PlaceData.prototype.loadFromCity = function (city_id) {
+	    PlaceData.prototype.loadFromCity = function (cityId) {
 	        var _this = this;
-	        if (this.data) {
+	        if (this.places) {
 	        }
 	        return new Promise(function (resolve) {
-	            _this.http.get('http://feiraup.ngrok.com/places/city/' + city_id).subscribe(function (res) {
-	                _this.data = _this.processData(res.json());
-	                resolve(_this.data);
+	            _this.http.get('http://feiraup.ngrok.com/places/city/' + cityId).subscribe(function (res) {
+	                _this.places = _this.processData(res.json());
+	                resolve(_this.places);
 	            });
 	        });
 	    };
 	    PlaceData.prototype.processData = function (data) {
 	        return data;
 	    };
-	    PlaceData.prototype.getPlacesFromCity = function (city_id) {
-	        return this.loadFromCity(city_id).then(function (data) {
+	    PlaceData.prototype.getPlacesFromCity = function (cityId) {
+	        return this.loadFromCity(cityId).then(function (data) {
 	            return data.places;
 	        });
+	    };
+	    PlaceData.prototype.setCurrent = function (placeId) {
+	        this.placeId = placeId;
+	        this.storage.set('placeId', placeId);
+	    };
+	    PlaceData.prototype.getCurrent = function () {
+	        return this.placeId;
 	    };
 	    PlaceData = __decorate([
 	        core_1.Injectable(), 

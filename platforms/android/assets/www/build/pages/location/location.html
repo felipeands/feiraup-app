@@ -9,28 +9,27 @@
 
   <p>Escolha a localização</p>
 
-  <ion-list>
-    <ion-item>
-      <ion-label>Cidade</ion-label>
-      <ion-select [(ngModel)]="cityModel" (change)="onUpdateCity()">
-        <ion-option *ngFor="#c of cities" [value]="c.id">{{c.name}}</ion-option>
-      </ion-select>
-    </ion-item>
+  <form #locationForm="ngForm" novalidate>
 
-    <ion-item>
-      <ion-label>Local</ion-label>
-      <ion-select [(ngModel)]="placeModel" [disabled]="!currentCity">
-        <ion-option *ngFor="#p of places" [value]="p.id">{{p.name}}</ion-option>
-      </ion-select>
-    </ion-item>
+    <ion-list>
+      <ion-item>
+        <ion-label>Cidade</ion-label>
+        <ion-select [(ngModel)]="cityModel" ngControl="city" (change)="onUpdateCity()" #city required>
+          <ion-option *ngFor="#c of cities" [value]="c.id">{{c.name}}</ion-option>
+        </ion-select>
+      </ion-item>
 
-    <!-- <ion-item>
-      <ion-label floating>Teste</ion-label>
-      <ion-input [(ngModel)]="teste"></ion-input>
-    </ion-item> -->
+      <ion-item>
+        <ion-label>Local</ion-label>
+        <ion-select [(ngModel)]="placeModel" ngControl="place" [disabled]="!cityModel" #place required>
+          <ion-option *ngFor="#p of places" [value]="p.id">{{p.name}}</ion-option>
+        </ion-select>
+      </ion-item>
 
-  </ion-list>
+    </ion-list>
 
-      <button block large>ATUALIZAR</button>
+    <button (click)="onUpdateLocation(locationForm)" type="submit" block large>ATUALIZAR</button>
+
+  </form>
 
 </ion-content>

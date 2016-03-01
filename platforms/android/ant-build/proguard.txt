@@ -1,3 +1,3 @@
 # view AndroidManifest.xml #generated:6
--keep class io.ionic.starter.CordovaApp { <init>(...); }
+-keep class br.com.feiraup.CordovaApp { <init>(...); }
 
