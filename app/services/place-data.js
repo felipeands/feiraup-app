@@ -12,12 +12,16 @@ export class PlaceData {
   constructor(http) {
     this.http = http;
     this.storage = new Storage(LocalStorage);
-    this.placeId = false;
-    this.places = [];
+    this.storage.get('placeId').then((value) => {
+      this.placeId = JSON.parse(value);
+    })
+
+    this.places = false;
   }
 
   loadFromCity(cityId) {
     if (this.places) {
+      // guardar locais das cidades para offline
       // return Promise.resolve(this.data);
     }
 
@@ -45,9 +49,7 @@ export class PlaceData {
   }
 
   getCurrent() {
-    this.storage.get('placeId').then((placeId) => {
-      return placeId;
-    });
+    return this.placeId;
   }
 
 }

@@ -1,5 +1,4 @@
-import {Page} from 'ionic-framework/ionic';
-import {NavController} from 'ionic-framework/ionic';
+import {Page, NavController, Alert} from 'ionic-framework/ionic';
 import {CityData} from '../../services/city-data';
 import {PlaceData} from '../../services/place-data';
 
@@ -12,24 +11,30 @@ export class LocationPage {
   placeModel;
 
   static get parameters() {
-    return [[CityData], [PlaceData]];
+    return [[NavController], [CityData], [PlaceData]];
   }
 
-  constructor(cityData, placeData) {
+  constructor(nav, cityData, placeData) {
+    var $this = this;
 
+    this.nav = nav;
     this.cityData = cityData;
     this.cityModel = this.cityData.getCurrent();
     this.cities = [];
 
     this.placeData = placeData;
-    this.placeModel = this.placeData.getCurrent();
+    setTimeout(function(){
+        $this.placeModel = $this.placeData.getCurrent();
+      },1000);
     this.places = [];
 
     this.loadCities();
 
     if(this.cityModel) {
+      console.log(this.placeModel);
       this.loadPlaces();
     }
+
 
   }
 
@@ -50,8 +55,38 @@ export class LocationPage {
     });
   }
 
-  save() {
-    this.cityData.setCurrent(this.cityModel);
-    this.placeData.setCurrent(this.currentPlace);
+  onUpdateLocation(form) {
+    if(form.valid) {
+      this.cityData.setCurrent(this.cityModel);
+      this.placeData.setCurrent(this.placeModel);
+      this.doSuccessAlert();
+    }else{
+      this.doValidateAlert();
+    }
   }
+
+  doSuccessAlert() {
+    let alert = Alert.create({
+      title: 'OK',
+      message: 'Dados atualizados',
+      buttons: [{
+        text: 'OK',
+        handler: () => {
+          // this.nav.push();
+          // console.log(this.cityData.getCurrent());
+        }
+      }]
+    });
+    this.nav.present(alert);
+  }
+
+  doValidateAlert() {
+    let alert = Alert.create({
+      title: 'Ops.. Verifique',
+      message: 'Precisa selecionar Cidade e Local',
+      buttons: ['OK']
+    });
+    this.nav.present(alert);
+  }
+
 }

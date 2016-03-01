@@ -12,7 +12,10 @@ export class CityData {
   constructor(http) {
     this.http = http;
     this.storage = new Storage(LocalStorage);
-    this.cityId = false;
+    this.storage.get('cityId').then((value) => {
+      this.cityId = JSON.parse(value);
+    })
+
     this.cities = false;
   }
 
@@ -45,9 +48,7 @@ export class CityData {
   }
 
   getCurrent() {
-    this.storage.get('cityId').then((cityId) => {
-      return cityId;
-    });
+    return this.cityId;
   }
 
 }
