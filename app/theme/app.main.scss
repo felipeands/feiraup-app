@@ -9,6 +9,11 @@
   }
 }
 
+
+// [fab-top] {
+//   top: 0;
+// }
+
 footer {
   position: fixed;
   bottom: 0;
@@ -18,12 +23,13 @@ footer {
   button:nth-child(2) {
     position: absolute;
     margin-left: -40px;
-    top: -40px;
+    top: 2px;
     left: 50%;
     border-radius: 50%;
-    min-height: 80px;
-    font-size: 2em;
-    background: rgba(255,255,255,1);
+    min-height: 45px;
+    // font-size: 2em;
+    background: $primary;
+    color: white;
     border: 1px solid $primary;
   }
 

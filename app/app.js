@@ -4,6 +4,8 @@ import {Inject} from 'angular2/core';
 import {RandomPage} from './pages/random/random';
 import {CartPage} from './pages/cart/cart';
 import {LocationPage} from './pages/location/location';
+
+import {UserData} from './services/user-data';
 import {CityData} from './services/city-data';
 import {PlaceData} from './services/place-data';
 
@@ -35,6 +37,11 @@ export class MyApp {
       {title: '', component: CartPage, icon: 'cart', fab: 'fab-center'},
       {title: 'Localização', component: LocationPage, icon: 'navigate', fab: 'fab-right'}
     ];
+
+    this.userData.hasLoggedIn().then((hasLoggedIn) => {
+      this.loggedIn = (hasLoggedIn == 'true');
+    });
+
   }
 
   openPage(page) {
