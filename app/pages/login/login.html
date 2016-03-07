@@ -1,0 +1,29 @@
+<ion-navbar *navbar>
+  <button menuToggle>
+    <ion-icon name="menu"></ion-icon>
+  </button>
+  <ion-title>Entrar</ion-title>
+</ion-navbar>
+
+<ion-content padding class="login">
+
+  <p>Entre com seu email e senha para ter acesso a sua conta</p>
+
+  <form #loginForm="ngForm">
+
+    <ion-list>
+      <ion-item>
+        <ion-label floating>Email</ion-label>
+        <ion-input type="email" [(ngModel)]="emailModel" ngControl="email" #email required></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label floating>Senha</ion-label>
+        <ion-input type="password" [(ngModel)]="passwordModel" ngControl="password" #password required></ion-input>
+      </ion-item>
+    </ion-list>
+
+    <button (click)="onSubmitLogin(loginForm)" type="submit" block large>ENTRAR</button>
+
+  </form>
+
+</ion-content>

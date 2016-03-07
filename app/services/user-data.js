@@ -49,11 +49,16 @@ export class UserData {
   }
 
   setCurrentUserData(userData) {
-    this.storage.set('cityId', cityId);
+    // this.storage.set('cityId', userData);
+    console.log(userData);
   }
 
   getCurrent() {
     return this.cityId;
+  }
+
+  hasLoggedIn() {
+    this.loggedIn;
   }
 
 }

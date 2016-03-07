@@ -4,6 +4,7 @@ import {Inject} from 'angular2/core';
 import {RandomPage} from './pages/random/random';
 import {CartPage} from './pages/cart/cart';
 import {LocationPage} from './pages/location/location';
+import {LoginPage} from './pages/login/login';
 
 import {UserData} from './services/user-data';
 import {CityData} from './services/city-data';
@@ -12,7 +13,7 @@ import {PlaceData} from './services/place-data';
 
 @App({
   templateUrl: './build/app.html',
-  providers: [CityData, PlaceData],
+  providers: [CityData, PlaceData, UserData],
   config: {
     mode: 'md'
   }
@@ -21,14 +22,15 @@ import {PlaceData} from './services/place-data';
 export class MyApp {
 
   static get parameters() {
-    return [[IonicApp], [Events], [CityData]];
+    return [[IonicApp], [Events], [CityData], [UserData]];
   }
 
-  constructor(app, events, cityData) {
+  constructor(app, events, cityData, userData) {
     this.app = app;
     this.events = events;
     this.loggedIn = false;
     this.cityData = cityData;
+    this.userData = userData;
 
     this.root = LocationPage;
 
@@ -38,9 +40,22 @@ export class MyApp {
       {title: 'Localização', component: LocationPage, icon: 'navigate', fab: 'fab-right'}
     ];
 
-    this.userData.hasLoggedIn().then((hasLoggedIn) => {
-      this.loggedIn = (hasLoggedIn == 'true');
-    });
+    this.loggedOutPages = [
+      {title: 'Entrar', component: LoginPage, icon: 'log-in'}
+    ];
+
+    this.loggedIn = this.userData.hasLoggedIn();
+
+    if(this.loggedIn) {
+      console.log('true');
+    }
+
+    console.log(this.userData.hasLoggedIn());
+
+    // this.userData.hasLoggedIn().then((hasLoggedIn) => {
+      // console.log(hasLoggedIn);
+      // this.loggedIn = (hasLoggedIn == 'true');
+    // });
 
   }
 

@@ -25,7 +25,7 @@ export class LocationPage {
     this.placeData = placeData;
     setTimeout(function(){
         $this.placeModel = $this.placeData.getCurrent();
-      }, 1300);
+      }, 2000);
     this.places = [];
 
     this.loadCities();
