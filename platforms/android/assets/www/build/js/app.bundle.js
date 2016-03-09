@@ -3188,24 +3188,39 @@
 	var random_1 = __webpack_require__(358);
 	var cart_1 = __webpack_require__(359);
 	var location_1 = __webpack_require__(360);
+	var login_1 = __webpack_require__(363);
+	var user_data_1 = __webpack_require__(364);
 	var city_data_1 = __webpack_require__(361);
 	var place_data_1 = __webpack_require__(362);
 	var MyApp = (function () {
-	    function MyApp(app, events, cityData) {
+	    function MyApp(app, events, cityData, userData) {
 	        this.app = app;
 	        this.events = events;
 	        this.loggedIn = false;
 	        this.cityData = cityData;
+	        this.userData = userData;
 	        this.root = location_1.LocationPage;
 	        this.footerPages = [
 	            { title: 'Aleatório', component: random_1.RandomPage, icon: 'sync', fab: 'fab-left' },
 	            { title: '', component: cart_1.CartPage, icon: 'cart', fab: 'fab-center' },
 	            { title: 'Localização', component: location_1.LocationPage, icon: 'navigate', fab: 'fab-right' }
 	        ];
+	        this.loggedOutPages = [
+	            { title: 'Entrar', component: login_1.LoginPage, icon: 'log-in' }
+	        ];
+	        this.loggedIn = this.userData.hasLoggedIn();
+	        if (this.loggedIn) {
+	            console.log('true');
+	        }
+	        console.log(this.userData.hasLoggedIn());
+	        // this.userData.hasLoggedIn().then((hasLoggedIn) => {
+	        // console.log(hasLoggedIn);
+	        // this.loggedIn = (hasLoggedIn == 'true');
+	        // });
 	    }
 	    Object.defineProperty(MyApp, "parameters", {
 	        get: function () {
-	            return [[ionic_1.IonicApp], [ionic_1.Events], [city_data_1.CityData]];
+	            return [[ionic_1.IonicApp], [ionic_1.Events], [city_data_1.CityData], [user_data_1.UserData]];
 	        },
 	        enumerable: true,
 	        configurable: true
@@ -3217,12 +3232,12 @@
 	    MyApp = __decorate([
 	        ionic_1.App({
 	            templateUrl: './build/app.html',
-	            providers: [city_data_1.CityData, place_data_1.PlaceData],
+	            providers: [city_data_1.CityData, place_data_1.PlaceData, user_data_1.UserData],
 	            config: {
 	                mode: 'md'
 	            }
 	        }), 
-	        __metadata('design:paramtypes', [Object, Object, Object])
+	        __metadata('design:paramtypes', [Object, Object, Object, Object])
 	    ], MyApp);
 	    return MyApp;
 	})();
@@ -62246,7 +62261,7 @@
 	        this.placeData = placeData;
 	        setTimeout(function () {
 	            $this.placeModel = $this.placeData.getCurrent();
-	        }, 1300);
+	        }, 2000);
 	        this.places = [];
 	        this.loadCities();
 	        if (this.cityModel) {
@@ -62454,6 +62469,127 @@
 	    return PlaceData;
 	})();
 	exports.PlaceData = PlaceData;
+
+
+/***/ },
+/* 363 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+	    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+	    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+	    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+	    return c > 3 && r && Object.defineProperty(target, key, r), r;
+	};
+	var __metadata = (this && this.__metadata) || function (k, v) {
+	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+	};
+	var ionic_1 = __webpack_require__(5);
+	var user_data_1 = __webpack_require__(364);
+	var LoginPage = (function () {
+	    function LoginPage(nav, userData) {
+	        var $this = this;
+	        this.nav = nav;
+	        this.userData = userData;
+	    }
+	    Object.defineProperty(LoginPage, "parameters", {
+	        get: function () {
+	            return [[ionic_1.NavController], [user_data_1.UserData]];
+	        },
+	        enumerable: true,
+	        configurable: true
+	    });
+	    LoginPage.prototype.onSubmitLogin = function (form) {
+	        if (form.valid) {
+	            this.userData.login(this.emailModel, this.passwordModel);
+	        }
+	    };
+	    LoginPage = __decorate([
+	        ionic_1.Page({
+	            templateUrl: 'build/pages/login/login.html'
+	        }), 
+	        __metadata('design:paramtypes', [Object, Object])
+	    ], LoginPage);
+	    return LoginPage;
+	})();
+	exports.LoginPage = LoginPage;
+
+
+/***/ },
+/* 364 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+	    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+	    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+	    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+	    return c > 3 && r && Object.defineProperty(target, key, r), r;
+	};
+	var __metadata = (this && this.__metadata) || function (k, v) {
+	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+	};
+	var core_1 = __webpack_require__(7);
+	var ionic_1 = __webpack_require__(5);
+	var http_1 = __webpack_require__(145);
+	var UserData = (function () {
+	    function UserData(http) {
+	        var _this = this;
+	        this.http = http;
+	        this.storage = new ionic_1.Storage(ionic_1.LocalStorage);
+	        this.storage.get('loggedIn').then(function (value) {
+	            _this.loggedIn = JSON.parse(value);
+	        });
+	        this.storage.get('loggedToken').then(function (value) {
+	            _this.loggedToken = JSON.parse(value);
+	        });
+	        this.storage.get('loggedRole').then(function (value) {
+	            _this.loggedRole = JSON.parse(value);
+	        });
+	        this.userData = false;
+	    }
+	    Object.defineProperty(UserData, "parameters", {
+	        get: function () {
+	            return [[http_1.Http]];
+	        },
+	        enumerable: true,
+	        configurable: true
+	    });
+	    UserData.prototype.getLogin = function (username, password) {
+	        var _this = this;
+	        var data = { username: username, password: password };
+	        return new Promise(function (resolve) {
+	            _this.http.post('http://feiraup.ngrok.com/user/login/', data).subscribe(function (res) {
+	                _this.userData = _this.processData(res.json());
+	                _this.setCurrentUserData(_this.userData);
+	                resolve(_this.userData);
+	            });
+	        });
+	    };
+	    UserData.prototype.login = function (username, password) {
+	        return this.getLogin(username, password).then(function (data) {
+	            return (data) ? true : false;
+	        });
+	    };
+	    UserData.prototype.processData = function (data) {
+	        return data;
+	    };
+	    UserData.prototype.setCurrentUserData = function (userData) {
+	        // this.storage.set('cityId', userData);
+	        console.log(userData);
+	    };
+	    UserData.prototype.getCurrent = function () {
+	        return this.cityId;
+	    };
+	    UserData.prototype.hasLoggedIn = function () {
+	        this.loggedIn;
+	    };
+	    UserData = __decorate([
+	        core_1.Injectable(), 
+	        __metadata('design:paramtypes', [Object])
+	    ], UserData);
+	    return UserData;
+	})();
+	exports.UserData = UserData;
 
 
 /***/ }

@@ -54,8 +54,11 @@
 /Users/felipeandrada/Projects/alchymia/feiraup/app/platforms/android/assets/www/build/js/app.bundle.js \
 /Users/felipeandrada/Projects/alchymia/feiraup/app/platforms/android/assets/www/build/pages/cart \
 /Users/felipeandrada/Projects/alchymia/feiraup/app/platforms/android/assets/www/build/pages/location \
+/Users/felipeandrada/Projects/alchymia/feiraup/app/platforms/android/assets/www/build/pages/login \
 /Users/felipeandrada/Projects/alchymia/feiraup/app/platforms/android/assets/www/build/pages/random \
 /Users/felipeandrada/Projects/alchymia/feiraup/app/platforms/android/assets/www/build/pages/cart/cart.html \
 /Users/felipeandrada/Projects/alchymia/feiraup/app/platforms/android/assets/www/build/pages/location/location.html \
+/Users/felipeandrada/Projects/alchymia/feiraup/app/platforms/android/assets/www/build/pages/login/location.html \
+/Users/felipeandrada/Projects/alchymia/feiraup/app/platforms/android/assets/www/build/pages/login/login.html \
 /Users/felipeandrada/Projects/alchymia/feiraup/app/platforms/android/assets/www/build/pages/random/random.html \
 /Users/felipeandrada/Projects/alchymia/feiraup/app/platforms/android/ant-build/AndroidManifest.xml \

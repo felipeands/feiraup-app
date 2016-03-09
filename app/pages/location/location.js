@@ -19,27 +19,30 @@ export class LocationPage {
 
     this.nav = nav;
     this.cityData = cityData;
-    this.cityModel = this.cityData.getCurrent();
-    this.cities = [];
-
     this.placeData = placeData;
-    setTimeout(function(){
-        $this.placeModel = $this.placeData.getCurrent();
-      }, 2000);
+
+    this.cities = [];
     this.places = [];
 
     this.loadCities();
 
-    if(this.cityModel) {
-      this.loadPlaces();
-    }
+    this.cityData.getCurrent().then((city) => {
+      if (city) {
+        this.cityModel = city;
+        this.loadPlaces();
+      }
+    });
 
+    this.placeData.getCurrent().then((place) => {
+      this.placeModel = place;
+    })
 
   }
 
   loadCities() {
-    this.cityData.getCities().then(cities => {
+    return this.cityData.getCities().then(cities => {
       this.cities = cities;
+      return cities;
     });
   }
 
@@ -50,7 +53,6 @@ export class LocationPage {
 
   loadPlaces() {
     this.placeData.getPlacesFromCity(this.cityModel).then(places => {
-      this.placeModel = null;
       this.places = places;
     });
   }

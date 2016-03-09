@@ -22,7 +22,9 @@ export class LoginPage {
 
   onSubmitLogin(form) {
     if(form.valid) {
-      this.userData.login(this.emailModel, this.passwordModel);
+      this.userData.login(this.emailModel, this.passwordModel).then((response) => {
+        console.log(response);
+      });
     }
   }
 
