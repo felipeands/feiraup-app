@@ -21,6 +21,13 @@
       </button>
     </io-list>
 
+    <io-list *ngIf="loggedIn">
+      <button ion-item menuClose *ngFor="#p of loggedInPages" (click)="openPage(p)">
+        <ion-icon item-left [name]="p.icon"></ion-icon>
+        {{p.title}}
+      </button>
+    </io-list>
+
   </ion-content>
 
 </ion-menu>

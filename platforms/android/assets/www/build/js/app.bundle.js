@@ -3208,15 +3208,10 @@
 	        this.loggedOutPages = [
 	            { title: 'Entrar', component: login_1.LoginPage, icon: 'log-in' }
 	        ];
-	        this.loggedIn = this.userData.hasLoggedIn();
-	        if (this.loggedIn) {
-	            console.log('true');
-	        }
-	        console.log(this.userData.hasLoggedIn());
-	        // this.userData.hasLoggedIn().then((hasLoggedIn) => {
-	        // console.log(hasLoggedIn);
-	        // this.loggedIn = (hasLoggedIn == 'true');
-	        // });
+	        this.loggedInPages = [
+	            { title: 'Sair', component: login_1.LoginPage, icon: 'log-out' }
+	        ];
+	        this.listenToEvents();
 	    }
 	    Object.defineProperty(MyApp, "parameters", {
 	        get: function () {
@@ -3228,6 +3223,13 @@
 	    MyApp.prototype.openPage = function (page) {
 	        var nav = this.app.getComponent('nav');
 	        nav.setRoot(page.component);
+	    };
+	    MyApp.prototype.listenToEvents = function () {
+	        var _this = this;
+	        this.events.subscribe('user:login', function () {
+	            console.log('logou');
+	            _this.loggedIn = true;
+	        });
 	    };
 	    MyApp = __decorate([
 	        ionic_1.App({
@@ -62253,20 +62255,23 @@
 	var place_data_1 = __webpack_require__(362);
 	var LocationPage = (function () {
 	    function LocationPage(nav, cityData, placeData) {
+	        var _this = this;
 	        var $this = this;
 	        this.nav = nav;
 	        this.cityData = cityData;
-	        this.cityModel = this.cityData.getCurrent();
-	        this.cities = [];
 	        this.placeData = placeData;
-	        setTimeout(function () {
-	            $this.placeModel = $this.placeData.getCurrent();
-	        }, 2000);
+	        this.cities = [];
 	        this.places = [];
 	        this.loadCities();
-	        if (this.cityModel) {
-	            this.loadPlaces();
-	        }
+	        this.cityData.getCurrent().then(function (city) {
+	            if (city) {
+	                _this.cityModel = city;
+	                _this.loadPlaces();
+	            }
+	        });
+	        this.placeData.getCurrent().then(function (place) {
+	            _this.placeModel = place;
+	        });
 	    }
 	    Object.defineProperty(LocationPage, "parameters", {
 	        get: function () {
@@ -62277,8 +62282,9 @@
 	    });
 	    LocationPage.prototype.loadCities = function () {
 	        var _this = this;
-	        this.cityData.getCities().then(function (cities) {
+	        return this.cityData.getCities().then(function (cities) {
 	            _this.cities = cities;
+	            return cities;
 	        });
 	    };
 	    LocationPage.prototype.onUpdateCity = function () {
@@ -62288,7 +62294,6 @@
 	    LocationPage.prototype.loadPlaces = function () {
 	        var _this = this;
 	        this.placeData.getPlacesFromCity(this.cityModel).then(function (places) {
-	            _this.placeModel = null;
 	            _this.places = places;
 	        });
 	    };
@@ -62352,12 +62357,9 @@
 	var http_1 = __webpack_require__(145);
 	var CityData = (function () {
 	    function CityData(http) {
-	        var _this = this;
 	        this.http = http;
 	        this.storage = new ionic_1.Storage(ionic_1.LocalStorage);
-	        this.storage.get('cityId').then(function (value) {
-	            _this.cityId = JSON.parse(value);
-	        });
+	        this.getCurrent();
 	        this.cities = false;
 	    }
 	    Object.defineProperty(CityData, "parameters", {
@@ -62392,7 +62394,11 @@
 	        this.storage.set('cityId', cityId);
 	    };
 	    CityData.prototype.getCurrent = function () {
-	        return this.cityId;
+	        var _this = this;
+	        return this.storage.get('cityId').then(function (value) {
+	            _this.cityId = JSON.parse(value);
+	            return _this.cityId;
+	        });
 	    };
 	    CityData = __decorate([
 	        core_1.Injectable(), 
@@ -62421,12 +62427,9 @@
 	var http_1 = __webpack_require__(145);
 	var PlaceData = (function () {
 	    function PlaceData(http) {
-	        var _this = this;
 	        this.http = http;
 	        this.storage = new ionic_1.Storage(ionic_1.LocalStorage);
-	        this.storage.get('placeId').then(function (value) {
-	            _this.placeId = JSON.parse(value);
-	        });
+	        this.getCurrent();
 	        this.places = false;
 	    }
 	    Object.defineProperty(PlaceData, "parameters", {
@@ -62460,7 +62463,11 @@
 	        this.storage.set('placeId', placeId);
 	    };
 	    PlaceData.prototype.getCurrent = function () {
-	        return this.placeId;
+	        var _this = this;
+	        return this.storage.get('placeId').then(function (value) {
+	            _this.placeId = JSON.parse(value);
+	            return _this.placeId;
+	        });
 	    };
 	    PlaceData = __decorate([
 	        core_1.Injectable(), 
@@ -62500,8 +62507,46 @@
 	        configurable: true
 	    });
 	    LoginPage.prototype.onSubmitLogin = function (form) {
+	        var _this = this;
 	        if (form.valid) {
-	            this.userData.login(this.emailModel, this.passwordModel);
+	            this.userData.login(this.emailModel, this.passwordModel)
+	                .then(function (res) {
+	                if (res.hasOwnProperty('access_token')) {
+	                    var alert_1 = ionic_1.Alert.create({
+	                        title: 'Ola...',
+	                        message: 'Bem vindo(a) ' + res.name,
+	                        buttons: ['OK']
+	                    });
+	                    _this.nav.present(alert_1);
+	                    _this.passwordModel = '';
+	                }
+	                else if (res.hasOwnProperty('error')) {
+	                    var alert_2 = ionic_1.Alert.create({
+	                        title: 'Ops...',
+	                        message: res.error,
+	                        buttons: ['OK']
+	                    });
+	                    _this.nav.present(alert_2);
+	                    _this.passwordModel = '';
+	                }
+	                else {
+	                    message = 'Não foi possível logar';
+	                    var alert_3 = ionic_1.Alert.create({
+	                        title: 'Ops...',
+	                        message: 'Não foi possível autenticar.',
+	                        buttons: ['OK']
+	                    });
+	                    _this.nav.present(alert_3);
+	                }
+	            });
+	        }
+	        else {
+	            var alert_4 = ionic_1.Alert.create({
+	                title: 'Ops...',
+	                message: 'Você precisa preencher com seu email e senha cadastrados.',
+	                buttons: ['OK']
+	            });
+	            this.nav.present(alert_4);
 	        }
 	    };
 	    LoginPage = __decorate([
@@ -62532,60 +62577,83 @@
 	var ionic_1 = __webpack_require__(5);
 	var http_1 = __webpack_require__(145);
 	var UserData = (function () {
-	    function UserData(http) {
-	        var _this = this;
+	    function UserData(http, events, headers) {
 	        this.http = http;
 	        this.storage = new ionic_1.Storage(ionic_1.LocalStorage);
-	        this.storage.get('loggedIn').then(function (value) {
-	            _this.loggedIn = JSON.parse(value);
-	        });
-	        this.storage.get('loggedToken').then(function (value) {
-	            _this.loggedToken = JSON.parse(value);
-	        });
-	        this.storage.get('loggedRole').then(function (value) {
-	            _this.loggedRole = JSON.parse(value);
-	        });
-	        this.userData = false;
+	        this.events = events;
+	        this.getCurrent();
 	    }
 	    Object.defineProperty(UserData, "parameters", {
 	        get: function () {
-	            return [[http_1.Http]];
+	            return [[http_1.Http], [ionic_1.Events]];
 	        },
 	        enumerable: true,
 	        configurable: true
 	    });
 	    UserData.prototype.getLogin = function (username, password) {
 	        var _this = this;
-	        var data = { username: username, password: password };
+	        var data = "username=" + username + "&password=" + password;
+	        this.headers = new http_1.Headers();
+	        this.headers.append('Content-Type', 'application/x-www-form-urlencoded');
 	        return new Promise(function (resolve) {
-	            _this.http.post('http://feiraup.ngrok.com/user/login/', data).subscribe(function (res) {
-	                _this.userData = _this.processData(res.json());
-	                _this.setCurrentUserData(_this.userData);
-	                resolve(_this.userData);
-	            });
+	            _this.http.post('http://feiraup.ngrok.com/user/login', data, {
+	                headers: _this.headers
+	            })
+	                .subscribe(function (res) {
+	                resolve(res.json());
+	                _this.setCurrentUserData(res.json());
+	            }, function (err) {
+	                if (err) {
+	                    resolve(err.json());
+	                }
+	            }, function () { });
 	        });
 	    };
 	    UserData.prototype.login = function (username, password) {
 	        return this.getLogin(username, password).then(function (data) {
-	            return (data) ? true : false;
+	            return data;
 	        });
 	    };
-	    UserData.prototype.processData = function (data) {
-	        return data;
-	    };
 	    UserData.prototype.setCurrentUserData = function (userData) {
-	        // this.storage.set('cityId', userData);
-	        console.log(userData);
+	        this.loggedIn = true;
+	        this.loggedToken = userData.access_token;
+	        this.loggedEmail = userData.email;
+	        this.loggedRole = userData.role;
+	        this.loggedName = userData.name;
+	        this.storage.set('loggedIn', this.loggedIn);
+	        this.storage.set('loggedToken', this.loggedToken);
+	        this.storage.set('loggedEmail', this.loggedEmail);
+	        this.storage.set('loggedRole', this.loggedRole);
+	        this.storage.set('loggedName', this.loggedName);
+	        this.events.publish('user:login');
 	    };
 	    UserData.prototype.getCurrent = function () {
-	        return this.cityId;
+	        var _this = this;
+	        this.storage.get('loggedIn').then(function (value) {
+	            _this.loggedIn = value;
+	            if (_this.loggedIn) {
+	                _this.storage.get('loggedToken').then(function (value) {
+	                    _this.loggedToken = value;
+	                });
+	                _this.storage.get('loggedEmail').then(function (value) {
+	                    _this.loggedEmail = value;
+	                });
+	                _this.storage.get('loggedRole').then(function (value) {
+	                    _this.loggedRole = value;
+	                });
+	                _this.storage.get('loggedName').then(function (value) {
+	                    _this.loggedName = value;
+	                });
+	                _this.events.publish('user:login');
+	            }
+	        });
 	    };
 	    UserData.prototype.hasLoggedIn = function () {
 	        this.loggedIn;
 	    };
 	    UserData = __decorate([
 	        core_1.Injectable(), 
-	        __metadata('design:paramtypes', [Object])
+	        __metadata('design:paramtypes', [Object, Object, Object])
 	    ], UserData);
 	    return UserData;
 	})();

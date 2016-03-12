@@ -21,11 +21,53 @@ export class LoginPage {
   }
 
   onSubmitLogin(form) {
+
     if(form.valid) {
-      this.userData.login(this.emailModel, this.passwordModel).then((response) => {
-        console.log(response);
+      this.userData.login(this.emailModel, this.passwordModel)
+      .then((res) => {
+
+        if(res.hasOwnProperty('access_token')) {
+
+          let alert = Alert.create({
+            title: 'Ola...',
+            message: 'Bem vindo(a) '+ res.name,
+            buttons: ['OK']
+          });
+          this.nav.present(alert);
+          this.passwordModel = '';
+
+        } else if(res.hasOwnProperty('error')) {
+
+          let alert = Alert.create({
+            title: 'Ops...',
+            message: res.error,
+            buttons: ['OK']
+          });
+          this.nav.present(alert);
+          this.passwordModel = '';
+
+        } else {
+          message = 'Não foi possível logar';
+
+          let alert = Alert.create({
+            title: 'Ops...',
+            message: 'Não foi possível autenticar.',
+            buttons: ['OK']
+          });
+          this.nav.present(alert);
+
+        }
+
       });
+    } else {
+      let alert = Alert.create({
+        title: 'Ops...',
+        message: 'Você precisa preencher com seu email e senha cadastrados.',
+        buttons: ['OK']
+      });
+      this.nav.present(alert);
     }
+
   }
 
 }

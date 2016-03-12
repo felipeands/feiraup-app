@@ -44,23 +44,45 @@ export class MyApp {
       {title: 'Entrar', component: LoginPage, icon: 'log-in'}
     ];
 
-    this.loggedIn = this.userData.hasLoggedIn();
+    this.loggedInPages = [
+      {title: 'Deslogar', component: LoginPage, icon: 'log-out'}
+    ];
 
-    if(this.loggedIn) {
-      console.log('true');
-    }
-
-    console.log(this.userData.hasLoggedIn());
-
-    // this.userData.hasLoggedIn().then((hasLoggedIn) => {
-      // console.log(hasLoggedIn);
-      // this.loggedIn = (hasLoggedIn == 'true');
-    // });
+    this.listenToEvents();
 
   }
 
   openPage(page) {
     let nav = this.app.getComponent('nav');
-    nav.setRoot(page.component);
+
+    if(page.title === 'Deslogar') {
+      let alert = Alert.create({
+        title: 'Confirmação',
+        message: 'Tem certeza que deseja sair da sua conta?',
+        buttons: ['Não',
+          {
+            text: 'Sim',
+            handler: () => {
+              this.userData.logout();
+            }
+          }
+        ]
+      });
+      this.nav.present(alert);
+    } else {
+      nav.setRoot(page.component);
+    }
+  }
+
+  listenToEvents() {
+    this.events.subscribe('user:login', () => {
+      console.log('logou');
+      this.loggedIn = true;
+    });
+
+    this.events.subscribe('user:logout', () => {
+      console.log('deslogou');
+      this.loggedIn = false;
+    })
   }
 }

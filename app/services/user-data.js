@@ -1,32 +1,20 @@
 import {Injectable, Inject} from 'angular2/core';
 import {Storage, LocalStorage, Events} from 'ionic-framework/ionic';
 import {Http, Headers} from 'angular2/http';
-// import 'rxjs/add/operator/map';
 
 @Injectable()
 export class UserData {
   public headers: Headers;
 
   static get parameters() {
-    return [[Http]];
+    return [[Http],[Events]];
   }
 
-  constructor(http, headers) {
+  constructor(http, events, headers) {
     this.http = http;
     this.storage = new Storage(LocalStorage);
-    this.storage.get('loggedIn').then((value) => {
-      this.loggedIn = JSON.parse(value);
-    });
-    this.storage.get('loggedToken').then((value) => {
-      this.loggedToken = JSON.parse(value);
-    });
-    this.storage.get('loggedRole').then((value) => {
-      this.loggedRole = JSON.parse(value);
-    });
-
-
-
-    this.userData = false;
+    this.events = events;
+    this.getCurrent();
   }
 
   getLogin(username, password) {
@@ -36,31 +24,84 @@ export class UserData {
     this.headers.append('Content-Type', 'application/x-www-form-urlencoded');
 
     return new Promise(resolve => {
-      this.http.post('http://feiraup.ngrok.com/user/login', data, {headers: this.headers}).subscribe(res => {
-        this.userData = this.processData(res.json());
-        this.setCurrentUserData(this.userData);
-        resolve(this.userData);
-      });
+      this.http.post('http://feiraup.ngrok.com/user/login', data, {
+        headers: this.headers
+      })
+      .subscribe(
+        res => {
+          resolve(res.json());
+          this.setCurrentUserData(res.json());
+        },
+        (err) => {
+          if(err){
+            resolve(err.json());
+          }
+        },
+        () => {}
+        );
     });
   }
 
   login(username, password) {
     return this.getLogin(username, password).then(data => {
-      return (data) ? true : false;
+      return data;
     });
   }
 
-  processData(data) {
-    return data;
+  logout() {
+    this.loggedIn = false;
+    this.loggedToken = false;
+    this.loggedEmail = false;
+    this.loggedRole = false;
+    this.loggedName = false;
+
+    this.updateStorage();
+    this.events.publish('user:logout');
   }
 
   setCurrentUserData(userData) {
-    // this.storage.set('cityId', userData);
-    console.log(userData);
+    this.loggedIn = true;
+    this.loggedToken = userData.access_token;
+    this.loggedEmail = userData.email;
+    this.loggedRole = userData.role;
+    this.loggedName = userData.name;
+
+    this.updateStorage();
+    this.events.publish('user:login');
+  }
+
+  updateStorage() {
+    this.storage.set('loggedIn', this.loggedIn);
+    this.storage.set('loggedToken', this.loggedToken);
+    this.storage.set('loggedEmail', this.loggedEmail);
+    this.storage.set('loggedRole', this.loggedRole);
+    this.storage.set('loggedName', this.loggedName);
   }
 
   getCurrent() {
-    return this.cityId;
+    this.storage.get('loggedIn').then((value) => {
+      this.loggedIn = value;
+      if(this.loggedIn) {
+
+        this.storage.get('loggedToken').then((value) => {
+          this.loggedToken = value;
+        });
+
+        this.storage.get('loggedEmail').then((value) => {
+          this.loggedEmail = value;
+        });
+
+        this.storage.get('loggedRole').then((value) => {
+          this.loggedRole = value;
+        });
+
+        this.storage.get('loggedName').then((value) => {
+          this.loggedName = value;
+        });
+
+        this.events.publish('user:login');
+      }
+    });
   }
 
   hasLoggedIn() {
