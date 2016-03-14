@@ -45,11 +45,10 @@ export class LoginPage {
           this.passwordModel = '';
 
         } else {
-          message = 'Não foi possível logar';
 
           let alert = Alert.create({
             title: 'Ops...',
-            message: 'Não foi possível autenticar.',
+            message: 'Não foi possível logar.',
             buttons: ['OK']
           });
           this.nav.present(alert);
