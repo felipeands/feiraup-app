@@ -15,8 +15,6 @@ export class LocationPage {
   }
 
   constructor(nav, cityData, placeData) {
-    var $this = this;
-
     this.nav = nav;
     this.cityData = cityData;
     this.placeData = placeData;

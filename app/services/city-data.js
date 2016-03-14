@@ -1,16 +1,18 @@
 import {Injectable, Inject} from 'angular2/core';
 import {Storage, LocalStorage, Events} from 'ionic-framework/ionic';
 import {Http} from 'angular2/http';
+import {OptionData} from './option-data';
 
 @Injectable()
 export class CityData {
 
   static get parameters() {
-    return [[Http]];
+    return [[Http], [OptionData]];
   }
 
-  constructor(http) {
+  constructor(http, options) {
     this.http = http;
+    this.options = options;
     this.storage = new Storage(LocalStorage);
     this.getCurrent();
 
@@ -23,7 +25,7 @@ export class CityData {
     }
 
     return new Promise(resolve => {
-      this.http.get('http://feiraup.ngrok.com/cities').subscribe(res => {
+      this.http.get(`${this.options.base_url}/cities`).subscribe(res => {
         this.cities = this.processData(res.json());
         resolve(this.cities);
       });

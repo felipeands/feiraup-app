@@ -1,17 +1,19 @@
 import {Injectable, Inject} from 'angular2/core';
 import {Storage, LocalStorage, Events} from 'ionic-framework/ionic';
 import {Http, Headers} from 'angular2/http';
+import {OptionData} from './option-data';
 
 @Injectable()
 export class UserData {
   public headers: Headers;
 
   static get parameters() {
-    return [[Http],[Events]];
+    return [[Http],[Events],[OptionData]];
   }
 
-  constructor(http, events, headers) {
+  constructor(http, events, headers, options) {
     this.http = http;
+    this.options = options;
     this.storage = new Storage(LocalStorage);
     this.events = events;
     this.getCurrent();
@@ -24,7 +26,7 @@ export class UserData {
     this.headers.append('Content-Type', 'application/x-www-form-urlencoded');
 
     return new Promise(resolve => {
-      this.http.post('http://feiraup.ngrok.com/user/login', data, {
+      this.http.post(`${this.options.base_url}/user/login`, data, {
         headers: this.headers
       })
       .subscribe(

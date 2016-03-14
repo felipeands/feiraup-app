@@ -10,11 +10,12 @@ import {NewRoutePage} from './pages/route/new-route';
 import {UserData} from './services/user-data';
 import {CityData} from './services/city-data';
 import {PlaceData} from './services/place-data';
+import {OptionData} from './services/option-data';
 
 
 @App({
   templateUrl: './build/app.html',
-  providers: [CityData, PlaceData, UserData],
+  providers: [CityData, PlaceData, UserData, OptionData],
   config: {
     mode: 'md'
   }
