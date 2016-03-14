@@ -14,5 +14,15 @@ export class NewRoutePage {
   }
 
   constructor() {
+    this.mapping = false;
+    this.firstPosition = false;
+    this.lastPosition = false;
   }
+
+  onStart() { }
+
+  onEnd() { }
+
+  onNewMark() { }
+
 }

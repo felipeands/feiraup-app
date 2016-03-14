@@ -35,7 +35,7 @@ export class MyApp {
     this.cityData = cityData;
     this.userData = userData;
 
-    this.root = LocationPage;
+    this.root = NewRoutePage;
 
     this.footerPages = [
       {title: 'Aleatório', component: RandomPage, icon: 'sync', fab: 'fab-left'},

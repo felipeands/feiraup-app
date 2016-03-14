@@ -5,9 +5,7 @@ import {Injectable, Inject} from 'angular2/core';
 export class OptionData {
 
   constructor() {
-
     this.base_url = 'http://feiraup.ngrok.com';
-
   }
 
 }
