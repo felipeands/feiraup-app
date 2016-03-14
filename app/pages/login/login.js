@@ -14,8 +14,6 @@ export class LoginPage {
   }
 
   constructor(nav, userData) {
-    var $this = this;
-
     this.nav = nav;
     this.userData = userData;
   }

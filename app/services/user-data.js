@@ -81,8 +81,8 @@ export class UserData {
   getCurrent() {
     this.storage.get('loggedIn').then((value) => {
       this.loggedIn = value;
-      if(this.loggedIn) {
 
+      if(this.loggedIn == 'true') {
         this.storage.get('loggedToken').then((value) => {
           this.loggedToken = value;
         });
@@ -91,15 +91,15 @@ export class UserData {
           this.loggedEmail = value;
         });
 
-        this.storage.get('loggedRole').then((value) => {
-          this.loggedRole = value;
-        });
 
         this.storage.get('loggedName').then((value) => {
           this.loggedName = value;
         });
 
-        this.events.publish('user:login');
+        this.storage.get('loggedRole').then((value) => {
+          this.loggedRole = value;
+          this.events.publish('user:login');
+        });
       }
     });
   }

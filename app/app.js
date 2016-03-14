@@ -1,10 +1,11 @@
-import {App, IonicApp, Events, Platform} from 'ionic-framework/ionic';
-import {NavController} from 'ionic-framework/ionic';
+import {App, IonicApp, Events, Platform, Alert} from 'ionic-framework/ionic';
 import {Inject} from 'angular2/core';
+
 import {RandomPage} from './pages/random/random';
 import {CartPage} from './pages/cart/cart';
 import {LocationPage} from './pages/location/location';
 import {LoginPage} from './pages/login/login';
+import {NewRoutePage} from './pages/route/new-route';
 
 import {UserData} from './services/user-data';
 import {CityData} from './services/city-data';
@@ -29,6 +30,7 @@ export class MyApp {
     this.app = app;
     this.events = events;
     this.loggedIn = false;
+    this.loggedRole = false;
     this.cityData = cityData;
     this.userData = userData;
 
@@ -38,6 +40,10 @@ export class MyApp {
       {title: 'Aleatório', component: RandomPage, icon: 'sync', fab: 'fab-left'},
       {title: '', component: CartPage, icon: 'cart', fab: 'fab-center'},
       {title: 'Localização', component: LocationPage, icon: 'navigate', fab: 'fab-right'}
+    ];
+
+    this.adminPages = [
+      {title: 'Novo local', component: NewRoutePage, icon: 'map'}
     ];
 
     this.loggedOutPages = [
@@ -58,7 +64,7 @@ export class MyApp {
     if(page.title === 'Deslogar') {
       let alert = Alert.create({
         title: 'Confirmação',
-        message: 'Tem certeza que deseja sair da sua conta?',
+        message: 'Deseja mesmo sair da sua conta?',
         buttons: ['Não',
           {
             text: 'Sim',
@@ -68,7 +74,7 @@ export class MyApp {
           }
         ]
       });
-      this.nav.present(alert);
+      nav.present(alert);
     } else {
       nav.setRoot(page.component);
     }
@@ -76,13 +82,14 @@ export class MyApp {
 
   listenToEvents() {
     this.events.subscribe('user:login', () => {
-      console.log('logou');
       this.loggedIn = true;
+      this.loggedRole = this.userData.loggedRole;
     });
 
     this.events.subscribe('user:logout', () => {
       console.log('deslogou');
       this.loggedIn = false;
+      this.loggedRole = false;
     })
   }
 }
