@@ -17,12 +17,23 @@ export class NewRoutePage {
     this.mapping = false;
     this.firstPosition = false;
     this.lastPosition = false;
+
+    this.currentLat = -100.0;
+    this.currentLng = 100.0;
   }
 
-  onStart() { }
+  onStart() {
+    this.mapping = true;
+  }
 
-  onEnd() { }
+  onFinish() {
+    this.mapping = false;
+  }
 
   onNewMark() { }
+
+  updateLocation() {
+
+  }
 
 }

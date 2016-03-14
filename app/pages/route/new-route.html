@@ -7,6 +7,14 @@
 
 <ion-content padding class="login">
 
-  <button (click)="onStart()" type="submit" block large>COMEÇAR</button>
+  <button (click)="onNewMark()" type="submit" [disabled]="!mapping" secondary><ion-icon name="add-circle"> Adicionar</ion-icon></button>
+
+  <button (click)="updateLocation()" type="submit" [disabled]="!mapping" primary><ion-icon name="refresh-circle"> Atualizar</ion-icon></button>
+
+  <p>Minha Localização. Lat: {{currentLat}}, Lng: {{currentLng}}</p>
+
+  <button (click)="onStart()" type="submit" [disabled]="mapping" block large>COMEÇAR</button>
+
+  <button (click)="onFinish()" type="submit" [disabled]="!mapping" block large>FINALIZAR</button>
 
 </ion-content>
