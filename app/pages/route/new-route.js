@@ -110,6 +110,26 @@ export class NewRoutePage {
 
   onFinish() {
     this.mapping = false;
+
+    let alert = Alert.create({
+      title: 'Finalizando',
+      message: 'Informe um nome para esse novo caminho.',
+      inputs: [{
+        name: 'name',
+        placeholder: 'Nome'
+      }],
+      buttons: [{
+        text: 'Cancelar',
+        handler: data => {}
+      }, {
+        text: 'OK',
+        handler: data => {
+          console.log(data.name);
+        }
+      }]
+    });
+    this.nav.present(alert);
+
   }
 
   onNewMark() {
