@@ -35,6 +35,7 @@ export class NewRoutePage {
     this.updated = false;
 
     this.map = null;
+    this.poly = null;
 
     this.mapData.loadSdk();
     this.loadMap();
@@ -75,8 +76,11 @@ export class NewRoutePage {
     });
 
     let content = `lat: ${latitude}, lng: ${longitude}`;
-
     this.addInfoWindow(marker, content);
+
+    let path = this.poly.getPath();
+    path.push(this.latLng);
+    this.poly.setPath(path);
 
   }
 
@@ -91,6 +95,10 @@ export class NewRoutePage {
 
   onStart() {
     this.mapping = true;
+    this.poly = new google.maps.Polyline({
+      map: this.map,
+      path: []
+    });
     this.addPosition(this.currentLat, this.currentLng);
   }
 
