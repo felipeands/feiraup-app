@@ -40,6 +40,9 @@
     "installed_plugins": {
         "cordova-plugin-geolocation": {
             "PACKAGE_NAME": "io.ionic.starter"
+        },
+        "cordova-plugin-whitelist": {
+            "PACKAGE_NAME": "br.com.feiraup"
         }
     },
     "dependent_plugins": {}

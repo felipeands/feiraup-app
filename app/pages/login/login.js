@@ -19,8 +19,8 @@ export class LoginPage {
   }
 
   onSubmitLogin(form) {
-
     if(form.valid) {
+
       this.userData.login(this.emailModel, this.passwordModel)
       .then((res) => {
 
@@ -28,7 +28,7 @@ export class LoginPage {
 
           let alert = Alert.create({
             title: 'Ola...',
-            message: 'Bem vindo(a) '+ res.name,
+            message: `Bem vindo(a) ${res.name}`,
             buttons: ['OK']
           });
           this.nav.present(alert);

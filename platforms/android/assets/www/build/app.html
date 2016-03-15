@@ -7,7 +7,7 @@
 
   <ion-content class="outer-content">
 
-    <io-list *ngIf="loggedIn isAdmin">
+    <io-list *ngIf="loggedIn && loggedRole=='admin'">
       <button ion-item menuClose *ngFor="#p of adminPages" (click)="openPage(p)">
         <ion-icon item-left [name]="p.icon"></ion-icon>
         {{p.title}}

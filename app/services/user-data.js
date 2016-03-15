@@ -11,7 +11,7 @@ export class UserData {
     return [[Http],[Events],[OptionData]];
   }
 
-  constructor(http, events, headers, options) {
+  constructor(http, events, options, headers) {
     this.http = http;
     this.options = options;
     this.storage = new Storage(LocalStorage);

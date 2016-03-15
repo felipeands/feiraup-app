@@ -1,81 +1,126 @@
-import {Page, Alert} from 'ionic-framework/ionic';
-// import {Xs} from 'plugins/cordova-plugin-geolocation';
-// import {RouteData}
+import {Page, NavController, Alert} from 'ionic-framework/ionic';
+import {MapData} from '../../services/map-data';
 
 @Page ({
-  templateUrl: 'build/pages/route/new-route.html'
+  templateUrl: 'build/pages/route/new-route.html',
+  styles: [`
+  #map {
+    width: 100%;
+    height: 200px;
+  }
+  `]
 })
 
 export class NewRoutePage {
   // Model;
 
   static get parameters() {
-    // return [];
+    return [[NavController],[MapData]];
 
   }
 
-  constructor() {
+  constructor(nav, mapData) {
+    this.nav = nav;
+    this.mapData = mapData;
+
     this.mapping = false;
     this.firstPosition = false;
     this.lastPosition = false;
+    this.positions = [];
 
     this.latLng = null;
     this.currentLat = 0;
     this.currentLng = 0;
 
+    this.updated = false;
+
     this.map = null;
 
-    this.loadSdk();
+    this.mapData.loadSdk();
     this.loadMap();
   }
 
-  loadSdk() {
-    let script = document.createElement('script');
-    script.type = 'text/javascript';
-    script.src = 'http://maps.google.com/maps/api/js?sensor=true';
-    document.body.appendChild(script);
-  }
+
 
   loadMap() {
-    let options = {timeout: 10000, enableHightAccuracy: false}
+    this.mapData.getUpdatedPos().then((position) => {
+      this.updatePosition(position.latitude, position.longitude);
 
-    navigator.geolocation.getCurrentPosition((position) => {
+      let mapOptions = {
+        center: this.latLng,
+        zoom: 16,
+        mapTypeId: google.maps.MapTypeId.ROADMAP
+      }
 
-      this.currentLat = position.coords.latitude;
-      this.currentLng = position.coords.longitude;
+      this.map = new google.maps.Map(document.getElementById('map'), mapOptions);
 
-      console.log(position.coords);
+    });
 
-      this.latLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+  }
 
-    },()=>{}, options);
-    // navigator.geolocation.getCurrentPosition(options).then((position) => {
-      // console.log(position)
-    //   let latLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+  addPosition(latitude, longitude) {
+    let pos = {
+      latitude: latitude,
+      longitude: longitude
+    }
+    this.positions.push(pos);
+    this.updated = false;
 
-    //   let mapOptions = {
-    //     center: latLng,
-    //     zoom: 15,
-    //     mapTypeId: google.maps.MapTypeId.ROADMAP
-    //   }
+    this.map.setCenter(this.latLng);
 
-    //   this.map = new google.maps.Map(document.getElementById('map'), mapOptions);
+    let marker = new google.maps.Marker({
+      map: this.map,
+      animation: google.maps.Animation.DROP,
+      position: this.latLng
+    });
 
-    // });
+    let content = `lat: ${latitude}, lng: ${longitude}`;
+
+    this.addInfoWindow(marker, content);
+
+  }
+
+  addInfoWindow(marker, content){
+    let infoWindow = new google.maps.InfoWindow({
+      content: content
+    });
+    google.maps.event.addListener(marker, 'click', function(){
+      infoWindow.open(this.map, marker);
+    });
   }
 
   onStart() {
     this.mapping = true;
+    this.addPosition(this.currentLat, this.currentLng);
+  }
+
+  onUpdateLocation() {
+    this.mapData.getUpdatedPos().then((position) => {
+      if(position.latitude && position.longitude) {
+        this.updatePosition(position.latitude, position.longitude);
+        let alert = Alert.create({
+          title: 'OK...',
+          message: 'Localização atualizada.',
+          buttons: ['OK']
+        });
+        this.nav.present(alert);
+      }
+    });
   }
 
   onFinish() {
     this.mapping = false;
   }
 
-  onNewMark() { }
+  onNewMark() {
+    this.addPosition(this.currentLat, this.currentLng);
+  }
 
-  updateLocation() {
-
+  updatePosition(latitude, longitude) {
+    this.currentLat = latitude;
+    this.currentLng = longitude;
+    this.latLng = new google.maps.LatLng(latitude, longitude);
+    this.updated = true;
   }
 
 }

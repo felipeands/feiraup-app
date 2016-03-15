@@ -1,12 +1,21 @@
 <?xml version='1.0' encoding='utf-8'?>
 <widget id="br.com.feiraup" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <preference name="loglevel" value="DEBUG" />
+    <feature name="Geolocation">
+        <param name="android-package" value="org.apache.cordova.geolocation.Geolocation" />
+    </feature>
+    <feature name="Whitelist">
+        <param name="android-package" value="org.apache.cordova.whitelist.WhitelistPlugin" />
+        <param name="onload" value="true" />
+    </feature>
     <allow-intent href="market:*" />
+    <allow-intent href="*" />
     <name>FEIRA UP</name>
     <description>Encontre o que deseja para sua próxima viagem.</description>
     <author email="felipe.andrada@gmail.com" href="http://felipeandrada.com.br/">Felipe A</author>
-    <content original-src="index.html" src="http://192.168.1.4:8100" />
-    <access origin="*" />
+    <content original-src="index.html" src="http://192.168.0.13:8100" />
+    <access launch-external="yes" origin="*" />
+    <allow-navigation href="*" />
     <allow-intent href="http://*/*" />
     <allow-intent href="https://*/*" />
     <allow-intent href="tel:*" />
@@ -18,7 +27,4 @@
     <preference name="DisallowOverscroll" value="true" />
     <preference name="android-minSdkVersion" value="16" />
     <preference name="BackupWebStorage" value="none" />
-    <feature name="Geolocation">
-        <param name="android-package" value="org.apache.cordova.geolocation.Geolocation" />
-    </feature>
 </widget>

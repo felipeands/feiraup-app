@@ -17,10 +17,11 @@
   "name": "tt",
   "description": "tt: An Ionic project",
   "cordovaPlugins": [
-    "cordova-plugin-geolocation"
+    "cordova-plugin-geolocation",
+    "cordova-plugin-whitelist"
   ],
   "cordovaPlatforms": [
-    "android",
-    "ios"
+    "ios",
+    "android"
   ]
 }

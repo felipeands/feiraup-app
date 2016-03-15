@@ -9615,10 +9615,10 @@ footer {
   footer button:nth-child(2) {
     position: absolute;
     margin-left: -20px;
-    top: 2px;
+    bottom: 1px;
     left: 50%;
     border-radius: 50%;
-    min-height: 45px;
+    min-height: 40px;
     background: #387ef5;
     color: white;
     border: 1px solid #387ef5; }
