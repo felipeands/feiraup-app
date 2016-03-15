@@ -66,11 +66,7 @@ export class NewRoutePage {
       animation: google.maps.Animation.DROP,
       position: latLng
     });
-
     this.map.setCenter(this.latLng);
-
-    let content = `lat: ${latitude}, lng: ${longitude}`;
-    this.addInfoWindow(marker, content);
   }
 
   addPosition(latitude, longitude) {

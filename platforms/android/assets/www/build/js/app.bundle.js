@@ -62455,6 +62455,9 @@
 	var OptionData = (function () {
 	    function OptionData() {
 	        this.base_url = 'http://feiraup.ngrok.com';
+	        this.gmaps_key = 'AIzaSyDEdVkgms32J_TZad9VJO-XJHWvaQRUDqg';
+	        this.gmaps_timeout = 100000;
+	        this.gmaps_accuracy = true;
 	    }
 	    OptionData = __decorate([
 	        core_1.Injectable(), 
@@ -62566,7 +62569,6 @@
 	    LoginPage.prototype.onSubmitLogin = function (form) {
 	        var _this = this;
 	        if (form.valid) {
-	            console.log('login sub');
 	            this.userData.login(this.emailModel, this.passwordModel)
 	                .then(function (res) {
 	                if (res.hasOwnProperty('access_token')) {
@@ -62757,8 +62759,10 @@
 	        this.latLng = null;
 	        this.currentLat = 0;
 	        this.currentLng = 0;
+	        this.updating = true;
 	        this.updated = false;
 	        this.map = null;
+	        this.poly = null;
 	        this.mapData.loadSdk();
 	        this.loadMap();
 	    }
@@ -62776,11 +62780,21 @@
 	            _this.updatePosition(position.latitude, position.longitude);
 	            var mapOptions = {
 	                center: _this.latLng,
-	                zoom: 17,
+	                zoom: 18,
 	                mapTypeId: google.maps.MapTypeId.ROADMAP
 	            };
 	            _this.map = new google.maps.Map(document.getElementById('map'), mapOptions);
 	        });
+	    };
+	    NewRoutePage.prototype.addMarker = function (latLng) {
+	        var marker = new google.maps.Marker({
+	            map: this.map,
+	            animation: google.maps.Animation.DROP,
+	            position: latLng
+	        });
+	        this.map.setCenter(this.latLng);
+	        var content = "lat: " + latitude + ", lng: " + longitude;
+	        this.addInfoWindow(marker, content);
 	    };
 	    NewRoutePage.prototype.addPosition = function (latitude, longitude) {
 	        var pos = {
@@ -62789,13 +62803,9 @@
 	        };
 	        this.positions.push(pos);
 	        this.updated = false;
-	        var marker = new google.maps.Marker({
-	            map: this.map,
-	            animation: google.maps.Animation.DROP,
-	            position: this.latLng
-	        });
-	        var content = "lat: " + latitude + ", lng: " + longitude;
-	        this.addInfoWindow(marker, content);
+	        var path = this.poly.getPath();
+	        path.push(this.latLng);
+	        this.poly.setPath(path);
 	    };
 	    NewRoutePage.prototype.addInfoWindow = function (marker, content) {
 	        var infoWindow = new google.maps.InfoWindow({
@@ -62807,13 +62817,20 @@
 	    };
 	    NewRoutePage.prototype.onStart = function () {
 	        this.mapping = true;
+	        this.poly = new google.maps.Polyline({
+	            map: this.map,
+	            path: []
+	        });
 	        this.addPosition(this.currentLat, this.currentLng);
+	        this.addMarker(this.latLng);
 	    };
 	    NewRoutePage.prototype.onUpdateLocation = function () {
 	        var _this = this;
+	        this.updating = true;
 	        this.mapData.getUpdatedPos().then(function (position) {
 	            if (position.latitude && position.longitude) {
 	                _this.updatePosition(position.latitude, position.longitude);
+	                _this.addMarker(_this.latLng);
 	                var alert_1 = ionic_1.Alert.create({
 	                    title: 'OK...',
 	                    message: 'Localização atualizada.',
@@ -62825,7 +62842,24 @@
 	    };
 	    NewRoutePage.prototype.onFinish = function () {
 	        this.mapping = false;
-	        this.addPosition(this.currentLat, this.currentLng);
+	        var alert = ionic_1.Alert.create({
+	            title: 'Finalizando',
+	            message: 'Informe um nome para esse novo caminho.',
+	            inputs: [{
+	                    name: 'name',
+	                    placeholder: 'Nome'
+	                }],
+	            buttons: [{
+	                    text: 'Cancelar',
+	                    handler: function (data) { }
+	                }, {
+	                    text: 'OK',
+	                    handler: function (data) {
+	                        console.log(data.name);
+	                    }
+	                }]
+	        });
+	        this.nav.present(alert);
 	    };
 	    NewRoutePage.prototype.onNewMark = function () {
 	        this.addPosition(this.currentLat, this.currentLng);
@@ -62834,12 +62868,13 @@
 	        this.currentLat = latitude;
 	        this.currentLng = longitude;
 	        this.latLng = new google.maps.LatLng(latitude, longitude);
+	        this.updating = false;
 	        this.updated = true;
 	    };
 	    NewRoutePage = __decorate([
 	        ionic_1.Page({
 	            templateUrl: 'build/pages/route/new-route.html',
-	            styles: ["\n  #map {\n    width: 100%;\n    height: 100%;\n  }\n  "]
+	            styles: ["\n  #map {\n    width: 100%;\n    height: 200px;\n  }\n  "]
 	        }), 
 	        __metadata('design:paramtypes', [Object, Object])
 	    ], NewRoutePage);
@@ -62866,6 +62901,7 @@
 	var option_data_1 = __webpack_require__(362);
 	var MapData = (function () {
 	    function MapData(http, options) {
+	        this.options = options;
 	    }
 	    Object.defineProperty(MapData, "parameters", {
 	        get: function () {
@@ -62880,17 +62916,15 @@
 	            script = document.createElement('script');
 	            script.id = 'mapscript';
 	            script.type = 'text/javascript';
-	            script.src = 'http://maps.google.com/maps/api/js?sensor=true';
+	            script.src = "http://maps.google.com/maps/api/js?sensor=true&key=" + this.options.gmaps_key;
 	            document.body.appendChild(script);
 	        }
 	    };
 	    MapData.prototype.getUpdatedPos = function () {
-	        var options = { timeout: 10000, enableHighAccuracy: false };
+	        var options = { timeout: this.options.gmaps_timeout, enableHighAccuracy: this.options.gmaps_accuracy };
 	        return new Promise(function (resolve) {
 	            navigator.geolocation.getCurrentPosition(function (position) {
 	                resolve(position.coords);
-	                // this.updatePosition(position.coords.longitude,position.coords.latitude);
-	                // return position.coords;
 	            }, function () { }, options);
 	        });
 	    };
