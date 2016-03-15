@@ -24,8 +24,6 @@ export class NewRoutePage {
     this.mapData = mapData;
 
     this.mapping = false;
-    this.firstPosition = false;
-    this.lastPosition = false;
     this.positions = [];
 
     this.latLng = null;
@@ -36,6 +34,7 @@ export class NewRoutePage {
     this.updated = false;
 
     this.map = null;
+    this.market = null;
     this.poly = null;
 
     this.mapData.loadSdk();
@@ -55,18 +54,38 @@ export class NewRoutePage {
       }
 
       this.map = new google.maps.Map(document.getElementById('map'), mapOptions);
+      this.addMarker(this.latLng);
 
     });
 
   }
 
   addMarker(latLng) {
-    let marker = new google.maps.Marker({
+    this.marker = new google.maps.Marker({
       map: this.map,
       animation: google.maps.Animation.DROP,
-      position: latLng
+      position: latLng,
+      draggable: true
     });
+
+    $this = this;
+
+    this.marker.addListener('dragend', function(e) {
+      $this.updatePosition(e.latLng.lat(), e.latLng.lng());
+    });
+
     this.map.setCenter(this.latLng);
+  }
+
+  updateMarker() {
+    this.marker.setPosition(this.latLng);
+    this.map.setCenter(this.latLng);
+  }
+
+  updatePoly() {
+    let path = this.poly.getPath();
+    path.push(this.latLng);
+    this.poly.setPath(path);
   }
 
   addPosition(latitude, longitude) {
@@ -77,19 +96,8 @@ export class NewRoutePage {
     this.positions.push(pos);
     this.updated = false;
 
-    let path = this.poly.getPath();
-    path.push(this.latLng);
-    this.poly.setPath(path);
+    this.updatePoly();
 
-  }
-
-  addInfoWindow(marker, content){
-    let infoWindow = new google.maps.InfoWindow({
-      content: content
-    });
-    google.maps.event.addListener(marker, 'click', function(){
-      infoWindow.open(this.map, marker);
-    });
   }
 
   onStart() {
@@ -99,15 +107,17 @@ export class NewRoutePage {
       path: []
     });
     this.addPosition(this.currentLat, this.currentLng);
-    this.addMarker(this.latLng);
   }
 
   onUpdateLocation() {
     this.updating = true;
     this.mapData.getUpdatedPos().then((position) => {
+
       if(position.latitude && position.longitude) {
+
         this.updatePosition(position.latitude, position.longitude);
-        this.addMarker(this.latLng);
+        this.updateMarker(this.latLng);
+
         let alert = Alert.create({
           title: 'OK...',
           message: 'Localização atualizada.',
@@ -115,6 +125,7 @@ export class NewRoutePage {
         });
         this.nav.present(alert);
       }
+
     });
   }
 

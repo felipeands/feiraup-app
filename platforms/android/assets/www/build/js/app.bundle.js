@@ -62755,8 +62755,6 @@
 	        this.nav = nav;
 	        this.mapData = mapData;
 	        this.mapping = false;
-	        this.firstPosition = false;
-	        this.lastPosition = false;
 	        this.positions = [];
 	        this.latLng = null;
 	        this.currentLat = 0;
@@ -62764,6 +62762,7 @@
 	        this.updating = true;
 	        this.updated = false;
 	        this.map = null;
+	        this.market = null;
 	        this.poly = null;
 	        this.mapData.loadSdk();
 	        this.loadMap();
@@ -62786,15 +62785,30 @@
 	                mapTypeId: google.maps.MapTypeId.ROADMAP
 	            };
 	            _this.map = new google.maps.Map(document.getElementById('map'), mapOptions);
+	            _this.addMarker(_this.latLng);
 	        });
 	    };
 	    NewRoutePage.prototype.addMarker = function (latLng) {
-	        var marker = new google.maps.Marker({
+	        this.marker = new google.maps.Marker({
 	            map: this.map,
 	            animation: google.maps.Animation.DROP,
-	            position: latLng
+	            position: latLng,
+	            draggable: true
+	        });
+	        $this = this;
+	        this.marker.addListener('dragend', function (e) {
+	            $this.updatePosition(e.latLng.lat(), e.latLng.lng());
 	        });
 	        this.map.setCenter(this.latLng);
+	    };
+	    NewRoutePage.prototype.updateMarker = function () {
+	        this.marker.setPosition(this.latLng);
+	        this.map.setCenter(this.latLng);
+	    };
+	    NewRoutePage.prototype.updatePoly = function () {
+	        var path = this.poly.getPath();
+	        path.push(this.latLng);
+	        this.poly.setPath(path);
 	    };
 	    NewRoutePage.prototype.addPosition = function (latitude, longitude) {
 	        var pos = {
@@ -62803,17 +62817,7 @@
 	        };
 	        this.positions.push(pos);
 	        this.updated = false;
-	        var path = this.poly.getPath();
-	        path.push(this.latLng);
-	        this.poly.setPath(path);
-	    };
-	    NewRoutePage.prototype.addInfoWindow = function (marker, content) {
-	        var infoWindow = new google.maps.InfoWindow({
-	            content: content
-	        });
-	        google.maps.event.addListener(marker, 'click', function () {
-	            infoWindow.open(this.map, marker);
-	        });
+	        this.updatePoly();
 	    };
 	    NewRoutePage.prototype.onStart = function () {
 	        this.mapping = true;
@@ -62822,7 +62826,6 @@
 	            path: []
 	        });
 	        this.addPosition(this.currentLat, this.currentLng);
-	        this.addMarker(this.latLng);
 	    };
 	    NewRoutePage.prototype.onUpdateLocation = function () {
 	        var _this = this;
@@ -62830,7 +62833,7 @@
 	        this.mapData.getUpdatedPos().then(function (position) {
 	            if (position.latitude && position.longitude) {
 	                _this.updatePosition(position.latitude, position.longitude);
-	                _this.addMarker(_this.latLng);
+	                _this.updateMarker(_this.latLng);
 	                var alert_1 = ionic_1.Alert.create({
 	                    title: 'OK...',
 	                    message: 'Localização atualizada.',

@@ -15,7 +15,7 @@
 
   <p>Minha Localização. Lat: {{currentLat}}, Lng: {{currentLng}}</p>
 
-  <button (click)="onStart()" type="submit" [disabled]="mapping" block large>COMEÇAR</button>
+  <button (click)="onStart()" type="submit" [disabled]="mapping || updating" block large>COMEÇAR</button>
 
   <button (click)="onFinish()" type="submit" [disabled]="!mapping" block large>FINALIZAR</button>
 
