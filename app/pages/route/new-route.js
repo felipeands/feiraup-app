@@ -32,6 +32,7 @@ export class NewRoutePage {
     this.currentLat = 0;
     this.currentLng = 0;
 
+    this.updating = true;
     this.updated = false;
 
     this.map = null;
@@ -49,7 +50,7 @@ export class NewRoutePage {
 
       let mapOptions = {
         center: this.latLng,
-        zoom: 16,
+        zoom: 18,
         mapTypeId: google.maps.MapTypeId.ROADMAP
       }
 
@@ -59,6 +60,19 @@ export class NewRoutePage {
 
   }
 
+  addMarker(latLng) {
+    let marker = new google.maps.Marker({
+      map: this.map,
+      animation: google.maps.Animation.DROP,
+      position: latLng
+    });
+
+    this.map.setCenter(this.latLng);
+
+    let content = `lat: ${latitude}, lng: ${longitude}`;
+    this.addInfoWindow(marker, content);
+  }
+
   addPosition(latitude, longitude) {
     let pos = {
       latitude: latitude,
@@ -66,17 +80,6 @@ export class NewRoutePage {
     }
     this.positions.push(pos);
     this.updated = false;
-
-    this.map.setCenter(this.latLng);
-
-    let marker = new google.maps.Marker({
-      map: this.map,
-      animation: google.maps.Animation.DROP,
-      position: this.latLng
-    });
-
-    let content = `lat: ${latitude}, lng: ${longitude}`;
-    this.addInfoWindow(marker, content);
 
     let path = this.poly.getPath();
     path.push(this.latLng);
@@ -100,12 +103,15 @@ export class NewRoutePage {
       path: []
     });
     this.addPosition(this.currentLat, this.currentLng);
+    this.addMarker(this.latLng);
   }
 
   onUpdateLocation() {
+    this.updating = true;
     this.mapData.getUpdatedPos().then((position) => {
       if(position.latitude && position.longitude) {
         this.updatePosition(position.latitude, position.longitude);
+        this.addMarker(this.latLng);
         let alert = Alert.create({
           title: 'OK...',
           message: 'Localização atualizada.',
@@ -148,6 +154,7 @@ export class NewRoutePage {
     this.currentLat = latitude;
     this.currentLng = longitude;
     this.latLng = new google.maps.LatLng(latitude, longitude);
+    this.updating = false;
     this.updated = true;
   }
 
