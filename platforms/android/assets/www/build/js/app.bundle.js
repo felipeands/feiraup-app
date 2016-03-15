@@ -3203,7 +3203,7 @@
 	        this.loggedRole = false;
 	        this.cityData = cityData;
 	        this.userData = userData;
-	        this.root = new_route_1.NewRoutePage;
+	        this.root = location_1.LocationPage;
 	        this.footerPages = [
 	            { title: 'Aleatório', component: random_1.RandomPage, icon: 'sync', fab: 'fab-left' },
 	            { title: '', component: cart_1.CartPage, icon: 'cart', fab: 'fab-center' },
@@ -3265,7 +3265,9 @@
 	        ionic_1.App({
 	            templateUrl: './build/app.html',
 	            providers: [city_data_1.CityData, place_data_1.PlaceData, user_data_1.UserData, option_data_1.OptionData, map_data_1.MapData],
-	            config: {}
+	            config: {
+	                mode: 'md'
+	            }
 	        }), 
 	        __metadata('design:paramtypes', [Object, Object, Object, Object])
 	    ], MyApp);
@@ -62780,7 +62782,7 @@
 	            _this.updatePosition(position.latitude, position.longitude);
 	            var mapOptions = {
 	                center: _this.latLng,
-	                zoom: 18,
+	                zoom: 19,
 	                mapTypeId: google.maps.MapTypeId.ROADMAP
 	            };
 	            _this.map = new google.maps.Map(document.getElementById('map'), mapOptions);
@@ -62793,8 +62795,6 @@
 	            position: latLng
 	        });
 	        this.map.setCenter(this.latLng);
-	        var content = "lat: " + latitude + ", lng: " + longitude;
-	        this.addInfoWindow(marker, content);
 	    };
 	    NewRoutePage.prototype.addPosition = function (latitude, longitude) {
 	        var pos = {

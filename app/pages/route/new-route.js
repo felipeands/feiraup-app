@@ -50,7 +50,7 @@ export class NewRoutePage {
 
       let mapOptions = {
         center: this.latLng,
-        zoom: 18,
+        zoom: 19,
         mapTypeId: google.maps.MapTypeId.ROADMAP
       }
 

@@ -18,7 +18,7 @@ import {MapData} from './services/map-data';
   templateUrl: './build/app.html',
   providers: [CityData, PlaceData, UserData, OptionData, MapData],
   config: {
-    // mode: 'md'
+    mode: 'md'
   }
 })
 
@@ -36,7 +36,7 @@ export class MyApp {
     this.cityData = cityData;
     this.userData = userData;
 
-    this.root = NewRoutePage;
+    this.root = LocationPage;
 
     this.footerPages = [
       {title: 'Aleatório', component: RandomPage, icon: 'sync', fab: 'fab-left'},

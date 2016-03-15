@@ -9,7 +9,7 @@
 
 <ion-content padding class="route">
 
-  <button (click)="onNewMark()" type="submit" [disabled]="!mapping || !updated" secondary><ion-icon name="add-circle"> Adicionar</ion-icon></button>
+  <button (click)="onNewMark()" type="submit" [disabled]="!mapping || !updated || updating" secondary><ion-icon name="add-circle"> Adicionar</ion-icon></button>
 
   <button (click)="onUpdateLocation()" type="submit" [disabled]="!mapping || updating" primary><ion-icon name="refresh-circle"> Atualizar</ion-icon></button>
 
