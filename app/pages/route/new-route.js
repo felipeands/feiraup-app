@@ -1,27 +1,28 @@
 import {Page, NavController, Alert} from 'ionic-framework/ionic';
 import {MapData} from '../../services/map-data';
+import {RouteData} from '../../services/route-data';
 
 @Page ({
   templateUrl: 'build/pages/route/new-route.html',
   styles: [`
   #map {
     width: 100%;
-    height: 200px;
+    height: 250px;
   }
   `]
 })
 
 export class NewRoutePage {
-  // Model;
 
   static get parameters() {
-    return [[NavController],[MapData]];
+    return [[NavController],[MapData],[RouteData]];
 
   }
 
-  constructor(nav, mapData) {
+  constructor(nav, mapData, routeData) {
     this.nav = nav;
     this.mapData = mapData;
+    this.routeData = routeData;
 
     this.mapping = false;
     this.positions = [];
@@ -37,25 +38,32 @@ export class NewRoutePage {
     this.market = null;
     this.poly = null;
 
-    this.mapData.loadSdk();
-    this.loadMap();
+    this.mapData.waitGoogleMaps().then((win) => {
+      this.initMap();
+      this.loadFirstPos();
+    });
+
+    let sdk = this.mapData.loadSdk();
+    if (sdk==false) {
+      window.initMap();
+    }
+
+  }
+
+  initMap() {
+    let mapOptions = {
+      center: new google.maps.LatLng(-16.6667, -49.2500),
+      zoom: 19,
+      mapTypeId: google.maps.MapTypeId.ROADMAP
+    }
+    this.map = new google.maps.Map(document.getElementById('map'), mapOptions);
   }
 
 
-
-  loadMap() {
+  loadFirstPos() {
     this.mapData.getUpdatedPos().then((position) => {
       this.updatePosition(position.latitude, position.longitude);
-
-      let mapOptions = {
-        center: this.latLng,
-        zoom: 19,
-        mapTypeId: google.maps.MapTypeId.ROADMAP
-      }
-
-      this.map = new google.maps.Map(document.getElementById('map'), mapOptions);
       this.addMarker(this.latLng);
-
     });
 
   }
@@ -144,8 +152,40 @@ export class NewRoutePage {
         handler: data => {}
       }, {
         text: 'OK',
-        handler: data => {
-          console.log(data.name);
+        handler: (form) => {
+          this.routeData.addRoute(form.name, this.positions).then((response) => {
+
+            if(response.hasOwnProperty('message')) {
+
+              var alert = Alert.create({
+                title: 'OK...',
+                message: response.message,
+                buttons: ['OK']
+              });
+
+            } else if(response.hasOwnProperty('error')) {
+
+              var alert = Alert.create({
+                title: 'Ops...',
+                message: response.error,
+                buttons: ['OK']
+              });
+
+            } else {
+
+              var alert = Alert.create({
+                title: 'Ops...',
+                message: 'Não foi possível adicionar.',
+                buttons: ['OK']
+              });
+
+            }
+            let nav = this.nav;
+            setTimeout(function() {
+              nav.present(alert);
+            }, 500);
+
+          });
         }
       }]
     });

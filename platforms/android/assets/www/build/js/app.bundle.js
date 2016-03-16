@@ -3195,6 +3195,7 @@
 	var place_data_1 = __webpack_require__(363);
 	var option_data_1 = __webpack_require__(362);
 	var map_data_1 = __webpack_require__(367);
+	var route_data_1 = __webpack_require__(368);
 	var MyApp = (function () {
 	    function MyApp(app, events, cityData, userData) {
 	        this.app = app;
@@ -3264,10 +3265,8 @@
 	    MyApp = __decorate([
 	        ionic_1.App({
 	            templateUrl: './build/app.html',
-	            providers: [city_data_1.CityData, place_data_1.PlaceData, user_data_1.UserData, option_data_1.OptionData, map_data_1.MapData],
-	            config: {
-	                mode: 'md'
-	            }
+	            providers: [city_data_1.CityData, place_data_1.PlaceData, user_data_1.UserData, option_data_1.OptionData, map_data_1.MapData, route_data_1.RouteData],
+	            config: {}
 	        }), 
 	        __metadata('design:paramtypes', [Object, Object, Object, Object])
 	    ], MyApp);
@@ -62456,10 +62455,13 @@
 	var core_1 = __webpack_require__(7);
 	var OptionData = (function () {
 	    function OptionData() {
-	        this.base_url = 'http://feiraup.ngrok.com';
+	        this.base_url = 'http://feiraup.herokuapp.com';
+	        // this.base_url = 'http://localhost:3000';
+	        // this.base_url = 'http://feiraup.ngrok.com';
 	        this.gmaps_key = 'AIzaSyDEdVkgms32J_TZad9VJO-XJHWvaQRUDqg';
 	        this.gmaps_timeout = 100000;
 	        this.gmaps_accuracy = true;
+	        this.gmaps_sensor = ''; // '&sensor=true';
 	    }
 	    OptionData = __decorate([
 	        core_1.Injectable(), 
@@ -62750,10 +62752,13 @@
 	};
 	var ionic_1 = __webpack_require__(5);
 	var map_data_1 = __webpack_require__(367);
+	var route_data_1 = __webpack_require__(368);
 	var NewRoutePage = (function () {
-	    function NewRoutePage(nav, mapData) {
+	    function NewRoutePage(nav, mapData, routeData) {
+	        var _this = this;
 	        this.nav = nav;
 	        this.mapData = mapData;
+	        this.routeData = routeData;
 	        this.mapping = false;
 	        this.positions = [];
 	        this.latLng = null;
@@ -62764,27 +62769,34 @@
 	        this.map = null;
 	        this.market = null;
 	        this.poly = null;
-	        this.mapData.loadSdk();
-	        this.loadMap();
+	        this.mapData.waitGoogleMaps().then(function (win) {
+	            _this.initMap();
+	            _this.loadFirstPos();
+	        });
+	        var sdk = this.mapData.loadSdk();
+	        if (sdk == false) {
+	            window.initMap();
+	        }
 	    }
 	    Object.defineProperty(NewRoutePage, "parameters", {
-	        // Model;
 	        get: function () {
-	            return [[ionic_1.NavController], [map_data_1.MapData]];
+	            return [[ionic_1.NavController], [map_data_1.MapData], [route_data_1.RouteData]];
 	        },
 	        enumerable: true,
 	        configurable: true
 	    });
-	    NewRoutePage.prototype.loadMap = function () {
+	    NewRoutePage.prototype.initMap = function () {
+	        var mapOptions = {
+	            center: new google.maps.LatLng(-16.6667, -49.2500),
+	            zoom: 19,
+	            mapTypeId: google.maps.MapTypeId.ROADMAP
+	        };
+	        this.map = new google.maps.Map(document.getElementById('map'), mapOptions);
+	    };
+	    NewRoutePage.prototype.loadFirstPos = function () {
 	        var _this = this;
 	        this.mapData.getUpdatedPos().then(function (position) {
 	            _this.updatePosition(position.latitude, position.longitude);
-	            var mapOptions = {
-	                center: _this.latLng,
-	                zoom: 19,
-	                mapTypeId: google.maps.MapTypeId.ROADMAP
-	            };
-	            _this.map = new google.maps.Map(document.getElementById('map'), mapOptions);
 	            _this.addMarker(_this.latLng);
 	        });
 	    };
@@ -62844,6 +62856,7 @@
 	        });
 	    };
 	    NewRoutePage.prototype.onFinish = function () {
+	        var _this = this;
 	        this.mapping = false;
 	        var alert = ionic_1.Alert.create({
 	            title: 'Finalizando',
@@ -62857,8 +62870,34 @@
 	                    handler: function (data) { }
 	                }, {
 	                    text: 'OK',
-	                    handler: function (data) {
-	                        console.log(data.name);
+	                    handler: function (form) {
+	                        _this.routeData.addRoute(form.name, _this.positions).then(function (response) {
+	                            if (response.hasOwnProperty('message')) {
+	                                var alert = ionic_1.Alert.create({
+	                                    title: 'OK...',
+	                                    message: response.message,
+	                                    buttons: ['OK']
+	                                });
+	                            }
+	                            else if (response.hasOwnProperty('error')) {
+	                                var alert = ionic_1.Alert.create({
+	                                    title: 'Ops...',
+	                                    message: response.error,
+	                                    buttons: ['OK']
+	                                });
+	                            }
+	                            else {
+	                                var alert = ionic_1.Alert.create({
+	                                    title: 'Ops...',
+	                                    message: 'Não foi possível adicionar.',
+	                                    buttons: ['OK']
+	                                });
+	                            }
+	                            var nav = _this.nav;
+	                            setTimeout(function () {
+	                                nav.present(alert);
+	                            }, 500);
+	                        });
 	                    }
 	                }]
 	        });
@@ -62877,9 +62916,9 @@
 	    NewRoutePage = __decorate([
 	        ionic_1.Page({
 	            templateUrl: 'build/pages/route/new-route.html',
-	            styles: ["\n  #map {\n    width: 100%;\n    height: 200px;\n  }\n  "]
+	            styles: ["\n  #map {\n    width: 100%;\n    height: 250px;\n  }\n  "]
 	        }), 
-	        __metadata('design:paramtypes', [Object, Object])
+	        __metadata('design:paramtypes', [Object, Object, Object])
 	    ], NewRoutePage);
 	    return NewRoutePage;
 	})();
@@ -62900,15 +62939,14 @@
 	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 	};
 	var core_1 = __webpack_require__(7);
-	var http_1 = __webpack_require__(145);
 	var option_data_1 = __webpack_require__(362);
 	var MapData = (function () {
-	    function MapData(http, options) {
+	    function MapData(options) {
 	        this.options = options;
 	    }
 	    Object.defineProperty(MapData, "parameters", {
 	        get: function () {
-	            return [[http_1.Http], [option_data_1.OptionData]];
+	            return [[option_data_1.OptionData]];
 	        },
 	        enumerable: true,
 	        configurable: true
@@ -62919,9 +62957,20 @@
 	            script = document.createElement('script');
 	            script.id = 'mapscript';
 	            script.type = 'text/javascript';
-	            script.src = "http://maps.google.com/maps/api/js?sensor=true&key=" + this.options.gmaps_key;
+	            script.src = "http://maps.google.com/maps/api/js?key=" + this.options.gmaps_key + this.options.gmaps_sensor + "&callback=initMap";
 	            document.body.appendChild(script);
+	            return true;
 	        }
+	        else {
+	            return false;
+	        }
+	    };
+	    MapData.prototype.waitGoogleMaps = function () {
+	        return new Promise(function (resolve) {
+	            window['initMap'] = function () {
+	                resolve(window);
+	            };
+	        });
 	    };
 	    MapData.prototype.getUpdatedPos = function () {
 	        var options = { timeout: this.options.gmaps_timeout, enableHighAccuracy: this.options.gmaps_accuracy };
@@ -62933,11 +62982,76 @@
 	    };
 	    MapData = __decorate([
 	        core_1.Injectable(), 
-	        __metadata('design:paramtypes', [Object, Object])
+	        __metadata('design:paramtypes', [Object])
 	    ], MapData);
 	    return MapData;
 	})();
 	exports.MapData = MapData;
+
+
+/***/ },
+/* 368 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+	    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+	    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+	    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+	    return c > 3 && r && Object.defineProperty(target, key, r), r;
+	};
+	var __metadata = (this && this.__metadata) || function (k, v) {
+	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+	};
+	var core_1 = __webpack_require__(7);
+	var http_1 = __webpack_require__(145);
+	var option_data_1 = __webpack_require__(362);
+	var user_data_1 = __webpack_require__(365);
+	var place_data_1 = __webpack_require__(363);
+	var RouteData = (function () {
+	    function RouteData(http, options, user, place, win) {
+	        this.http = http;
+	        this.options = options;
+	        this.userData = user;
+	        this.placeData = place;
+	    }
+	    Object.defineProperty(RouteData, "parameters", {
+	        get: function () {
+	            return [[http_1.Http], [option_data_1.OptionData], [user_data_1.UserData], [place_data_1.PlaceData]];
+	        },
+	        enumerable: true,
+	        configurable: true
+	    });
+	    RouteData.prototype.addRoute = function (name, positions) {
+	        var _this = this;
+	        var data = [
+	            ("email=" + this.userData.loggedEmail),
+	            ("access_token=" + this.userData.loggedToken),
+	            ("name=" + name),
+	            ("place_id=" + this.placeData.placeId),
+	            ("positions=" + JSON.stringify(positions))
+	        ];
+	        this.headers = new http_1.Headers();
+	        this.headers.append('Content-Type', 'application/x-www-form-urlencoded');
+	        return new Promise(function (resolve) {
+	            _this.http.post(_this.options.base_url + "/route/add", data.join('&'), {
+	                headers: _this.headers
+	            })
+	                .subscribe(function (res) {
+	                resolve(res.json());
+	            }, function (err) {
+	                if (err) {
+	                    resolve(err.json());
+	                }
+	            }, function () { });
+	        });
+	    };
+	    RouteData = __decorate([
+	        core_1.Injectable(), 
+	        __metadata('design:paramtypes', [Object, Object, Object, Object, Object])
+	    ], RouteData);
+	    return RouteData;
+	})();
+	exports.RouteData = RouteData;
 
 
 /***/ }

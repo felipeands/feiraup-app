@@ -20,7 +20,7 @@ export class UserData {
   }
 
   getLogin(username, password) {
-    var data = "username="+ username +"&password="+ password;
+    var data = `username=${username}&password=${password}`;
 
     this.headers = new Headers();
     this.headers.append('Content-Type', 'application/x-www-form-urlencoded');

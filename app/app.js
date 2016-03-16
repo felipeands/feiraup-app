@@ -12,13 +12,14 @@ import {CityData} from './services/city-data';
 import {PlaceData} from './services/place-data';
 import {OptionData} from './services/option-data';
 import {MapData} from './services/map-data';
+import {RouteData} from './services/route-data';
 
 
 @App({
   templateUrl: './build/app.html',
-  providers: [CityData, PlaceData, UserData, OptionData, MapData],
+  providers: [CityData, PlaceData, UserData, OptionData, MapData, RouteData],
   config: {
-    mode: 'md'
+    // mode: 'md'
   }
 })
 
