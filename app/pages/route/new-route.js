@@ -175,7 +175,7 @@ export class NewRoutePage {
 
               var alert = Alert.create({
                 title: 'Ops...',
-                message: 'Não foi possível adicionar.',
+                message: 'Não foi possível salvar!',
                 buttons: ['OK']
               });
 
