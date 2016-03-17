@@ -68,7 +68,7 @@
       <true/>
       <key>NSExceptionDomains</key>
       <dict>
-        <key>ngrok.com</key>
+        <key>herokuapp.com</key>
         <dict>
           <key>NSIncludesSubdomains</key>
           <true/>

@@ -16,7 +16,6 @@ export class NewRoutePage {
 
   static get parameters() {
     return [[NavController],[MapData],[RouteData]];
-
   }
 
   constructor(nav, mapData, routeData) {

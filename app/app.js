@@ -6,6 +6,7 @@ import {CartPage} from './pages/cart/cart';
 import {LocationPage} from './pages/location/location';
 import {LoginPage} from './pages/login/login';
 import {NewRoutePage} from './pages/route/new-route';
+import {ShowRoutesPage} from './pages/route/show-routes';
 
 import {UserData} from './services/user-data';
 import {CityData} from './services/city-data';
@@ -46,7 +47,8 @@ export class MyApp {
     ];
 
     this.adminPages = [
-      {title: 'Novo local', component: NewRoutePage, icon: 'map'}
+      {title: 'Caminhos', component: ShowRoutesPage, icon: 'map'}
+      {title: 'Novo caminho', component: NewRoutePage, icon: 'map'},
     ];
 
     this.loggedOutPages = [

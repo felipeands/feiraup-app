@@ -62889,7 +62889,7 @@
 	                            else {
 	                                var alert = ionic_1.Alert.create({
 	                                    title: 'Ops...',
-	                                    message: 'Não foi possível adicionar.',
+	                                    message: 'Não foi possível salvar!',
 	                                    buttons: ['OK']
 	                                });
 	                            }
