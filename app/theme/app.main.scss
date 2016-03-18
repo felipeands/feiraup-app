@@ -10,10 +10,6 @@
 }
 
 
-// [fab-top] {
-//   top: 0;
-// }
-
 footer {
   position: fixed;
   bottom: 0;
@@ -27,7 +23,6 @@ footer {
     left: 50%;
     border-radius: 50%;
     min-height: 40px;
-    // font-size: 2em;
     background: $primary;
     color: white;
     border: 1px solid $primary;

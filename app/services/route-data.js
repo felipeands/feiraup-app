@@ -4,17 +4,18 @@ import {Http, Headers} from 'angular2/http';
 import {OptionData} from './option-data';
 import {UserData} from './user-data';
 import {PlaceData} from './place-data';
+import {Options} from './../options';
 
 @Injectable()
+
 export class RouteData {
   public headers: Headers;
 
   static get parameters() {
-    return [[Http],[OptionData],[UserData],[PlaceData]];
+    return [[Http],[UserData],[PlaceData],[Options]];
   }
 
-  constructor(http, options, user, place, win) {
-
+  constructor(http, user, place, options) {
     this.http = http;
     this.options = options;
     this.userData = user;
@@ -50,5 +51,14 @@ export class RouteData {
         () => {}
       );
     })
+  }
+
+  getPlaceRoutes() {
+    return new Promise(resolve => {
+      // this.http.get(`${this.options.base_url}/route/place/${this.placeData.placeId}`).subscribe((res) => {
+      this.http.get(`${this.options.base_url}/cities`).subscribe((res) => {
+        resolve(res.json());
+      });
+    });
   }
 }

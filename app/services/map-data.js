@@ -1,12 +1,12 @@
 import {Events} from 'ionic-framework/ionic';
 import {Injectable, Inject} from 'angular2/core';
-import {OptionData} from './option-data';
+import {Options} from './../options';
 
 @Injectable()
 export class MapData {
 
   static get parameters() {
-    return [[OptionData]];
+    return [[Options]];
   }
 
   constructor(options) {

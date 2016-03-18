@@ -11,14 +11,15 @@ import {ShowRoutesPage} from './pages/route/show-routes';
 import {UserData} from './services/user-data';
 import {CityData} from './services/city-data';
 import {PlaceData} from './services/place-data';
-import {OptionData} from './services/option-data';
 import {MapData} from './services/map-data';
 import {RouteData} from './services/route-data';
+import {Options} from './options';
+
 
 
 @App({
   templateUrl: './build/app.html',
-  providers: [CityData, PlaceData, UserData, OptionData, MapData, RouteData],
+  providers: [CityData, PlaceData, UserData, MapData, RouteData, Options],
   config: {
     // mode: 'md'
   }
@@ -27,15 +28,14 @@ import {RouteData} from './services/route-data';
 export class MyApp {
 
   static get parameters() {
-    return [[IonicApp], [Events], [CityData], [UserData]];
+    return [[IonicApp], [Events], [UserData]];
   }
 
-  constructor(app, events, cityData, userData) {
+  constructor(app, events, userData) {
     this.app = app;
     this.events = events;
     this.loggedIn = false;
     this.loggedRole = false;
-    this.cityData = cityData;
     this.userData = userData;
 
     this.root = LocationPage;

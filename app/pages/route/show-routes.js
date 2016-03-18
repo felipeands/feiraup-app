@@ -21,6 +21,33 @@ export class ShowRoutesPage {
   constructor(mapData, routeData) {
     this.mapData = mapData;
     this.routeData = routeData;
+
+    this.routeData.getPlaceRoutes().then((result) => {
+      this.routes = result;
+    });
+
+    this.prepareMap();
+
+    let sdk = this.mapData.loadSdk();
+    if (sdk==false) {
+      window.initMap();
+    }
+
+  }
+
+  prepareMap() {
+    this.mapData.waitGoogleMaps().then((win) => {
+      this.initMap();
+    });
+  }
+
+  initMap() {
+    let mapOptions = {
+      center: new google.maps.LatLng(-16.6667, -49.2500),
+      zoom: 19,
+      mapTypeId: google.maps.MapTypeId.ROADMAP
+    }
+    this.map = new google.maps.Map(document.getElementById('map'), mapOptions);
   }
 
 }

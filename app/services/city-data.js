@@ -1,13 +1,13 @@
 import {Injectable, Inject} from 'angular2/core';
 import {Storage, LocalStorage, Events} from 'ionic-framework/ionic';
 import {Http} from 'angular2/http';
-import {OptionData} from './option-data';
+import {Options} from './../options';
 
 @Injectable()
 export class CityData {
 
   static get parameters() {
-    return [[Http], [OptionData]];
+    return [[Http], [Options]];
   }
 
   constructor(http, options) {
