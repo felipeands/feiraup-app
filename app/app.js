@@ -49,7 +49,7 @@ export class MyApp {
     ];
 
     this.adminPages = [
-      {title: 'Caminhos', component: ShowRoutesPage, icon: 'map'}
+      {title: 'Caminhos e Galerias', component: ShowRoutesPage, icon: 'map'}
       {title: 'Novo caminho', component: NewRoutePage, icon: 'map'},
       {title: 'Nova galeria', component: NewGalleryPage, icon: 'map'},
     ];
