@@ -8,7 +8,7 @@ import {Options} from './../options';
 
 @Injectable()
 
-export class RouteData {
+export class GalleryData {
   public headers: Headers;
 
   static get parameters() {
@@ -22,7 +22,7 @@ export class RouteData {
     this.placeData = place;
   }
 
-  addRoute(name, positions) {
+  addGallery(name, positions) {
 
     let data = [
       `email=${this.userData.loggedEmail}`,
@@ -36,7 +36,7 @@ export class RouteData {
     this.headers.append('Content-Type', 'application/x-www-form-urlencoded');
 
     return new Promise(resolve => {
-      this.http.post(`${this.options.base_url}/route/add`, data.join('&'), {
+      this.http.post(`${this.options.base_url}/gallery/add`, data.join('&'), {
         headers: this.headers
       })
       .subscribe(
@@ -55,8 +55,7 @@ export class RouteData {
 
   // getPlaceRoutes() {
   //   return new Promise(resolve => {
-  //     // this.http.get(`${this.options.base_url}/cities`).subscribe((res) => {
-  //     this.http.get(`${this.options.base_url}/route/place/${this.placeData.placeId}`).subscribe((res) => {
+  //     this.http.get(`${this.options.base_url}/gallery/place/${this.placeData.placeId}`).subscribe((res) => {
   //       console.log(res);
   //       resolve(res.json());
   //     });

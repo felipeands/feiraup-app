@@ -7,19 +7,21 @@ import {LocationPage} from './pages/location/location';
 import {LoginPage} from './pages/login/login';
 import {NewRoutePage} from './pages/route/new-route';
 import {ShowRoutesPage} from './pages/route/show-routes';
+import {NewGalleryPage} from './pages/gallery/new-gallery';
 
 import {UserData} from './services/user-data';
 import {CityData} from './services/city-data';
 import {PlaceData} from './services/place-data';
 import {MapData} from './services/map-data';
 import {RouteData} from './services/route-data';
+import {GalleryData} from './services/gallery-data';
 import {Options} from './options';
 
 
 
 @App({
   templateUrl: './build/app.html',
-  providers: [CityData, PlaceData, UserData, MapData, RouteData, Options],
+  providers: [CityData, PlaceData, UserData, MapData, RouteData, GalleryData, Options],
   config: {
     // mode: 'md'
   }
@@ -49,6 +51,7 @@ export class MyApp {
     this.adminPages = [
       {title: 'Caminhos', component: ShowRoutesPage, icon: 'map'}
       {title: 'Novo caminho', component: NewRoutePage, icon: 'map'},
+      {title: 'Nova galeria', component: NewGalleryPage, icon: 'map'},
     ];
 
     this.loggedOutPages = [
