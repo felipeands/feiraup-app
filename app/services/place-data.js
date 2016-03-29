@@ -1,17 +1,23 @@
 import {Injectable, Inject} from 'angular2/core';
 import {Storage, LocalStorage, Events} from 'ionic-framework/ionic';
-import {Http} from 'angular2/http';
+import {Http, Headers} from 'angular2/http';
+
+import {UserData} from './user-data';
+import {CityData} from './city-data';
 import {Options} from './../options';
 
 @Injectable()
 export class PlaceData {
+  public headers: Headers;
 
   static get parameters() {
-    return [[Http], [Options]];
+    return [[Http], [UserData], [CityData], [Options]];
   }
 
-  constructor(http, options) {
+  constructor(http, user, city, options) {
     this.http = http;
+    this.userData = user;
+    this.cityData = city;
     this.options = options;
     this.storage = new Storage(LocalStorage);
     this.getCurrent();
@@ -60,6 +66,37 @@ export class PlaceData {
         resolve(res.json());
       });
     });
+  }
+
+  addPlace(name, position) {
+
+    let data = [
+    `email=${this.userData.loggedEmail}`,
+    `access_token=${this.userData.loggedToken}`,
+    `name=${name}`,
+    `city_id=${this.cityData.cityId}`,
+    `position=${JSON.stringify(position)}`
+    ];
+
+    this.headers = new Headers();
+    this.headers.append('Content-Type', 'application/x-www-form-urlencoded');
+
+    return new Promise(resolve => {
+      this.http.post(`${this.options.base_url}/place/add`, data.join('&'), {
+        headers: this.headers
+      })
+      .subscribe(
+        res => {
+          resolve(res.json())
+        },
+        (err) => {
+          if(err) {
+            resolve(err.json());
+          }
+        },
+        () => {}
+        );
+    })
   }
 
 }

@@ -62460,9 +62460,9 @@
 	var core_1 = __webpack_require__(7);
 	var Options = (function () {
 	    function Options() {
-	        // this.base_url = 'http://feiraup.herokuapp.com';
+	        this.base_url = 'http://feiraup.herokuapp.com';
 	        // this.base_url = 'http://localhost:3000';
-	        this.base_url = 'http://feiraup.ngrok.com';
+	        // this.base_url = 'http://feiraup.ngrok.com';
 	        // this.base_url = 'http://192.168.0.14:3000';
 	        this.gmaps_key = 'AIzaSyDEdVkgms32J_TZad9VJO-XJHWvaQRUDqg';
 	        this.gmaps_timeout = 100000;
@@ -62543,9 +62543,8 @@
 	    PlaceData.prototype.getPlaceFull = function (placeId) {
 	        var _this = this;
 	        return new Promise(function (resolve) {
-	            _this.http.get(_this.options.base_url + "/place/" + placeId).subscribe(function (res) {
+	            _this.http.get(_this.options.base_url + "/place-full/" + placeId).subscribe(function (res) {
 	                resolve(res.json());
-	                console.log(res);
 	            });
 	        });
 	    };
@@ -63338,8 +63337,8 @@
 	var ionic_1 = __webpack_require__(5);
 	var map_data_1 = __webpack_require__(367);
 	var place_data_1 = __webpack_require__(363);
-	var ShowRoutesPage = (function () {
-	    function ShowRoutesPage(mapData, placeData) {
+	var ShowPlacePage = (function () {
+	    function ShowPlacePage(mapData, placeData) {
 	        var _this = this;
 	        this.mapData = mapData;
 	        this.placeData = placeData;
@@ -63352,23 +63351,59 @@
 	            window.initMap();
 	        }
 	    }
-	    Object.defineProperty(ShowRoutesPage, "parameters", {
+	    Object.defineProperty(ShowPlacePage, "parameters", {
 	        get: function () {
 	            return [[map_data_1.MapData], [place_data_1.PlaceData]];
 	        },
 	        enumerable: true,
 	        configurable: true
 	    });
-	    ShowRoutesPage.prototype.processPlaceFull = function (place) {
-	        this.place = place;
+	    ShowPlacePage.prototype.getPositions = function (obj) {
+	        var result = [];
+	        for (var position in obj.positions) {
+	            result.push({
+	                lat: Number(obj.positions[position].latitude),
+	                lng: Number(obj.positions[position].longitude)
+	            });
+	        }
+	        return result;
 	    };
-	    ShowRoutesPage.prototype.prepareMap = function () {
+	    ShowPlacePage.prototype.processPlaceFull = function (place) {
+	        this.addGalleries(place.galleries);
+	        this.addRoutes(place.routes);
+	        var latitude = Number(place.place.latitude);
+	        var longitude = Number(place.place.longitude);
+	        this.setLatLng(latitude, longitude);
+	    };
+	    ShowPlacePage.prototype.addGalleries = function (galleries) {
+	        for (var gallery in galleries) {
+	            this.addGallery(galleries[gallery]);
+	        }
+	    };
+	    ShowPlacePage.prototype.addGallery = function (gallery) {
+	        new google.maps.Polygon({
+	            map: this.map,
+	            path: this.getPositions(gallery)
+	        });
+	    };
+	    ShowPlacePage.prototype.addRoutes = function (routes) {
+	        for (var route in routes) {
+	            this.addRoute(routes[route]);
+	        }
+	    };
+	    ShowPlacePage.prototype.addRoute = function (route) {
+	        new google.maps.Polyline({
+	            map: this.map,
+	            path: this.getPositions(route)
+	        });
+	    };
+	    ShowPlacePage.prototype.prepareMap = function () {
 	        var _this = this;
 	        this.mapData.waitGoogleMaps().then(function (win) {
 	            _this.initMap();
 	        });
 	    };
-	    ShowRoutesPage.prototype.initMap = function () {
+	    ShowPlacePage.prototype.initMap = function () {
 	        var mapOptions = {
 	            center: new google.maps.LatLng(-16.6667, -49.2500),
 	            zoom: 19,
@@ -63376,16 +63411,20 @@
 	        };
 	        this.map = new google.maps.Map(document.getElementById('map'), mapOptions);
 	    };
-	    ShowRoutesPage = __decorate([
+	    ShowPlacePage.prototype.setLatLng = function (latitude, longitude) {
+	        var latLng = new google.maps.LatLng(latitude, longitude);
+	        this.map.setCenter(latLng);
+	    };
+	    ShowPlacePage = __decorate([
 	        ionic_1.Page({
 	            templateUrl: 'build/pages/place/show-place.html',
 	            styles: ["\n  #map {\n    width: 100%;\n    height: 100%;\n  }\n  "]
 	        }), 
 	        __metadata('design:paramtypes', [Object, Object])
-	    ], ShowRoutesPage);
-	    return ShowRoutesPage;
+	    ], ShowPlacePage);
+	    return ShowPlacePage;
 	})();
-	exports.ShowRoutesPage = ShowRoutesPage;
+	exports.ShowPlacePage = ShowPlacePage;
 
 
 /***/ }

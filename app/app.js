@@ -5,6 +5,7 @@ import {RandomPage} from './pages/random/random';
 import {CartPage} from './pages/cart/cart';
 import {LocationPage} from './pages/location/location';
 import {LoginPage} from './pages/login/login';
+import {NewPlacePage} from './pages/place/new-place';
 import {NewRoutePage} from './pages/route/new-route';
 import {NewGalleryPage} from './pages/gallery/new-gallery';
 import {ShowPlacePage} from './pages/place/show-place';
@@ -50,8 +51,9 @@ export class MyApp {
 
     this.adminPages = [
       {title: 'Caminhos e Galerias', component: ShowPlacePage, icon: 'map'}
-      {title: 'Novo caminho', component: NewRoutePage, icon: 'map'},
-      {title: 'Nova galeria', component: NewGalleryPage, icon: 'map'},
+      {title: 'Novo Local', component: NewPlacePage, icon: 'map'},
+      {title: 'Nova Galeria', component: NewGalleryPage, icon: 'map'},
+      {title: 'Novo Caminho', component: NewRoutePage, icon: 'map'},
     ];
 
     this.loggedOutPages = [
