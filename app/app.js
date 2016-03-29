@@ -6,8 +6,8 @@ import {CartPage} from './pages/cart/cart';
 import {LocationPage} from './pages/location/location';
 import {LoginPage} from './pages/login/login';
 import {NewRoutePage} from './pages/route/new-route';
-import {ShowRoutesPage} from './pages/route/show-routes';
 import {NewGalleryPage} from './pages/gallery/new-gallery';
+import {ShowPlacePage} from './pages/place/show-place';
 
 import {UserData} from './services/user-data';
 import {CityData} from './services/city-data';
@@ -49,12 +49,13 @@ export class MyApp {
     ];
 
     this.adminPages = [
-      {title: 'Caminhos e Galerias', component: ShowRoutesPage, icon: 'map'}
+      {title: 'Caminhos e Galerias', component: ShowPlacePage, icon: 'map'}
       {title: 'Novo caminho', component: NewRoutePage, icon: 'map'},
       {title: 'Nova galeria', component: NewGalleryPage, icon: 'map'},
     ];
 
     this.loggedOutPages = [
+      {title: 'Caminhos e Galerias', component: ShowPlacePage, icon: 'map'},
       {title: 'Entrar', component: LoginPage, icon: 'log-in'}
     ];
 

@@ -52,13 +52,4 @@ export class GalleryData {
       );
     })
   }
-
-  // getPlaceRoutes() {
-  //   return new Promise(resolve => {
-  //     this.http.get(`${this.options.base_url}/gallery/place/${this.placeData.placeId}`).subscribe((res) => {
-  //       console.log(res);
-  //       resolve(res.json());
-  //     });
-  //   });
-  // }
 }

@@ -52,14 +52,4 @@ export class RouteData {
       );
     })
   }
-
-  // getPlaceRoutes() {
-  //   return new Promise(resolve => {
-  //     // this.http.get(`${this.options.base_url}/cities`).subscribe((res) => {
-  //     this.http.get(`${this.options.base_url}/route/place/${this.placeData.placeId}`).subscribe((res) => {
-  //       console.log(res);
-  //       resolve(res.json());
-  //     });
-  //   });
-  // }
 }

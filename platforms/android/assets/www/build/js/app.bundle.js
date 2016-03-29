@@ -3190,14 +3190,14 @@
 	var location_1 = __webpack_require__(360);
 	var login_1 = __webpack_require__(364);
 	var new_route_1 = __webpack_require__(366);
-	var show_routes_1 = __webpack_require__(369);
-	var new_gallery_1 = __webpack_require__(370);
+	var new_gallery_1 = __webpack_require__(369);
+	var show_place_1 = __webpack_require__(371);
 	var user_data_1 = __webpack_require__(365);
 	var city_data_1 = __webpack_require__(361);
 	var place_data_1 = __webpack_require__(363);
 	var map_data_1 = __webpack_require__(367);
 	var route_data_1 = __webpack_require__(368);
-	var gallery_data_1 = __webpack_require__(371);
+	var gallery_data_1 = __webpack_require__(370);
 	var options_1 = __webpack_require__(362);
 	var MyApp = (function () {
 	    function MyApp(app, events, userData) {
@@ -3213,11 +3213,12 @@
 	            { title: 'Localização', component: location_1.LocationPage, icon: 'navigate', fab: 'fab-right' }
 	        ];
 	        this.adminPages = [
-	            { title: 'Caminhos e Galerias', component: show_routes_1.ShowRoutesPage, icon: 'map' },
+	            { title: 'Caminhos e Galerias', component: show_place_1.ShowPlacePage, icon: 'map' },
 	            { title: 'Novo caminho', component: new_route_1.NewRoutePage, icon: 'map' },
 	            { title: 'Nova galeria', component: new_gallery_1.NewGalleryPage, icon: 'map' },
 	        ];
 	        this.loggedOutPages = [
+	            { title: 'Caminhos e Galerias', component: show_place_1.ShowPlacePage, icon: 'map' },
 	            { title: 'Entrar', component: login_1.LoginPage, icon: 'log-in' }
 	        ];
 	        this.loggedInPages = [
@@ -62459,9 +62460,9 @@
 	var core_1 = __webpack_require__(7);
 	var Options = (function () {
 	    function Options() {
-	        this.base_url = 'http://feiraup.herokuapp.com';
+	        // this.base_url = 'http://feiraup.herokuapp.com';
 	        // this.base_url = 'http://localhost:3000';
-	        // this.base_url = 'http://feiraup.ngrok.com';
+	        this.base_url = 'http://feiraup.ngrok.com';
 	        // this.base_url = 'http://192.168.0.14:3000';
 	        this.gmaps_key = 'AIzaSyDEdVkgms32J_TZad9VJO-XJHWvaQRUDqg';
 	        this.gmaps_timeout = 100000;
@@ -62537,6 +62538,15 @@
 	        return this.storage.get('placeId').then(function (value) {
 	            _this.placeId = JSON.parse(value);
 	            return _this.placeId;
+	        });
+	    };
+	    PlaceData.prototype.getPlaceFull = function (placeId) {
+	        var _this = this;
+	        return new Promise(function (resolve) {
+	            _this.http.get(_this.options.base_url + "/place/" + placeId).subscribe(function (res) {
+	                resolve(res.json());
+	                console.log(res);
+	            });
 	        });
 	    };
 	    PlaceData = __decorate([
@@ -63074,70 +63084,7 @@
 	};
 	var ionic_1 = __webpack_require__(5);
 	var map_data_1 = __webpack_require__(367);
-	var route_data_1 = __webpack_require__(368);
-	var ShowRoutesPage = (function () {
-	    function ShowRoutesPage(mapData, routeData) {
-	        var _this = this;
-	        this.mapData = mapData;
-	        this.routeData = routeData;
-	        this.routeData.getPlaceRoutes().then(function (result) {
-	            _this.routes = result;
-	        });
-	        this.prepareMap();
-	        var sdk = this.mapData.loadSdk();
-	        if (sdk == false) {
-	            window.initMap();
-	        }
-	    }
-	    Object.defineProperty(ShowRoutesPage, "parameters", {
-	        get: function () {
-	            return [[map_data_1.MapData], [route_data_1.RouteData]];
-	        },
-	        enumerable: true,
-	        configurable: true
-	    });
-	    ShowRoutesPage.prototype.prepareMap = function () {
-	        var _this = this;
-	        this.mapData.waitGoogleMaps().then(function (win) {
-	            _this.initMap();
-	        });
-	    };
-	    ShowRoutesPage.prototype.initMap = function () {
-	        var mapOptions = {
-	            center: new google.maps.LatLng(-16.6667, -49.2500),
-	            zoom: 19,
-	            mapTypeId: google.maps.MapTypeId.ROADMAP
-	        };
-	        this.map = new google.maps.Map(document.getElementById('map'), mapOptions);
-	    };
-	    ShowRoutesPage = __decorate([
-	        ionic_1.Page({
-	            templateUrl: 'build/pages/route/show-routes.html',
-	            styles: ["\n  #map {\n    width: 100%;\n    height: 100%;\n  }\n  "]
-	        }), 
-	        __metadata('design:paramtypes', [Object, Object])
-	    ], ShowRoutesPage);
-	    return ShowRoutesPage;
-	})();
-	exports.ShowRoutesPage = ShowRoutesPage;
-
-
-/***/ },
-/* 370 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-	    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-	    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-	    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-	    return c > 3 && r && Object.defineProperty(target, key, r), r;
-	};
-	var __metadata = (this && this.__metadata) || function (k, v) {
-	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-	};
-	var ionic_1 = __webpack_require__(5);
-	var map_data_1 = __webpack_require__(367);
-	var gallery_data_1 = __webpack_require__(371);
+	var gallery_data_1 = __webpack_require__(370);
 	var NewGalleryPage = (function () {
 	    function NewGalleryPage(nav, mapData, galleryData) {
 	        var _this = this;
@@ -63311,7 +63258,7 @@
 
 
 /***/ },
-/* 371 */
+/* 370 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -63373,6 +63320,72 @@
 	    return GalleryData;
 	})();
 	exports.GalleryData = GalleryData;
+
+
+/***/ },
+/* 371 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+	    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+	    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+	    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+	    return c > 3 && r && Object.defineProperty(target, key, r), r;
+	};
+	var __metadata = (this && this.__metadata) || function (k, v) {
+	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+	};
+	var ionic_1 = __webpack_require__(5);
+	var map_data_1 = __webpack_require__(367);
+	var place_data_1 = __webpack_require__(363);
+	var ShowRoutesPage = (function () {
+	    function ShowRoutesPage(mapData, placeData) {
+	        var _this = this;
+	        this.mapData = mapData;
+	        this.placeData = placeData;
+	        this.placeData.getPlaceFull(this.placeData.placeId).then(function (result) {
+	            _this.processPlaceFull(result);
+	        });
+	        this.prepareMap();
+	        var sdk = this.mapData.loadSdk();
+	        if (sdk == false) {
+	            window.initMap();
+	        }
+	    }
+	    Object.defineProperty(ShowRoutesPage, "parameters", {
+	        get: function () {
+	            return [[map_data_1.MapData], [place_data_1.PlaceData]];
+	        },
+	        enumerable: true,
+	        configurable: true
+	    });
+	    ShowRoutesPage.prototype.processPlaceFull = function (place) {
+	        this.place = place;
+	    };
+	    ShowRoutesPage.prototype.prepareMap = function () {
+	        var _this = this;
+	        this.mapData.waitGoogleMaps().then(function (win) {
+	            _this.initMap();
+	        });
+	    };
+	    ShowRoutesPage.prototype.initMap = function () {
+	        var mapOptions = {
+	            center: new google.maps.LatLng(-16.6667, -49.2500),
+	            zoom: 19,
+	            mapTypeId: google.maps.MapTypeId.ROADMAP
+	        };
+	        this.map = new google.maps.Map(document.getElementById('map'), mapOptions);
+	    };
+	    ShowRoutesPage = __decorate([
+	        ionic_1.Page({
+	            templateUrl: 'build/pages/place/show-place.html',
+	            styles: ["\n  #map {\n    width: 100%;\n    height: 100%;\n  }\n  "]
+	        }), 
+	        __metadata('design:paramtypes', [Object, Object])
+	    ], ShowRoutesPage);
+	    return ShowRoutesPage;
+	})();
+	exports.ShowRoutesPage = ShowRoutesPage;
 
 
 /***/ }
