@@ -7,7 +7,7 @@ import {RouteData} from '../../services/route-data';
   styles: [`
   #map {
     width: 100%;
-    height: 250px;
+    height: 100%;
   }
   `]
 })
