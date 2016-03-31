@@ -1,0 +1,22 @@
+<ion-navbar *navbar>
+  <button menuToggle>
+    <ion-icon name="menu"></ion-icon>
+  </button>
+  <ion-title>
+    Nova Loja
+  </ion-title>
+</ion-navbar>
+
+<ion-content padding class="place">
+
+  <button (click)="onUpdateLocation()" type="submit" [disabled]="!mapping || updating" primary><ion-icon name="refresh-circle"> Atualizar</ion-icon></button>
+
+  <p>Minha Localização. Lat: {{currentLat}}, Lng: {{currentLng}}</p>
+
+  <button (click)="onStart()" type="submit" [disabled]="mapping || updating" block large>COMEÇAR</button>
+
+  <button (click)="onFinish()" type="submit" [disabled]="!mapping" block large>FINALIZAR</button>
+
+  <div id="map"></div>
+
+</ion-content>

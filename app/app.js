@@ -9,6 +9,7 @@ import {NewPlacePage} from './pages/place/new-place';
 import {NewRoutePage} from './pages/route/new-route';
 import {NewGalleryPage} from './pages/gallery/new-gallery';
 import {ShowPlacePage} from './pages/place/show-place';
+import {NewShopPage} from './pages/shop/new-shop';
 
 import {UserData} from './services/user-data';
 import {CityData} from './services/city-data';
@@ -16,13 +17,23 @@ import {PlaceData} from './services/place-data';
 import {MapData} from './services/map-data';
 import {RouteData} from './services/route-data';
 import {GalleryData} from './services/gallery-data';
+import {ShopData} from './services/shop-data';
 import {Options} from './options';
 
 
 
 @App({
   templateUrl: './build/app.html',
-  providers: [CityData, PlaceData, UserData, MapData, RouteData, GalleryData, Options],
+  providers: [
+    CityData,
+    PlaceData,
+    UserData,
+    MapData,
+    RouteData,
+    GalleryData,
+    ShopData,
+    Options
+  ],
   config: {
     // mode: 'md'
   }
@@ -53,7 +64,8 @@ export class MyApp {
       {title: 'Caminhos e Galerias', component: ShowPlacePage, icon: 'map'}
       {title: 'Novo Local', component: NewPlacePage, icon: 'map'},
       {title: 'Nova Galeria', component: NewGalleryPage, icon: 'map'},
-      {title: 'Novo Caminho', component: NewRoutePage, icon: 'map'},
+      {title: 'Novo Caminho', component: NewRoutePage, icon: 'git-branch'},
+      {title: 'Nova Loja', component: NewShopPage, icon: 'flag'},
     ];
 
     this.loggedOutPages = [

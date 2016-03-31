@@ -3188,16 +3188,19 @@
 	var random_1 = __webpack_require__(358);
 	var cart_1 = __webpack_require__(359);
 	var location_1 = __webpack_require__(360);
-	var login_1 = __webpack_require__(364);
-	var new_route_1 = __webpack_require__(366);
-	var new_gallery_1 = __webpack_require__(369);
-	var show_place_1 = __webpack_require__(371);
-	var user_data_1 = __webpack_require__(365);
+	var login_1 = __webpack_require__(365);
+	var new_place_1 = __webpack_require__(366);
+	var new_route_1 = __webpack_require__(368);
+	var new_gallery_1 = __webpack_require__(370);
+	var show_place_1 = __webpack_require__(372);
+	var new_shop_1 = __webpack_require__(373);
+	var user_data_1 = __webpack_require__(364);
 	var city_data_1 = __webpack_require__(361);
 	var place_data_1 = __webpack_require__(363);
 	var map_data_1 = __webpack_require__(367);
-	var route_data_1 = __webpack_require__(368);
-	var gallery_data_1 = __webpack_require__(370);
+	var route_data_1 = __webpack_require__(369);
+	var gallery_data_1 = __webpack_require__(371);
+	var shop_data_1 = __webpack_require__(374);
 	var options_1 = __webpack_require__(362);
 	var MyApp = (function () {
 	    function MyApp(app, events, userData) {
@@ -3214,8 +3217,10 @@
 	        ];
 	        this.adminPages = [
 	            { title: 'Caminhos e Galerias', component: show_place_1.ShowPlacePage, icon: 'map' },
-	            { title: 'Novo caminho', component: new_route_1.NewRoutePage, icon: 'map' },
-	            { title: 'Nova galeria', component: new_gallery_1.NewGalleryPage, icon: 'map' },
+	            { title: 'Novo Local', component: new_place_1.NewPlacePage, icon: 'map' },
+	            { title: 'Nova Galeria', component: new_gallery_1.NewGalleryPage, icon: 'map' },
+	            { title: 'Novo Caminho', component: new_route_1.NewRoutePage, icon: 'git-branch' },
+	            { title: 'Nova Loja', component: new_shop_1.NewShopPage, icon: 'flag' },
 	        ];
 	        this.loggedOutPages = [
 	            { title: 'Caminhos e Galerias', component: show_place_1.ShowPlacePage, icon: 'map' },
@@ -3270,7 +3275,16 @@
 	    MyApp = __decorate([
 	        ionic_1.App({
 	            templateUrl: './build/app.html',
-	            providers: [city_data_1.CityData, place_data_1.PlaceData, user_data_1.UserData, map_data_1.MapData, route_data_1.RouteData, gallery_data_1.GalleryData, options_1.Options],
+	            providers: [
+	                city_data_1.CityData,
+	                place_data_1.PlaceData,
+	                user_data_1.UserData,
+	                map_data_1.MapData,
+	                route_data_1.RouteData,
+	                gallery_data_1.GalleryData,
+	                shop_data_1.ShopData,
+	                options_1.Options
+	            ],
 	            config: {}
 	        }), 
 	        __metadata('design:paramtypes', [Object, Object, Object])
@@ -62494,10 +62508,14 @@
 	var core_1 = __webpack_require__(7);
 	var ionic_1 = __webpack_require__(5);
 	var http_1 = __webpack_require__(145);
+	var user_data_1 = __webpack_require__(364);
+	var city_data_1 = __webpack_require__(361);
 	var options_1 = __webpack_require__(362);
 	var PlaceData = (function () {
-	    function PlaceData(http, options) {
+	    function PlaceData(http, user, city, options) {
 	        this.http = http;
+	        this.userData = user;
+	        this.cityData = city;
 	        this.options = options;
 	        this.storage = new ionic_1.Storage(ionic_1.LocalStorage);
 	        this.getCurrent();
@@ -62505,7 +62523,7 @@
 	    }
 	    Object.defineProperty(PlaceData, "parameters", {
 	        get: function () {
-	            return [[http_1.Http], [options_1.Options]];
+	            return [[http_1.Http], [user_data_1.UserData], [city_data_1.CityData], [options_1.Options]];
 	        },
 	        enumerable: true,
 	        configurable: true
@@ -62548,9 +62566,33 @@
 	            });
 	        });
 	    };
+	    PlaceData.prototype.addPlace = function (name, position) {
+	        var _this = this;
+	        var data = [
+	            ("email=" + this.userData.loggedEmail),
+	            ("access_token=" + this.userData.loggedToken),
+	            ("name=" + name),
+	            ("city_id=" + this.cityData.cityId),
+	            ("position=" + JSON.stringify(position))
+	        ];
+	        this.headers = new http_1.Headers();
+	        this.headers.append('Content-Type', 'application/x-www-form-urlencoded');
+	        return new Promise(function (resolve) {
+	            _this.http.post(_this.options.base_url + "/place/add", data.join('&'), {
+	                headers: _this.headers
+	            })
+	                .subscribe(function (res) {
+	                resolve(res.json());
+	            }, function (err) {
+	                if (err) {
+	                    resolve(err.json());
+	                }
+	            }, function () { });
+	        });
+	    };
 	    PlaceData = __decorate([
 	        core_1.Injectable(), 
-	        __metadata('design:paramtypes', [Object, Object])
+	        __metadata('design:paramtypes', [Object, Object, Object, Object])
 	    ], PlaceData);
 	    return PlaceData;
 	})();
@@ -62559,86 +62601,6 @@
 
 /***/ },
 /* 364 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-	    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-	    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-	    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-	    return c > 3 && r && Object.defineProperty(target, key, r), r;
-	};
-	var __metadata = (this && this.__metadata) || function (k, v) {
-	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-	};
-	var ionic_1 = __webpack_require__(5);
-	var user_data_1 = __webpack_require__(365);
-	var LoginPage = (function () {
-	    function LoginPage(nav, userData) {
-	        this.nav = nav;
-	        this.userData = userData;
-	    }
-	    Object.defineProperty(LoginPage, "parameters", {
-	        get: function () {
-	            return [[ionic_1.NavController], [user_data_1.UserData]];
-	        },
-	        enumerable: true,
-	        configurable: true
-	    });
-	    LoginPage.prototype.onSubmitLogin = function (form) {
-	        var _this = this;
-	        if (form.valid) {
-	            this.userData.login(this.emailModel, this.passwordModel)
-	                .then(function (res) {
-	                if (res.hasOwnProperty('access_token')) {
-	                    var alert_1 = ionic_1.Alert.create({
-	                        title: 'Ola...',
-	                        message: "Bem vindo(a) " + res.name,
-	                        buttons: ['OK']
-	                    });
-	                    _this.nav.present(alert_1);
-	                    _this.passwordModel = '';
-	                }
-	                else if (res.hasOwnProperty('error')) {
-	                    var alert_2 = ionic_1.Alert.create({
-	                        title: 'Ops...',
-	                        message: res.error,
-	                        buttons: ['OK']
-	                    });
-	                    _this.nav.present(alert_2);
-	                    _this.passwordModel = '';
-	                }
-	                else {
-	                    var alert_3 = ionic_1.Alert.create({
-	                        title: 'Ops...',
-	                        message: 'Não foi possível logar.',
-	                        buttons: ['OK']
-	                    });
-	                    _this.nav.present(alert_3);
-	                }
-	            });
-	        }
-	        else {
-	            var alert_4 = ionic_1.Alert.create({
-	                title: 'Ops...',
-	                message: 'Você precisa preencher com seu email e senha cadastrados.',
-	                buttons: ['OK']
-	            });
-	            this.nav.present(alert_4);
-	        }
-	    };
-	    LoginPage = __decorate([
-	        ionic_1.Page({
-	            templateUrl: 'build/pages/login/login.html'
-	        }), 
-	        __metadata('design:paramtypes', [Object, Object])
-	    ], LoginPage);
-	    return LoginPage;
-	})();
-	exports.LoginPage = LoginPage;
-
-
-/***/ },
-/* 365 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -62752,6 +62714,86 @@
 
 
 /***/ },
+/* 365 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+	    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+	    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+	    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+	    return c > 3 && r && Object.defineProperty(target, key, r), r;
+	};
+	var __metadata = (this && this.__metadata) || function (k, v) {
+	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+	};
+	var ionic_1 = __webpack_require__(5);
+	var user_data_1 = __webpack_require__(364);
+	var LoginPage = (function () {
+	    function LoginPage(nav, userData) {
+	        this.nav = nav;
+	        this.userData = userData;
+	    }
+	    Object.defineProperty(LoginPage, "parameters", {
+	        get: function () {
+	            return [[ionic_1.NavController], [user_data_1.UserData]];
+	        },
+	        enumerable: true,
+	        configurable: true
+	    });
+	    LoginPage.prototype.onSubmitLogin = function (form) {
+	        var _this = this;
+	        if (form.valid) {
+	            this.userData.login(this.emailModel, this.passwordModel)
+	                .then(function (res) {
+	                if (res.hasOwnProperty('access_token')) {
+	                    var alert_1 = ionic_1.Alert.create({
+	                        title: 'Ola...',
+	                        message: "Bem vindo(a) " + res.name,
+	                        buttons: ['OK']
+	                    });
+	                    _this.nav.present(alert_1);
+	                    _this.passwordModel = '';
+	                }
+	                else if (res.hasOwnProperty('error')) {
+	                    var alert_2 = ionic_1.Alert.create({
+	                        title: 'Ops...',
+	                        message: res.error,
+	                        buttons: ['OK']
+	                    });
+	                    _this.nav.present(alert_2);
+	                    _this.passwordModel = '';
+	                }
+	                else {
+	                    var alert_3 = ionic_1.Alert.create({
+	                        title: 'Ops...',
+	                        message: 'Não foi possível logar.',
+	                        buttons: ['OK']
+	                    });
+	                    _this.nav.present(alert_3);
+	                }
+	            });
+	        }
+	        else {
+	            var alert_4 = ionic_1.Alert.create({
+	                title: 'Ops...',
+	                message: 'Você precisa preencher com seu email e senha cadastrados.',
+	                buttons: ['OK']
+	            });
+	            this.nav.present(alert_4);
+	        }
+	    };
+	    LoginPage = __decorate([
+	        ionic_1.Page({
+	            templateUrl: 'build/pages/login/login.html'
+	        }), 
+	        __metadata('design:paramtypes', [Object, Object])
+	    ], LoginPage);
+	    return LoginPage;
+	})();
+	exports.LoginPage = LoginPage;
+
+
+/***/ },
 /* 366 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -62766,7 +62808,244 @@
 	};
 	var ionic_1 = __webpack_require__(5);
 	var map_data_1 = __webpack_require__(367);
-	var route_data_1 = __webpack_require__(368);
+	var place_data_1 = __webpack_require__(363);
+	var NewPlacePage = (function () {
+	    function NewPlacePage(nav, mapData, placeData) {
+	        var _this = this;
+	        this.nav = nav;
+	        this.mapData = mapData;
+	        this.placeData = placeData;
+	        this.mapping = false;
+	        this.position = {};
+	        this.latLng = null;
+	        this.currentLat = 0;
+	        this.currentLng = 0;
+	        this.updating = true;
+	        this.updated = false;
+	        this.map = null;
+	        this.marker = null;
+	        this.mapData.waitGoogleMaps().then(function (win) {
+	            _this.initMap();
+	            _this.loadFirstPos();
+	        });
+	        var sdk = this.mapData.loadSdk();
+	        if (sdk == false) {
+	            window.initMap();
+	        }
+	    }
+	    Object.defineProperty(NewPlacePage, "parameters", {
+	        get: function () {
+	            return [[ionic_1.NavController], [map_data_1.MapData], [place_data_1.PlaceData]];
+	        },
+	        enumerable: true,
+	        configurable: true
+	    });
+	    NewPlacePage.prototype.initMap = function () {
+	        var mapOptions = {
+	            center: new google.maps.LatLng(-16.6667, -49.2500),
+	            zoom: 19,
+	            mapTypeId: google.maps.MapTypeId.ROADMAP
+	        };
+	        this.map = new google.maps.Map(document.getElementById('map'), mapOptions);
+	    };
+	    NewPlacePage.prototype.loadFirstPos = function () {
+	        var _this = this;
+	        this.mapData.getUpdatedPos().then(function (position) {
+	            _this.updatePosition(position.latitude, position.longitude);
+	            _this.addMarker(_this.latLng);
+	        });
+	    };
+	    NewPlacePage.prototype.addMarker = function (latLng) {
+	        this.marker = new google.maps.Marker({
+	            map: this.map,
+	            animation: google.maps.Animation.DROP,
+	            position: latLng,
+	            draggable: true
+	        });
+	        $this = this;
+	        this.marker.addListener('dragend', function (e) {
+	            $this.updatePosition(e.latLng.lat(), e.latLng.lng());
+	        });
+	        this.map.setCenter(this.latLng);
+	    };
+	    NewPlacePage.prototype.updateMarker = function () {
+	        this.marker.setPosition(this.latLng);
+	        this.map.setCenter(this.latLng);
+	    };
+	    NewPlacePage.prototype.addPosition = function (latitude, longitude) {
+	        this.position = {
+	            latitude: latitude,
+	            longitude: longitude
+	        };
+	        this.updated = false;
+	    };
+	    NewPlacePage.prototype.onStart = function () {
+	        this.mapping = true;
+	        this.addPosition(this.currentLat, this.currentLng);
+	    };
+	    NewPlacePage.prototype.onUpdateLocation = function () {
+	        var _this = this;
+	        this.updating = true;
+	        this.mapData.getUpdatedPos().then(function (position) {
+	            if (position.latitude && position.longitude) {
+	                _this.updatePosition(position.latitude, position.longitude);
+	                _this.updateMarker(_this.latLng);
+	                var alert_1 = ionic_1.Alert.create({
+	                    title: 'OK...',
+	                    message: 'Localização atualizada.',
+	                    buttons: ['OK']
+	                });
+	                _this.nav.present(alert_1);
+	            }
+	        });
+	    };
+	    NewPlacePage.prototype.onFinish = function () {
+	        var _this = this;
+	        this.mapping = false;
+	        var alert = ionic_1.Alert.create({
+	            title: 'Finalizando',
+	            message: 'Informe um nome para esse local.',
+	            inputs: [{
+	                    name: 'name',
+	                    placeholder: 'Nome'
+	                }],
+	            buttons: [{
+	                    text: 'Cancelar',
+	                    handler: function (data) { }
+	                }, {
+	                    text: 'OK',
+	                    handler: function (form) {
+	                        _this.placeData.addPlace(form.name, _this.position).then(function (response) {
+	                            if (response.hasOwnProperty('message')) {
+	                                var alert = ionic_1.Alert.create({
+	                                    title: 'OK...',
+	                                    message: response.message,
+	                                    buttons: ['OK']
+	                                });
+	                            }
+	                            else if (response.hasOwnProperty('error')) {
+	                                var alert = ionic_1.Alert.create({
+	                                    title: 'Ops...',
+	                                    message: response.error,
+	                                    buttons: ['OK']
+	                                });
+	                            }
+	                            else {
+	                                var alert = ionic_1.Alert.create({
+	                                    title: 'Ops...',
+	                                    message: 'Não foi possível salvar!',
+	                                    buttons: ['OK']
+	                                });
+	                            }
+	                            var nav = _this.nav;
+	                            setTimeout(function () {
+	                                nav.present(alert);
+	                            }, 500);
+	                        });
+	                    }
+	                }]
+	        });
+	        this.nav.present(alert);
+	    };
+	    NewPlacePage.prototype.updatePosition = function (latitude, longitude) {
+	        this.currentLat = latitude;
+	        this.currentLng = longitude;
+	        this.latLng = new google.maps.LatLng(latitude, longitude);
+	        this.updating = false;
+	        this.updated = true;
+	    };
+	    NewPlacePage = __decorate([
+	        ionic_1.Page({
+	            templateUrl: 'build/pages/place/new-place.html',
+	            styles: ["\n  #map {\n    width: 100%;\n    height: 100%;\n  }\n  "]
+	        }), 
+	        __metadata('design:paramtypes', [Object, Object, Object])
+	    ], NewPlacePage);
+	    return NewPlacePage;
+	})();
+	exports.NewPlacePage = NewPlacePage;
+
+
+/***/ },
+/* 367 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+	    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+	    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+	    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+	    return c > 3 && r && Object.defineProperty(target, key, r), r;
+	};
+	var __metadata = (this && this.__metadata) || function (k, v) {
+	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+	};
+	var core_1 = __webpack_require__(7);
+	var options_1 = __webpack_require__(362);
+	var MapData = (function () {
+	    function MapData(options) {
+	        this.options = options;
+	    }
+	    Object.defineProperty(MapData, "parameters", {
+	        get: function () {
+	            return [[options_1.Options]];
+	        },
+	        enumerable: true,
+	        configurable: true
+	    });
+	    MapData.prototype.loadSdk = function () {
+	        var mapScript = document.getElementById('mapscript');
+	        if (mapScript == undefined) {
+	            script = document.createElement('script');
+	            script.id = 'mapscript';
+	            script.type = 'text/javascript';
+	            script.src = "http://maps.google.com/maps/api/js?key=" + this.options.gmaps_key + this.options.gmaps_sensor + "&callback=initMap";
+	            document.body.appendChild(script);
+	            return true;
+	        }
+	        else {
+	            return false;
+	        }
+	    };
+	    MapData.prototype.waitGoogleMaps = function () {
+	        return new Promise(function (resolve) {
+	            window['initMap'] = function () {
+	                resolve(window);
+	            };
+	        });
+	    };
+	    MapData.prototype.getUpdatedPos = function () {
+	        var options = { timeout: this.options.gmaps_timeout, enableHighAccuracy: this.options.gmaps_accuracy };
+	        return new Promise(function (resolve) {
+	            navigator.geolocation.getCurrentPosition(function (position) {
+	                resolve(position.coords);
+	            }, function () { }, options);
+	        });
+	    };
+	    MapData = __decorate([
+	        core_1.Injectable(), 
+	        __metadata('design:paramtypes', [Object])
+	    ], MapData);
+	    return MapData;
+	})();
+	exports.MapData = MapData;
+
+
+/***/ },
+/* 368 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+	    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+	    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+	    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+	    return c > 3 && r && Object.defineProperty(target, key, r), r;
+	};
+	var __metadata = (this && this.__metadata) || function (k, v) {
+	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+	};
+	var ionic_1 = __webpack_require__(5);
+	var map_data_1 = __webpack_require__(367);
+	var route_data_1 = __webpack_require__(369);
 	var NewRoutePage = (function () {
 	    function NewRoutePage(nav, mapData, routeData) {
 	        var _this = this;
@@ -62940,71 +63219,7 @@
 
 
 /***/ },
-/* 367 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-	    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-	    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-	    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-	    return c > 3 && r && Object.defineProperty(target, key, r), r;
-	};
-	var __metadata = (this && this.__metadata) || function (k, v) {
-	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-	};
-	var core_1 = __webpack_require__(7);
-	var options_1 = __webpack_require__(362);
-	var MapData = (function () {
-	    function MapData(options) {
-	        this.options = options;
-	    }
-	    Object.defineProperty(MapData, "parameters", {
-	        get: function () {
-	            return [[options_1.Options]];
-	        },
-	        enumerable: true,
-	        configurable: true
-	    });
-	    MapData.prototype.loadSdk = function () {
-	        var mapScript = document.getElementById('mapscript');
-	        if (mapScript == undefined) {
-	            script = document.createElement('script');
-	            script.id = 'mapscript';
-	            script.type = 'text/javascript';
-	            script.src = "http://maps.google.com/maps/api/js?key=" + this.options.gmaps_key + this.options.gmaps_sensor + "&callback=initMap";
-	            document.body.appendChild(script);
-	            return true;
-	        }
-	        else {
-	            return false;
-	        }
-	    };
-	    MapData.prototype.waitGoogleMaps = function () {
-	        return new Promise(function (resolve) {
-	            window['initMap'] = function () {
-	                resolve(window);
-	            };
-	        });
-	    };
-	    MapData.prototype.getUpdatedPos = function () {
-	        var options = { timeout: this.options.gmaps_timeout, enableHighAccuracy: this.options.gmaps_accuracy };
-	        return new Promise(function (resolve) {
-	            navigator.geolocation.getCurrentPosition(function (position) {
-	                resolve(position.coords);
-	            }, function () { }, options);
-	        });
-	    };
-	    MapData = __decorate([
-	        core_1.Injectable(), 
-	        __metadata('design:paramtypes', [Object])
-	    ], MapData);
-	    return MapData;
-	})();
-	exports.MapData = MapData;
-
-
-/***/ },
-/* 368 */
+/* 369 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -63018,7 +63233,7 @@
 	};
 	var core_1 = __webpack_require__(7);
 	var http_1 = __webpack_require__(145);
-	var user_data_1 = __webpack_require__(365);
+	var user_data_1 = __webpack_require__(364);
 	var place_data_1 = __webpack_require__(363);
 	var options_1 = __webpack_require__(362);
 	var RouteData = (function () {
@@ -63069,7 +63284,7 @@
 
 
 /***/ },
-/* 369 */
+/* 370 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -63083,7 +63298,7 @@
 	};
 	var ionic_1 = __webpack_require__(5);
 	var map_data_1 = __webpack_require__(367);
-	var gallery_data_1 = __webpack_require__(370);
+	var gallery_data_1 = __webpack_require__(371);
 	var NewGalleryPage = (function () {
 	    function NewGalleryPage(nav, mapData, galleryData) {
 	        var _this = this;
@@ -63257,7 +63472,7 @@
 
 
 /***/ },
-/* 370 */
+/* 371 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -63271,7 +63486,7 @@
 	};
 	var core_1 = __webpack_require__(7);
 	var http_1 = __webpack_require__(145);
-	var user_data_1 = __webpack_require__(365);
+	var user_data_1 = __webpack_require__(364);
 	var place_data_1 = __webpack_require__(363);
 	var options_1 = __webpack_require__(362);
 	var GalleryData = (function () {
@@ -63322,7 +63537,7 @@
 
 
 /***/ },
-/* 371 */
+/* 372 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -63425,6 +63640,243 @@
 	    return ShowPlacePage;
 	})();
 	exports.ShowPlacePage = ShowPlacePage;
+
+
+/***/ },
+/* 373 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+	    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+	    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+	    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+	    return c > 3 && r && Object.defineProperty(target, key, r), r;
+	};
+	var __metadata = (this && this.__metadata) || function (k, v) {
+	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+	};
+	var ionic_1 = __webpack_require__(5);
+	var map_data_1 = __webpack_require__(367);
+	var shop_data_1 = __webpack_require__(374);
+	var NewShopPage = (function () {
+	    function NewShopPage(nav, mapData, shopData) {
+	        var _this = this;
+	        this.nav = nav;
+	        this.mapData = mapData;
+	        this.shopData = shopData;
+	        this.mapping = false;
+	        this.position = {};
+	        this.latLng = null;
+	        this.currentLat = 0;
+	        this.currentLng = 0;
+	        this.updating = true;
+	        this.updated = false;
+	        this.map = null;
+	        this.marker = null;
+	        this.mapData.waitGoogleMaps().then(function (win) {
+	            _this.initMap();
+	            _this.loadFirstPos();
+	        });
+	        var sdk = this.mapData.loadSdk();
+	        if (sdk == false) {
+	            window.initMap();
+	        }
+	    }
+	    Object.defineProperty(NewShopPage, "parameters", {
+	        get: function () {
+	            return [[ionic_1.NavController], [map_data_1.MapData], [shop_data_1.ShopData]];
+	        },
+	        enumerable: true,
+	        configurable: true
+	    });
+	    NewShopPage.prototype.initMap = function () {
+	        var mapOptions = {
+	            center: new google.maps.LatLng(-16.6667, -49.2500),
+	            zoom: 19,
+	            mapTypeId: google.maps.MapTypeId.ROADMAP
+	        };
+	        this.map = new google.maps.Map(document.getElementById('map'), mapOptions);
+	    };
+	    NewShopPage.prototype.loadFirstPos = function () {
+	        var _this = this;
+	        this.mapData.getUpdatedPos().then(function (position) {
+	            _this.updatePosition(position.latitude, position.longitude);
+	            _this.addMarker(_this.latLng);
+	        });
+	    };
+	    NewShopPage.prototype.addMarker = function (latLng) {
+	        this.marker = new google.maps.Marker({
+	            map: this.map,
+	            animation: google.maps.Animation.DROP,
+	            position: latLng,
+	            draggable: true
+	        });
+	        $this = this;
+	        this.marker.addListener('dragend', function (e) {
+	            $this.updatePosition(e.latLng.lat(), e.latLng.lng());
+	        });
+	        this.map.setCenter(this.latLng);
+	    };
+	    NewShopPage.prototype.updateMarker = function () {
+	        this.marker.setPosition(this.latLng);
+	        this.map.setCenter(this.latLng);
+	    };
+	    NewShopPage.prototype.addPosition = function (latitude, longitude) {
+	        this.position = {
+	            latitude: latitude,
+	            longitude: longitude
+	        };
+	        this.updated = false;
+	    };
+	    NewShopPage.prototype.onStart = function () {
+	        this.mapping = true;
+	        this.addPosition(this.currentLat, this.currentLng);
+	    };
+	    NewShopPage.prototype.onUpdateLocation = function () {
+	        var _this = this;
+	        this.updating = true;
+	        this.mapData.getUpdatedPos().then(function (position) {
+	            if (position.latitude && position.longitude) {
+	                _this.updatePosition(position.latitude, position.longitude);
+	                _this.updateMarker(_this.latLng);
+	                var alert_1 = ionic_1.Alert.create({
+	                    title: 'OK...',
+	                    message: 'Localização atualizada.',
+	                    buttons: ['OK']
+	                });
+	                _this.nav.present(alert_1);
+	            }
+	        });
+	    };
+	    NewShopPage.prototype.onFinish = function () {
+	        var _this = this;
+	        this.mapping = false;
+	        var alert = ionic_1.Alert.create({
+	            title: 'Finalizando',
+	            message: 'Informe um nome para essa loja.',
+	            inputs: [{
+	                    name: 'name',
+	                    placeholder: 'Nome'
+	                }],
+	            buttons: [{
+	                    text: 'Cancelar',
+	                    handler: function (data) { }
+	                }, {
+	                    text: 'OK',
+	                    handler: function (form) {
+	                        _this.shopData.addShop(form.name, _this.position).then(function (response) {
+	                            if (response.hasOwnProperty('message')) {
+	                                var alert = ionic_1.Alert.create({
+	                                    title: 'OK...',
+	                                    message: response.message,
+	                                    buttons: ['OK']
+	                                });
+	                            }
+	                            else if (response.hasOwnProperty('error')) {
+	                                var alert = ionic_1.Alert.create({
+	                                    title: 'Ops...',
+	                                    message: response.error,
+	                                    buttons: ['OK']
+	                                });
+	                            }
+	                            else {
+	                                var alert = ionic_1.Alert.create({
+	                                    title: 'Ops...',
+	                                    message: 'Não foi possível salvar!',
+	                                    buttons: ['OK']
+	                                });
+	                            }
+	                            var nav = _this.nav;
+	                            setTimeout(function () {
+	                                nav.present(alert);
+	                            }, 500);
+	                        });
+	                    }
+	                }]
+	        });
+	        this.nav.present(alert);
+	    };
+	    NewShopPage.prototype.updatePosition = function (latitude, longitude) {
+	        this.currentLat = latitude;
+	        this.currentLng = longitude;
+	        this.latLng = new google.maps.LatLng(latitude, longitude);
+	        this.updating = false;
+	        this.updated = true;
+	    };
+	    NewShopPage = __decorate([
+	        ionic_1.Page({
+	            templateUrl: 'build/pages/shop/new-shop.html',
+	            styles: ["\n  #map {\n    width: 100%;\n    height: 100%;\n  }\n  "]
+	        }), 
+	        __metadata('design:paramtypes', [Object, Object, Object])
+	    ], NewShopPage);
+	    return NewShopPage;
+	})();
+	exports.NewShopPage = NewShopPage;
+
+
+/***/ },
+/* 374 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+	    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+	    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+	    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+	    return c > 3 && r && Object.defineProperty(target, key, r), r;
+	};
+	var __metadata = (this && this.__metadata) || function (k, v) {
+	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+	};
+	var core_1 = __webpack_require__(7);
+	var http_1 = __webpack_require__(145);
+	var user_data_1 = __webpack_require__(364);
+	var options_1 = __webpack_require__(362);
+	var ShopData = (function () {
+	    function ShopData(http, user, options) {
+	        this.http = http;
+	        this.userData = user;
+	        this.options = options;
+	    }
+	    Object.defineProperty(ShopData, "parameters", {
+	        get: function () {
+	            return [[http_1.Http], [user_data_1.UserData], [options_1.Options]];
+	        },
+	        enumerable: true,
+	        configurable: true
+	    });
+	    ShopData.prototype.setHeaders = function () {
+	        this.headers = new http_1.Headers();
+	        this.headers.append('Content-Type', 'application/x-www-form-urlencoded');
+	    };
+	    ShopData.prototype.addShop = function (info, position) {
+	        var _this = this;
+	        var data = [
+	            ("email=" + this.userData.loggedEmail),
+	            ("access_token=" + this.userData.loggedToken),
+	            ("info=" + JSON.stringify(info))
+	        ];
+	        return new Promise(function (resolve) {
+	            _this.setHeaders();
+	            _this.http.post(_this.options.base_url + "/shop/add", data.join('&'), {
+	                headers: _this.headers
+	            })
+	                .subscribe(function (res) {
+	                resolve(res.json());
+	            }, function (err) {
+	                if (err) {
+	                    resolve(err.json());
+	                }
+	            }, function () { });
+	        });
+	    };
+	    ShopData = __decorate([
+	        core_1.Injectable(), 
+	        __metadata('design:paramtypes', [Object, Object, Object])
+	    ], ShopData);
+	    return ShopData;
+	})();
+	exports.ShopData = ShopData;
 
 
 /***/ }
