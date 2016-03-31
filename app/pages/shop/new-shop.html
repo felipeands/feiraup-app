@@ -13,6 +13,29 @@
 
   <p>Minha Localização. Lat: {{currentLat}}, Lng: {{currentLng}}</p>
 
+  <form #newShopForm="ngForm">
+
+    <ion-list>
+      <ion-item>
+        <ion-label floating>Nome</ion-label>
+        <ion-input type="name" [(ngModel)]="nameModel" ngControl="name" #name required></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label floating>Galeria</ion-label>
+        <ion-select [(ngModel)]="galleryModel" ngControl="gallery">
+          <ion-option *ngFor="#g of galleries" [value]="g.id">{{g.name}}</ion-option>
+        </ion-select>
+      </ion-item>
+
+      <ion-item>
+        <ion-label></ion-label>
+      </ion-item>
+
+    </ion-list>
+
+  </form>
+
   <button (click)="onStart()" type="submit" [disabled]="mapping || updating" block large>COMEÇAR</button>
 
   <button (click)="onFinish()" type="submit" [disabled]="!mapping" block large>FINALIZAR</button>
