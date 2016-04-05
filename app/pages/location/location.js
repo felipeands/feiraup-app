@@ -45,7 +45,6 @@ export class LocationPage {
   }
 
   onUpdateCity() {
-    this.cityModel = this.cityModel;
     this.loadPlaces();
   }
 

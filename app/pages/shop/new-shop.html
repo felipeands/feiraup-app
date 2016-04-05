@@ -17,20 +17,55 @@
 
     <ion-list>
       <ion-item>
-        <ion-label floating>Nome</ion-label>
-        <ion-input type="name" [(ngModel)]="nameModel" ngControl="name" #name required></ion-input>
+        <ion-label floating>Nome da loja</ion-label>
+        <ion-input type="text" [(ngModel)]="nameModel" ngControl="name" #name required></ion-input>
       </ion-item>
 
       <ion-item>
-        <ion-label floating>Galeria</ion-label>
-        <ion-select [(ngModel)]="galleryModel" ngControl="gallery">
-          <ion-option *ngFor="#g of galleries" [value]="g.id">{{g.name}}</ion-option>
-        </ion-select>
+        <ion-label>Dentro de uma galeria?</ion-label>
+        <ion-toggle [(ngModel)]="isGalleryModel" ngControl="isGallery" #isGallery></ion-toggle>
       </ion-item>
 
-      <ion-item>
-        <ion-label></ion-label>
-      </ion-item>
+      <div *ngIf="isGalleryModel">
+
+        <ion-item>
+          <ion-label>Galeria</ion-label>
+          <ion-select [(ngModel)]="galleryModel" ngControl="gallery">
+            <ion-option *ngFor="#g of galleries" [value]="g.id">{{g.name}}</ion-option>
+          </ion-select>
+        </ion-item>
+
+
+        <ion-item>
+          <ion-label floating>Rua</ion-label>
+          <ion-input type="text" [(ngModel)]="streetModel" ngControl="street" #street></ion-input>
+        </ion-item>
+
+        <ion-item>
+          <ion-label>Esquina</ion-label>
+          <ion-toggle [(ngModel)]="isCornerModel" ngControl="isCorner" #isCorner></ion-toggle>
+        </ion-item>
+
+        <ion-item *ngIf="isCornerModel">
+          <ion-label floating>Esquina com</ion-label>
+          <ion-input type="text" [(ngModel)]="streetCornerModel" ngControl="streetCorner" #streetCorner></ion-input>
+        </ion-item>
+
+        <ion-item>
+          <ion-label>Andar</ion-label>
+          <ion-select [(ngModel)]="floorModel" ngControl="floor"></ion-select>
+        </ion-item>
+
+      </div>
+
+      <div *ngIf="!isGalleryModel">
+
+        <ion-item>
+          <ion-label>Rua</ion-label>
+          <ion-select [(ngModel)]="routeModel" ngControl="route"></ion-select>
+        </ion-item>
+
+      </div>
 
     </ion-list>
 

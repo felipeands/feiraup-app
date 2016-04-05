@@ -13,6 +13,8 @@ import {ShopData} from '../../services/shop-data';
 })
 
 export class NewShopPage {
+  isGalleryModel;
+  galleryModel;
 
   static get parameters() {
     return [[NavController],[MapData],[ShopData]];
@@ -35,6 +37,8 @@ export class NewShopPage {
 
     this.map = null;
     this.marker = null;
+
+    this.isGalleryModel = false;
 
     this.mapData.waitGoogleMaps().then((win) => {
       this.initMap();
