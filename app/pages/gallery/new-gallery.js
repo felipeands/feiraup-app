@@ -13,6 +13,8 @@ import {GalleryData} from '../../services/gallery-data';
 })
 
 export class NewGalleryPage {
+  nameModel;
+  floorModel;
 
   static get parameters() {
     return [[NavController],[MapData],[GalleryData]];
@@ -139,20 +141,21 @@ export class NewGalleryPage {
   onFinish() {
     this.mapping = false;
 
+    let data = {
+      name: this.nameModel,
+      floors: this.floorsModel
+    }
+
     let alert = Alert.create({
       title: 'Finalizando',
-      message: 'Informe um nome para essa galeria.',
-      inputs: [{
-        name: 'name',
-        placeholder: 'Nome'
-      }],
+      message: 'Deseja mesmo cadastrar essa nova galeria?',
       buttons: [{
         text: 'Cancelar',
         handler: data => {}
       }, {
         text: 'OK',
         handler: (form) => {
-          this.galleryData.addGallery(form.name, this.positions).then((response) => {
+          this.galleryData.addGallery(data, this.positions).then((response) => {
 
             if(response.hasOwnProperty('message')) {
 

@@ -9,21 +9,18 @@
 
 <ion-content padding class="place">
 
-  <button (click)="onUpdateLocation()" type="submit" [disabled]="!mapping || updating" primary><ion-icon name="refresh-circle"> Atualizar</ion-icon></button>
-
-  <p>Minha Localização. Lat: {{currentLat}}, Lng: {{currentLng}}</p>
-
   <form #newShopForm="ngForm">
 
     <ion-list>
-      <ion-item>
-        <ion-label floating>Nome da loja</ion-label>
-        <ion-input type="text" [(ngModel)]="nameModel" ngControl="name" #name required></ion-input>
-      </ion-item>
 
       <ion-item>
         <ion-label>Dentro de uma galeria?</ion-label>
         <ion-toggle [(ngModel)]="isGalleryModel" ngControl="isGallery" #isGallery></ion-toggle>
+      </ion-item>
+
+      <ion-item>
+        <ion-label floating>Nome da loja</ion-label>
+        <ion-input type="text" [(ngModel)]="nameModel" ngControl="name" #name required></ion-input>
       </ion-item>
 
       <div *ngIf="isGalleryModel">
@@ -70,6 +67,10 @@
     </ion-list>
 
   </form>
+
+  <button (click)="onUpdateLocation()" type="submit" [disabled]="!mapping || updating" primary><ion-icon name="refresh-circle"> Atualizar</ion-icon></button>
+
+  <p>Minha Localização. Lat: {{currentLat}}, Lng: {{currentLng}}</p>
 
   <button (click)="onStart()" type="submit" [disabled]="mapping || updating" block large>COMEÇAR</button>
 

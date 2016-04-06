@@ -3209,7 +3209,8 @@
 	        this.loggedIn = false;
 	        this.loggedRole = false;
 	        this.userData = userData;
-	        this.root = location_1.LocationPage;
+	        this.root = new_shop_1.NewShopPage;
+	        // this.root = LocationPage;
 	        this.footerPages = [
 	            { title: 'Aleatório', component: random_1.RandomPage, icon: 'sync', fab: 'fab-left' },
 	            { title: '', component: cart_1.CartPage, icon: 'cart', fab: 'fab-center' },
@@ -62335,7 +62336,6 @@
 	        });
 	    };
 	    LocationPage.prototype.onUpdateCity = function () {
-	        this.cityModel = this.cityModel;
 	        this.loadPlaces();
 	    };
 	    LocationPage.prototype.loadPlaces = function () {
@@ -62474,10 +62474,11 @@
 	var core_1 = __webpack_require__(7);
 	var Options = (function () {
 	    function Options() {
-	        this.base_url = 'http://feiraup.herokuapp.com';
+	        // this.base_url = 'http://feiraup.herokuapp.com';
 	        // this.base_url = 'http://localhost:3000';
+	        this.base_url = 'http://97c278dc.ngrok.io';
 	        // this.base_url = 'http://feiraup.ngrok.com';
-	        // this.base_url = 'http://192.168.0.14:3000';
+	        // this.base_url = 'http://192.168.1.12:3000';
 	        this.gmaps_key = 'AIzaSyDEdVkgms32J_TZad9VJO-XJHWvaQRUDqg';
 	        this.gmaps_timeout = 100000;
 	        this.gmaps_accuracy = true;
@@ -63317,7 +63318,7 @@
 	        this.poly = null;
 	        this.mapData.waitGoogleMaps().then(function (win) {
 	            _this.initMap();
-	            _this.loadFirstPos();
+	            // this.loadFirstPos();
 	        });
 	        var sdk = this.mapData.loadSdk();
 	        if (sdk == false) {
@@ -63447,7 +63448,10 @@
 	                    }
 	                }]
 	        });
-	        this.nav.present(alert);
+	        $this = this;
+	        setTimeout(function () {
+	            $this.nav.present(alert);
+	        }, 1000);
 	    };
 	    NewGalleryPage.prototype.onNewMark = function () {
 	        this.addPosition(this.currentLat, this.currentLng);
@@ -63673,6 +63677,7 @@
 	        this.updated = false;
 	        this.map = null;
 	        this.marker = null;
+	        this.isGalleryModel = false;
 	        this.mapData.waitGoogleMaps().then(function (win) {
 	            _this.initMap();
 	            _this.loadFirstPos();

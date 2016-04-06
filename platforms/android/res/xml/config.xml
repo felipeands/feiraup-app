@@ -13,7 +13,7 @@
     <name>FEIRA UP</name>
     <description>Encontre o que deseja para sua próxima viagem.</description>
     <author email="felipe.andrada@gmail.com" href="http://felipeandrada.com.br/">Felipe A</author>
-    <content src="index.html" />
+    <content original-src="index.html" src="http://192.168.0.11:8100" />
     <access launch-external="yes" origin="*" />
     <allow-navigation href="*" />
     <allow-intent href="http://*/*" />
