@@ -1,5 +1,6 @@
 import {Page, NavController, Alert} from 'ionic-framework/ionic';
 import {MapData} from '../../services/map-data';
+import {GalleryData} from '../../services/gallery-data';
 import {ShopData} from '../../services/shop-data';
 
 @Page ({
@@ -16,6 +17,7 @@ export class NewShopPage {
   nameModel;
   isGalleryModel;
   galleryModel;
+  numberModel;
   streetModel;
   isCornerModel;
   streetCornerModel;
@@ -23,13 +25,14 @@ export class NewShopPage {
   routeModel;
 
   static get parameters() {
-    return [[NavController],[MapData],[ShopData]];
+    return [[NavController],[MapData],[ShopData],[GalleryData]];
   }
 
-  constructor(nav, mapData, shopData) {
+  constructor(nav, mapData, shopData, galleryData) {
     this.nav = nav;
     this.mapData = mapData;
     this.shopData = shopData;
+    this.galleryData = galleryData;
 
     this.mapping = false;
     this.position = {};
@@ -134,20 +137,27 @@ export class NewShopPage {
   onFinish() {
     this.mapping = false;
 
+    let data = {
+      name: this.nameModel,
+      number: this.numberModel,
+      gallery: this.galleryModel,
+      street: this.streetModel,
+      streetCorner: this.streetCornerModel,
+      floor: this.floorModel,
+      route: this.routeModel,
+      position: this.position
+    }
+
     let alert = Alert.create({
       title: 'Finalizando',
       message: 'Informe um nome para essa loja.',
-      inputs: [{
-        name: 'name',
-        placeholder: 'Nome'
-      }],
       buttons: [{
         text: 'Cancelar',
         handler: data => {}
       }, {
         text: 'OK',
         handler: (form) => {
-          this.shopData.addShop(form.name, this.position).then((response) => {
+          this.shopData.addShop(data).then((response) => {
 
             if(response.hasOwnProperty('message')) {
 

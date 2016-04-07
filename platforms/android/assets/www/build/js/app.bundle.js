@@ -62567,14 +62567,14 @@
 	            });
 	        });
 	    };
-	    PlaceData.prototype.addPlace = function (name, position) {
+	    PlaceData.prototype.addPlace = function (data) {
 	        var _this = this;
 	        var data = [
 	            ("email=" + this.userData.loggedEmail),
 	            ("access_token=" + this.userData.loggedToken),
-	            ("name=" + name),
+	            ("name=" + data.name),
 	            ("city_id=" + this.cityData.cityId),
-	            ("position=" + JSON.stringify(position))
+	            ("position=" + JSON.stringify(data.position))
 	        ];
 	        this.headers = new http_1.Headers();
 	        this.headers.append('Content-Type', 'application/x-www-form-urlencoded');
@@ -62903,20 +62903,20 @@
 	    NewPlacePage.prototype.onFinish = function () {
 	        var _this = this;
 	        this.mapping = false;
+	        var data = {
+	            name: this.nameModel,
+	            position: this.position
+	        };
 	        var alert = ionic_1.Alert.create({
 	            title: 'Finalizando',
-	            message: 'Informe um nome para esse local.',
-	            inputs: [{
-	                    name: 'name',
-	                    placeholder: 'Nome'
-	                }],
+	            message: 'Deseja mesmo cadastrar esse novo local?',
 	            buttons: [{
 	                    text: 'Cancelar',
 	                    handler: function (data) { }
 	                }, {
 	                    text: 'OK',
 	                    handler: function (form) {
-	                        _this.placeData.addPlace(form.name, _this.position).then(function (response) {
+	                        _this.placeData.addPlace(data).then(function (response) {
 	                            if (response.hasOwnProperty('message')) {
 	                                var alert = ionic_1.Alert.create({
 	                                    title: 'OK...',
@@ -63152,20 +63152,20 @@
 	    NewRoutePage.prototype.onFinish = function () {
 	        var _this = this;
 	        this.mapping = false;
+	        var data = {
+	            name: this.nameModel,
+	            positions: this.positions
+	        };
 	        var alert = ionic_1.Alert.create({
 	            title: 'Finalizando',
-	            message: 'Informe um nome para esse novo caminho.',
-	            inputs: [{
-	                    name: 'name',
-	                    placeholder: 'Nome'
-	                }],
+	            message: 'Deseja mesmo cadastrar esse novo caminho.',
 	            buttons: [{
 	                    text: 'Cancelar',
 	                    handler: function (data) { }
 	                }, {
 	                    text: 'OK',
 	                    handler: function (form) {
-	                        _this.routeData.addRoute(form.name, _this.positions).then(function (response) {
+	                        _this.routeData.addRoute(data).then(function (response) {
 	                            if (response.hasOwnProperty('message')) {
 	                                var alert = ionic_1.Alert.create({
 	                                    title: 'OK...',
@@ -63251,14 +63251,14 @@
 	        enumerable: true,
 	        configurable: true
 	    });
-	    RouteData.prototype.addRoute = function (name, positions) {
+	    RouteData.prototype.addRoute = function (data) {
 	        var _this = this;
 	        var data = [
 	            ("email=" + this.userData.loggedEmail),
 	            ("access_token=" + this.userData.loggedToken),
-	            ("name=" + name),
+	            ("name=" + data.name),
 	            ("place_id=" + this.placeData.placeId),
-	            ("positions=" + JSON.stringify(positions))
+	            ("positions=" + JSON.stringify(data.positions))
 	        ];
 	        this.headers = new http_1.Headers();
 	        this.headers.append('Content-Type', 'application/x-www-form-urlencoded');
@@ -63318,7 +63318,7 @@
 	        this.poly = null;
 	        this.mapData.waitGoogleMaps().then(function (win) {
 	            _this.initMap();
-	            // this.loadFirstPos();
+	            _this.loadFirstPos();
 	        });
 	        var sdk = this.mapData.loadSdk();
 	        if (sdk == false) {
@@ -63405,20 +63405,22 @@
 	    NewGalleryPage.prototype.onFinish = function () {
 	        var _this = this;
 	        this.mapping = false;
+	        var data = {
+	            name: this.nameModel,
+	            floors: this.floorsModel,
+	            address: this.addressModel,
+	            positions: this.positions
+	        };
 	        var alert = ionic_1.Alert.create({
 	            title: 'Finalizando',
-	            message: 'Informe um nome para essa galeria.',
-	            inputs: [{
-	                    name: 'name',
-	                    placeholder: 'Nome'
-	                }],
+	            message: 'Deseja mesmo cadastrar essa nova galeria?',
 	            buttons: [{
 	                    text: 'Cancelar',
 	                    handler: function (data) { }
 	                }, {
 	                    text: 'OK',
 	                    handler: function (form) {
-	                        _this.galleryData.addGallery(form.name, _this.positions).then(function (response) {
+	                        _this.galleryData.addGallery(data).then(function (response) {
 	                            if (response.hasOwnProperty('message')) {
 	                                var alert = ionic_1.Alert.create({
 	                                    title: 'OK...',
@@ -63448,10 +63450,7 @@
 	                    }
 	                }]
 	        });
-	        $this = this;
-	        setTimeout(function () {
-	            $this.nav.present(alert);
-	        }, 1000);
+	        this.nav.present(alert);
 	    };
 	    NewGalleryPage.prototype.onNewMark = function () {
 	        this.addPosition(this.currentLat, this.currentLng);
@@ -63507,14 +63506,16 @@
 	        enumerable: true,
 	        configurable: true
 	    });
-	    GalleryData.prototype.addGallery = function (name, positions) {
+	    GalleryData.prototype.addGallery = function (data) {
 	        var _this = this;
 	        var data = [
 	            ("email=" + this.userData.loggedEmail),
 	            ("access_token=" + this.userData.loggedToken),
-	            ("name=" + name),
+	            ("name=" + data.name),
+	            ("floors=" + data.floors),
+	            ("address=" + data.address),
 	            ("place_id=" + this.placeData.placeId),
-	            ("positions=" + JSON.stringify(positions))
+	            ("positions=" + JSON.stringify(data.positions))
 	        ];
 	        this.headers = new http_1.Headers();
 	        this.headers.append('Content-Type', 'application/x-www-form-urlencoded');
@@ -63734,8 +63735,9 @@
 	        this.updated = false;
 	    };
 	    NewShopPage.prototype.onStart = function () {
-	        this.mapping = true;
-	        this.addPosition(this.currentLat, this.currentLng);
+	        alert('oi');
+	        // this.mapping = true;
+	        // this.addPosition(this.currentLat, this.currentLng);
 	    };
 	    NewShopPage.prototype.onUpdateLocation = function () {
 	        var _this = this;

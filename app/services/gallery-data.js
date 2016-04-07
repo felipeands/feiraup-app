@@ -28,6 +28,7 @@ export class GalleryData {
       `email=${this.userData.loggedEmail}`,
       `access_token=${this.userData.loggedToken}`,
       `name=${data.name}`,
+      `number=${data.number}`,
       `floors=${data.floors}`,
       `address=${data.address}`,
       `place_id=${this.placeData.placeId}`,
@@ -52,6 +53,14 @@ export class GalleryData {
         },
         () => {}
       );
+    })
+  }
+
+  loadGalleriesFromPlace(placeId) {
+    return new Promise(resolve => {
+      this.http.get(`${this.options.base_url}/galleries/place/${placeId}`).subscribe(res => {
+        resolve(res.json());
+      })
     })
   }
 

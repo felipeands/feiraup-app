@@ -14,11 +14,15 @@
     <ion-list>
       <ion-item>
         <ion-label floating>Nome da galeria</ion-label>
-        <ion-input type="text" [(ngModel)]="galleryModel" ngControl="gallery" #gallery required></ion-input>
+        <ion-input type="text" [(ngModel)]="nameModel" ngControl="name" #name required></ion-input>
       </ion-item>
       <ion-item>
-        <ion-label floating>Andares</ion-label>
+        <ion-label floating>Quantidade de andares</ion-label>
         <ion-input type="text" [(ngModel)]="floorsModel" ngControl="floors" #floors></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label floating>Endereço</ion-label>
+        <ion-textarea [(ngModel)]="addressModel" ngControl="address" #address></ion-textarea>
       </ion-item>
     </ion-list>
 

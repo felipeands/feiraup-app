@@ -25,15 +25,20 @@ export class ShopData {
     this.headers.append('Content-Type', 'application/x-www-form-urlencoded');
   }
 
-  addShop(info, position) {
+  addShop(data) {
 
     let data = [
       `email=${this.userData.loggedEmail}`,
       `access_token=${this.userData.loggedToken}`,
-      `info=${JSON.stringify(info)}`
+      `name=${data.gallery}`,
+      `street=${data.street}`,
+      `streetCorner=${data.streetCorner}`,
+      `floor=${data.floor}`,
+      `route=${data.route}`,
+      `position=${JSON.stringify(data.position)}`
     ];
 
-    return new Promise((resolve) => {
+    return new Promise(resolve => {
       this.setHeaders();
       this.http.post(`${this.options.base_url}/shop/add`, data.join('&'), {
         headers: this.headers

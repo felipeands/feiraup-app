@@ -35,7 +35,12 @@
 
 
         <ion-item>
-          <ion-label floating>Rua</ion-label>
+          <ion-label floating>Número</ion-label>
+          <ion-input type="text" [(ngModel)]="numberModel" ngControl="number" #number></ion-input>
+        </ion-item>
+
+        <ion-item>
+          <ion-label floating>Corredor</ion-label>
           <ion-input type="text" [(ngModel)]="streetModel" ngControl="street" #street></ion-input>
         </ion-item>
 
@@ -45,7 +50,7 @@
         </ion-item>
 
         <ion-item *ngIf="isCornerModel">
-          <ion-label floating>Esquina com</ion-label>
+          <ion-label floating>Esquina com corredor</ion-label>
           <ion-input type="text" [(ngModel)]="streetCornerModel" ngControl="streetCorner" #streetCorner></ion-input>
         </ion-item>
 

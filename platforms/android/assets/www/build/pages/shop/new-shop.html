@@ -14,14 +14,15 @@
     <ion-list>
 
       <ion-item>
+        <ion-label floating>Nome da loja</ion-label>
+        <ion-input type="text" [(ngModel)]="nameModel" ngControl="name" #name></ion-input>
+      </ion-item>
+
+      <ion-item>
         <ion-label>Dentro de uma galeria?</ion-label>
         <ion-toggle [(ngModel)]="isGalleryModel" ngControl="isGallery" #isGallery></ion-toggle>
       </ion-item>
 
-      <ion-item>
-        <ion-label floating>Nome da loja</ion-label>
-        <ion-input type="text" [(ngModel)]="nameModel" ngControl="name" #name required></ion-input>
-      </ion-item>
 
       <div *ngIf="isGalleryModel">
 
