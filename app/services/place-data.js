@@ -68,14 +68,14 @@ export class PlaceData {
     });
   }
 
-  addPlace(name, position) {
+  addPlace(data) {
 
     let data = [
     `email=${this.userData.loggedEmail}`,
     `access_token=${this.userData.loggedToken}`,
-    `name=${name}`,
+    `name=${data.name}`,
     `city_id=${this.cityData.cityId}`,
-    `position=${JSON.stringify(position)}`
+    `position=${JSON.stringify(data.position)}`
     ];
 
     this.headers = new Headers();

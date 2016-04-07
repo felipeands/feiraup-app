@@ -15,6 +15,7 @@ import {GalleryData} from '../../services/gallery-data';
 export class NewGalleryPage {
   nameModel;
   floorModel;
+  addressModel;
 
   static get parameters() {
     return [[NavController],[MapData],[GalleryData]];
@@ -143,7 +144,9 @@ export class NewGalleryPage {
 
     let data = {
       name: this.nameModel,
-      floors: this.floorsModel
+      floors: this.floorsModel,
+      address: this.addressModel,
+      positions: this.positions
     }
 
     let alert = Alert.create({
@@ -155,7 +158,7 @@ export class NewGalleryPage {
       }, {
         text: 'OK',
         handler: (form) => {
-          this.galleryData.addGallery(data, this.positions).then((response) => {
+          this.galleryData.addGallery(data).then((response) => {
 
             if(response.hasOwnProperty('message')) {
 

@@ -9,6 +9,17 @@
 
 <ion-content padding class="route">
 
+  <form #newRouteForm="ngForm">
+
+    <ion-list>
+      <ion-item>
+        <ion-label floating>Nome do caminho</ion-label>
+        <ion-input type="text" [(ngModel)]="nameModel" ngControl="name" #name required></ion-input>
+      </ion-item>
+    </ion-list>
+
+  </form>
+
   <button (click)="onNewMark()" type="submit" [disabled]="!mapping || !updated || updating" secondary><ion-icon name="add-circle"> Adicionar</ion-icon></button>
 
   <button (click)="onUpdateLocation()" type="submit" [disabled]="!mapping || updating" primary><ion-icon name="refresh-circle"> Atualizar</ion-icon></button>

@@ -13,8 +13,14 @@ import {ShopData} from '../../services/shop-data';
 })
 
 export class NewShopPage {
+  nameModel;
   isGalleryModel;
   galleryModel;
+  streetModel;
+  isCornerModel;
+  streetCornerModel;
+  floorModel;
+  routeModel;
 
   static get parameters() {
     return [[NavController],[MapData],[ShopData]];

@@ -13,6 +13,7 @@ import {PlaceData} from '../../services/place-data';
 })
 
 export class NewPlacePage {
+  nameModel;
 
   static get parameters() {
     return [[NavController],[MapData],[PlaceData]];
@@ -124,20 +125,21 @@ export class NewPlacePage {
   onFinish() {
     this.mapping = false;
 
+    let data = {
+      name: this.nameModel
+      position: this.position
+    }
+
     let alert = Alert.create({
       title: 'Finalizando',
-      message: 'Informe um nome para esse local.',
-      inputs: [{
-        name: 'name',
-        placeholder: 'Nome'
-      }],
+      message: 'Deseja mesmo cadastrar esse novo local?',
       buttons: [{
         text: 'Cancelar',
         handler: data => {}
       }, {
         text: 'OK',
         handler: (form) => {
-          this.placeData.addPlace(form.name, this.position).then((response) => {
+          this.placeData.addPlace(data).then((response) => {
 
             if(response.hasOwnProperty('message')) {
 

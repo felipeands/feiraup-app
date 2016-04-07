@@ -22,14 +22,14 @@ export class RouteData {
     this.placeData = place;
   }
 
-  addRoute(name, positions) {
+  addRoute(data) {
 
     let data = [
       `email=${this.userData.loggedEmail}`,
       `access_token=${this.userData.loggedToken}`,
-      `name=${name}`,
+      `name=${data.name}`,
       `place_id=${this.placeData.placeId}`,
-      `positions=${JSON.stringify(positions)}`
+      `positions=${JSON.stringify(data.positions)}`
     ];
 
     this.headers = new Headers();

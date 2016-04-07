@@ -9,6 +9,17 @@
 
 <ion-content padding class="place">
 
+  <form #newPlaceForm="ngForm">
+
+    <ion-list>
+      <ion-item>
+        <ion-label floating>Nome do local</ion-label>
+        <ion-input type="text" [(ngModel)]="nameModel" ngControl="name" #name required></ion-input>
+      </ion-item>
+    </ion-list>
+
+  </form>
+
   <button (click)="onUpdateLocation()" type="submit" [disabled]="!mapping || updating" primary><ion-icon name="refresh-circle"> Atualizar</ion-icon></button>
 
   <p>Minha Localização. Lat: {{currentLat}}, Lng: {{currentLng}}</p>

@@ -13,6 +13,7 @@ import {RouteData} from '../../services/route-data';
 })
 
 export class NewRoutePage {
+  nameModel;
 
   static get parameters() {
     return [[NavController],[MapData],[RouteData]];
@@ -139,20 +140,21 @@ export class NewRoutePage {
   onFinish() {
     this.mapping = false;
 
+    let data = {
+      name: this.nameModel,
+      positions: this.positions
+    }
+
     let alert = Alert.create({
       title: 'Finalizando',
-      message: 'Informe um nome para esse novo caminho.',
-      inputs: [{
-        name: 'name',
-        placeholder: 'Nome'
-      }],
+      message: 'Deseja mesmo cadastrar esse novo caminho.',
       buttons: [{
         text: 'Cancelar',
         handler: data => {}
       }, {
         text: 'OK',
         handler: (form) => {
-          this.routeData.addRoute(form.name, this.positions).then((response) => {
+          this.routeData.addRoute(data).then((response) => {
 
             if(response.hasOwnProperty('message')) {
 

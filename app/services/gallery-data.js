@@ -22,14 +22,16 @@ export class GalleryData {
     this.placeData = place;
   }
 
-  addGallery(name, positions) {
+  addGallery(data) {
 
     let data = [
       `email=${this.userData.loggedEmail}`,
       `access_token=${this.userData.loggedToken}`,
-      `name=${name}`,
+      `name=${data.name}`,
+      `floors=${data.floors}`,
+      `address=${data.address}`,
       `place_id=${this.placeData.placeId}`,
-      `positions=${JSON.stringify(positions)}`
+      `positions=${JSON.stringify(data.positions)}`
     ];
 
     this.headers = new Headers();
