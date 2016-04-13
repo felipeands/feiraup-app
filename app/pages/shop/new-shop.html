@@ -28,7 +28,7 @@
 
         <ion-item>
           <ion-label>Galeria</ion-label>
-          <ion-select [(ngModel)]="galleryModel" ngControl="gallery">
+          <ion-select [(ngModel)]="galleryModel" ngControl="gallery" (change)="onUpdateGallery()">
             <ion-option *ngFor="#g of galleries" [value]="g.id">{{g.name}}</ion-option>
           </ion-select>
         </ion-item>

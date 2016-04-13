@@ -28,7 +28,7 @@ export class MapData {
   }
 
   waitGoogleMaps() {
-    return new Promise((resolve) => {
+    return new Promise(resolve => {
       window['initMap'] = () => {
         resolve(window);
       }

@@ -61,7 +61,7 @@ export class PlaceData {
   }
 
   getPlaceFull(placeId) {
-    return new Promise((resolve) => {
+    return new Promise(resolve => {
       this.http.get(`${this.options.base_url}/place-full/${placeId}`).subscribe((res) => {
         resolve(res.json());
       });

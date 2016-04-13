@@ -58,9 +58,15 @@ export class GalleryData {
 
   loadGalleriesFromPlace(placeId) {
     return new Promise(resolve => {
-      this.http.get(`${this.options.base_url}/galleries/place/${placeId}`).subscribe(res => {
+      this.http.get(`${this.options.base_url}/gallery/place/${placeId}`).subscribe(res => {
         resolve(res.json());
       })
+    })
+  }
+
+  loadGalleriesCurPlace() {
+    return this.placeData.getCurrent().then((placeId) => {
+      return this.loadGalleriesFromPlace(placeId);
     })
   }
 

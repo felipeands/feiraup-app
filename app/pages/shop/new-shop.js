@@ -33,6 +33,7 @@ export class NewShopPage {
     this.mapData = mapData;
     this.shopData = shopData;
     this.galleryData = galleryData;
+    this.galleries = [];
 
     this.mapping = false;
     this.position = {};
@@ -49,6 +50,8 @@ export class NewShopPage {
 
     this.isGalleryModel = false;
 
+    this.floors = 1;
+
     this.mapData.waitGoogleMaps().then((win) => {
       this.initMap();
       this.loadFirstPos();
@@ -58,6 +61,8 @@ export class NewShopPage {
     if (sdk==false) {
       window.initMap();
     }
+
+    this.loadGalleries();
 
   }
 
@@ -203,6 +208,18 @@ export class NewShopPage {
     this.latLng = new google.maps.LatLng(latitude, longitude);
     this.updating = false;
     this.updated = true;
+  }
+
+  loadGalleries() {
+    this.galleryData.loadGalleriesCurPlace().then(res => {
+      this.galleries = (res.galleries) ? res.galleries : [];
+    });
+  }
+
+  onUpdateGallery() {
+    this.galleryData.loadGalleryInfo(this.galleryModel).then(res => {
+      this.floors = res.floors;
+    })
   }
 
 }
