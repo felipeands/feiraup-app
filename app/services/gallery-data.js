@@ -70,4 +70,12 @@ export class GalleryData {
     })
   }
 
+  loadGalleryInfo(galleryId) {
+    return new Promise(resolve => {
+      this.http.get(`${this.options.base_url}/gallery/${galleryId}`).subscribe(res => {
+        resolve(res.json());
+      })
+    })
+  }
+
 }

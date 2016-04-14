@@ -52,4 +52,19 @@ export class RouteData {
       );
     })
   }
+
+  loadRoutesFromPlace(placeId) {
+    return new Promise(resolve => {
+      this.http.get(`${this.options.base_url}/route/place/${placeId}`).subscribe(res => {
+        resolve(res.json());
+      })
+    })
+  }
+
+  loadRoutesCurPlace() {
+    return this.placeData.getCurrent().then((placeId) => {
+      return this.loadRoutesFromPlace(placeId);
+    })
+  }
+
 }

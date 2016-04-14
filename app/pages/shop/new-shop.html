@@ -56,7 +56,9 @@
 
         <ion-item>
           <ion-label>Andar</ion-label>
-          <ion-select [(ngModel)]="floorModel" ngControl="floor"></ion-select>
+          <ion-select [(ngModel)]="floorModel" ngControl="floor">
+            <ion-option *ngFor="#f of floors" [value]="f">{{f}}</ion-option>
+          </ion-select>
         </ion-item>
 
       </div>
@@ -65,7 +67,9 @@
 
         <ion-item>
           <ion-label>Rua</ion-label>
-          <ion-select [(ngModel)]="routeModel" ngControl="route"></ion-select>
+          <ion-select [(ngModel)]="routeModel" ngControl="route">
+            <ion-option *ngFor="#r of routes" [value]="r.id">{{r.name}}</ion-option>
+          </ion-select>
         </ion-item>
 
       </div>

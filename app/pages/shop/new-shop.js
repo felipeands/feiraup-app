@@ -1,6 +1,7 @@
 import {Page, NavController, Alert} from 'ionic-framework/ionic';
 import {MapData} from '../../services/map-data';
 import {GalleryData} from '../../services/gallery-data';
+import {RouteData} from '../../services/route-data';
 import {ShopData} from '../../services/shop-data';
 
 @Page ({
@@ -25,14 +26,15 @@ export class NewShopPage {
   routeModel;
 
   static get parameters() {
-    return [[NavController],[MapData],[ShopData],[GalleryData]];
+    return [[NavController],[MapData],[ShopData],[GalleryData],[RouteData]];
   }
 
-  constructor(nav, mapData, shopData, galleryData) {
+  constructor(nav, mapData, shopData, galleryData, routeData) {
     this.nav = nav;
     this.mapData = mapData;
     this.shopData = shopData;
     this.galleryData = galleryData;
+    this.routeData = routeData;
     this.galleries = [];
 
     this.mapping = false;
@@ -50,7 +52,11 @@ export class NewShopPage {
 
     this.isGalleryModel = false;
 
-    this.floors = 1;
+    this.floors = [1];
+    this.galleries = null;
+    this.routes = null;
+    this.loadGalleries();
+    this.loadRoutes();
 
     this.mapData.waitGoogleMaps().then((win) => {
       this.initMap();
@@ -62,7 +68,6 @@ export class NewShopPage {
       window.initMap();
     }
 
-    this.loadGalleries();
 
   }
 
@@ -216,9 +221,15 @@ export class NewShopPage {
     });
   }
 
+  loadRoutes() {
+    this.routeData.loadRoutesCurPlace().then(res => {
+      this.routes = (res.routes) ? res.routes : [];
+    })
+  }
+
   onUpdateGallery() {
     this.galleryData.loadGalleryInfo(this.galleryModel).then(res => {
-      this.floors = res.floors;
+      this.floors = Array(res.gallery.floors).join().split(',').map(function(item,index){return ++index;});
     })
   }
 
