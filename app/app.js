@@ -21,7 +21,6 @@ import {ShopData} from './services/shop-data';
 import {Options} from './options';
 
 
-
 @App({
   templateUrl: './build/app.html',
   providers: [
@@ -35,7 +34,7 @@ import {Options} from './options';
     Options
   ],
   config: {
-    // mode: 'md'
+    mode: 'md'
   }
 })
 

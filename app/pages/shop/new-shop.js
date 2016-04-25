@@ -4,6 +4,8 @@ import {GalleryData} from '../../services/gallery-data';
 import {RouteData} from '../../services/route-data';
 import {ShopData} from '../../services/shop-data';
 
+import {FieldCategories} from '../../components/field-categories';
+
 @Page ({
   templateUrl: 'build/pages/shop/new-shop.html',
   styles: [`
@@ -11,7 +13,8 @@ import {ShopData} from '../../services/shop-data';
     width: 100%;
     height: 100%;
   }
-  `]
+  `],
+  directives: [FieldCategories]
 })
 
 export class NewShopPage {
