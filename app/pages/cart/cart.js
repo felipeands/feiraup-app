@@ -1,4 +1,4 @@
-import {NavController, Page} from 'ionic-framework/ionic';
+import {NavController, Page} from 'ionic-framework/index';
 // import {Footer} from '../components/footer';
 // import {Http, HTTP_PROVIDERS, Response} from 'angular2/http';
 

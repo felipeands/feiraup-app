@@ -1,4 +1,4 @@
-import {Events} from 'ionic-framework/ionic';
+import {Events} from 'ionic-framework/index';
 import {Injectable, Inject} from 'angular2/core';
 import {Options} from './../options';
 

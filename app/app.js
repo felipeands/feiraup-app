@@ -1,4 +1,4 @@
-import {App, IonicApp, Events, Platform, Alert} from 'ionic-framework/ionic';
+import {App, IonicApp, Events, Platform, Alert} from 'ionic-framework/index';
 import {Inject} from 'angular2/core';
 
 import {RandomPage} from './pages/random/random';
@@ -18,6 +18,7 @@ import {MapData} from './services/map-data';
 import {RouteData} from './services/route-data';
 import {GalleryData} from './services/gallery-data';
 import {ShopData} from './services/shop-data';
+import {CategoryData} from './services/category-data';
 import {Options} from './options';
 
 
@@ -31,6 +32,7 @@ import {Options} from './options';
     RouteData,
     GalleryData,
     ShopData,
+    CategoryData,
     Options
   ],
   config: {

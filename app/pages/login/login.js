@@ -1,4 +1,4 @@
-import {Page, NavController, Alert} from 'ionic-framework/ionic';
+import {Page, NavController, Alert} from 'ionic-framework/index';
 import {UserData} from '../../services/user-data';
 
 @Page ({

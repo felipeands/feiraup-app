@@ -1,4 +1,4 @@
-import {Page, NavController, Alert} from 'ionic-framework/ionic';
+import {Page, NavController, Alert} from 'ionic-framework/index';
 import {MapData} from '../../services/map-data';
 import {GalleryData} from '../../services/gallery-data';
 import {RouteData} from '../../services/route-data';
