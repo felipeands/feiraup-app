@@ -8,18 +8,22 @@ import {CategoryData} from '../services/category-data';
   <div>
     <div>Produtos vendidos</div>
     <div>
-      <div *ngFor="#genre of categories">
+      <div *ngFor="#genre of categories" class="genres">
 
-        <div class="title" (click)="onClickGenre(genre)">{{genre.name}}</div>
-        <div *ngIf="genreOpen == genre.id">
+        <div class="title" (click)="onClickGenre(genre)" [ngClass]="{active: genre.id == genreOpen}">
+          <ion-icon [name]="genreIcon(genre)"></ion-icon> {{genre.name}}
+        </div>
+        <div [ngClass]="{hide: genreOpen != genre.id}" class="groups">
           <div *ngFor="#group of genre.children">
 
-            <div class="title" (click)="onClickGroup(group)">{{group.name}}</div>
-            <ion-list *ngIf="groupOpen == group.id">
+            <div class="title" (click)="onClickGroup(group)" [ngClass]="{active: group.id == groupOpen}">
+              <ion-icon [name]="groupIcon(group)"></ion-icon> {{group.name}}
+            </div>
+            <ion-list [ngClass]="{hide: groupOpen != group.id}">
               <ion-item *ngFor="#category of group.children">
 
                 <ion-label>{{category.name}}</ion-label>
-                <ion-toggle (change)="onChangeCategory($event,category)"></ion-toggle>
+                <ion-checkbox [checked]="existsCategoryInSelecteds(category)" (change)="onChangeCategory($event,category)"></ion-checkbox>
 
               </ion-item>
             </ion-list>
@@ -35,6 +39,15 @@ import {CategoryData} from '../services/category-data';
 
   </div>
   `,
+  styles: [`
+  .title {
+    padding: 10px 0;
+    border-bottom: 1px solid #CCC;
+  }
+  .groups {
+    padding-left: 20px;
+  }
+  `]
   directives: [IONIC_DIRECTIVES],
 })
 
@@ -72,7 +85,32 @@ export class FieldCategories {
     this.groupOpen = this.groupOpen == group.id ? null : group.id;
   }
 
-  onChangeCategory() {
-    console.log('mudou');
+  onChangeCategory(event, category) {
+    if (event.checked) {
+      if(!this.existsCategoryInSelecteds(category)) {
+        this.categoriesSelected.push(category.id);
+      }
+    } else {
+      if(this.existsCategoryInSelecteds(category)) {
+        let index = this.categoriesSelected.indexOf(category.id);
+        this.categoriesSelected.splice(index,1);
+      }
+    }
+  }
+
+  existsCategoryInSelecteds(category) {
+    return (this.categoriesSelected.find((i) => return i == category.id));
+  }
+
+  genreIcon(genre) {
+    return (genre.id == this.genreOpen) ? 'arrow-dropup' : 'arrow-dropdown';
+  }
+
+  groupIcon(group) {
+    return (group.id == this.groupOpen) ? 'arrow-dropup' : 'arrow-dropdown';
+  }
+
+  getSelecteds() {
+    return this.categoriesSelected;
   }
 }
