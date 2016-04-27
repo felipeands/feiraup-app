@@ -31,7 +31,8 @@ export class ShopData {
     let data = [
       `email=${this.userData.loggedEmail}`,
       `access_token=${this.userData.loggedToken}`,
-      `name=${data.gallery}`,
+      `name=${data.name}`,
+      `gallery=${data.gallery}`,
       `street=${data.street}`,
       `streetCorner=${data.streetCorner}`,
       `floor=${data.floor}`,
