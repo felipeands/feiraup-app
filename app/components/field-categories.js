@@ -1,4 +1,4 @@
-import {Component} from 'angular2/core';
+import {Component, Output, EventEmitter} from 'angular2/core';
 import {IONIC_DIRECTIVES} from 'ionic-framework/index';
 import {CategoryData} from '../services/category-data';
 
@@ -52,7 +52,9 @@ import {CategoryData} from '../services/category-data';
 })
 
 export class FieldCategories {
-  categoriesToggle[];
+  @Output() selectedCategoriesChange = new EventEmitter();
+
+  selectedCategories: array = [];
 
   static get parameters() {
     return [[CategoryData]];
@@ -66,9 +68,6 @@ export class FieldCategories {
 
     this.genreOpen = null;
     this.groupOpen = null;
-
-    this.categoriesSelected = [];
-
   }
 
   getCategories() {
@@ -87,19 +86,29 @@ export class FieldCategories {
 
   onChangeCategory(event, category) {
     if (event.checked) {
-      if(!this.existsCategoryInSelecteds(category)) {
-        this.categoriesSelected.push(category.id);
-      }
+      this.add(category);
     } else {
-      if(this.existsCategoryInSelecteds(category)) {
-        let index = this.categoriesSelected.indexOf(category.id);
-        this.categoriesSelected.splice(index,1);
-      }
+      this.remove(category);
+    }
+
+    this.selectedCategoriesChange.emit(this.selectedCategories);
+  }
+
+  add(category) {
+    if(!this.existsCategoryInSelecteds(category)) {
+      this.selectedCategories.push(category.id);
+    }
+  }
+
+  remove(category) {
+    if(this.existsCategoryInSelecteds(category)) {
+      let index = this.selectedCategories.indexOf(category.id);
+      this.selectedCategories.splice(index,1);
     }
   }
 
   existsCategoryInSelecteds(category) {
-    return (this.categoriesSelected.find((i) => return i == category.id));
+    return (this.selectedCategories.find((i) => return i == category.id));
   }
 
   genreIcon(genre) {
@@ -111,6 +120,6 @@ export class FieldCategories {
   }
 
   getSelecteds() {
-    return this.categoriesSelected;
+    return this.selectedCategories;
   }
 }

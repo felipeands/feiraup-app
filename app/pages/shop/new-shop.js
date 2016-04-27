@@ -3,7 +3,6 @@ import {MapData} from '../../services/map-data';
 import {GalleryData} from '../../services/gallery-data';
 import {RouteData} from '../../services/route-data';
 import {ShopData} from '../../services/shop-data';
-
 import {FieldCategories} from '../../components/field-categories';
 
 @Page ({
@@ -12,6 +11,9 @@ import {FieldCategories} from '../../components/field-categories';
   #map {
     width: 100%;
     height: 100%;
+  }
+  field-categories {
+    margin-top: 20px;
   }
   `],
   directives: [FieldCategories]
@@ -27,6 +29,7 @@ export class NewShopPage {
   streetCornerModel;
   floorModel;
   routeModel;
+  selectedCategories : array = [];
 
   static get parameters() {
     return [[NavController],[MapData],[ShopData],[GalleryData],[RouteData]];
@@ -58,6 +61,7 @@ export class NewShopPage {
     this.floors = [1];
     this.galleries = null;
     this.routes = null;
+
     this.loadGalleries();
     this.loadRoutes();
 
@@ -158,12 +162,14 @@ export class NewShopPage {
       streetCorner: this.streetCornerModel,
       floor: this.floorModel,
       route: this.routeModel,
-      position: this.position
+      position: this.position,
+      categories: this.selectedCategories
     }
+    console.log('data',data);
 
     let alert = Alert.create({
       title: 'Finalizando',
-      message: 'Informe um nome para essa loja.',
+      message: 'Incluir mesmo essa loja?',
       buttons: [{
         text: 'Cancelar',
         handler: data => {}
@@ -234,6 +240,10 @@ export class NewShopPage {
     this.galleryData.loadGalleryInfo(this.galleryModel).then(res => {
       this.floors = Array(res.gallery.floors).join().split(',').map(function(item,index){return ++index;});
     })
+  }
+
+  categoriesChange(selected) {
+    this.selectedCategories = selected;
   }
 
 }

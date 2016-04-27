@@ -28,14 +28,19 @@
 
         <ion-item>
           <ion-label>Galeria</ion-label>
-          <ion-select [(ngModel)]="galleryModel" ngControl="gallery">
+          <ion-select [(ngModel)]="galleryModel" ngControl="gallery" (change)="onUpdateGallery()">
             <ion-option *ngFor="#g of galleries" [value]="g.id">{{g.name}}</ion-option>
           </ion-select>
         </ion-item>
 
 
         <ion-item>
-          <ion-label floating>Rua</ion-label>
+          <ion-label floating>Número</ion-label>
+          <ion-input type="text" [(ngModel)]="numberModel" ngControl="number" #number></ion-input>
+        </ion-item>
+
+        <ion-item>
+          <ion-label floating>Corredor</ion-label>
           <ion-input type="text" [(ngModel)]="streetModel" ngControl="street" #street></ion-input>
         </ion-item>
 
@@ -45,13 +50,15 @@
         </ion-item>
 
         <ion-item *ngIf="isCornerModel">
-          <ion-label floating>Esquina com</ion-label>
+          <ion-label floating>Esquina com corredor</ion-label>
           <ion-input type="text" [(ngModel)]="streetCornerModel" ngControl="streetCorner" #streetCorner></ion-input>
         </ion-item>
 
         <ion-item>
           <ion-label>Andar</ion-label>
-          <ion-select [(ngModel)]="floorModel" ngControl="floor"></ion-select>
+          <ion-select [(ngModel)]="floorModel" ngControl="floor">
+            <ion-option *ngFor="#f of floors" [value]="f">{{f}}</ion-option>
+          </ion-select>
         </ion-item>
 
       </div>
@@ -60,9 +67,15 @@
 
         <ion-item>
           <ion-label>Rua</ion-label>
-          <ion-select [(ngModel)]="routeModel" ngControl="route"></ion-select>
+          <ion-select [(ngModel)]="routeModel" ngControl="route">
+            <ion-option *ngFor="#r of routes" [value]="r.id">{{r.name}}</ion-option>
+          </ion-select>
         </ion-item>
 
+      </div>
+
+      <div>
+        <field-categories></field-categories>
       </div>
 
     </ion-list>

@@ -5,9 +5,9 @@ import {Component} from 'angular2/core';
 export class Options {
 
   constructor() {
-    // this.base_url = 'http://feiraup.herokuapp.com';
+    this.base_url = 'http://feiraup.herokuapp.com';
     // this.base_url = 'http://localhost:3000';
-    this.base_url = 'http://3a1181f3.ngrok.io';
+    // this.base_url = 'http://da0def2e.ngrok.io';
     // this.base_url = 'http://feiraup.ngrok.com';
     // this.base_url = 'http://192.168.1.12:3000';
     this.gmaps_key = 'AIzaSyDEdVkgms32J_TZad9VJO-XJHWvaQRUDqg';

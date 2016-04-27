@@ -9,6 +9,7 @@ import {Options} from './../options';
 
 export class ShopData {
   public headers: Headers;
+  public myValue:number = 2;
 
   static get parameters() {
     return [[Http], [UserData], [Options]];
@@ -35,7 +36,8 @@ export class ShopData {
       `streetCorner=${data.streetCorner}`,
       `floor=${data.floor}`,
       `route=${data.route}`,
-      `position=${JSON.stringify(data.position)}`
+      `position=${JSON.stringify(data.position)}`,
+      `categories=${JSON.stringify(data.categories)}`
     ];
 
     return new Promise(resolve => {
@@ -44,15 +46,12 @@ export class ShopData {
         headers: this.headers
       })
       .subscribe(
-        res => {
+        (res) => {
           resolve(res.json())
         },
         (err) => {
-          if(err) {
-            resolve(err.json());
-          }
-        },
-        () => {}
+          resolve(err.json());
+        }
       );
     })
 
