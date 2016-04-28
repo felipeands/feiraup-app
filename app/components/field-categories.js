@@ -5,8 +5,8 @@ import {CategoryData} from '../services/category-data';
 @Component({
   selector: 'field-categories',
   template: `
-  <div>
-    <div>Produtos vendidos</div>
+  <div class="categories">
+    <div>Categorias de produtos</div>
     <div>
       <div *ngFor="#genre of categories" class="genres">
 
@@ -46,6 +46,9 @@ import {CategoryData} from '../services/category-data';
   }
   .groups {
     padding-left: 20px;
+  }
+  .categories {
+    margin-top: 40px;
   }
   `]
   directives: [IONIC_DIRECTIVES],

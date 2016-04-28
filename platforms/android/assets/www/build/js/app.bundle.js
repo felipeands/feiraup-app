@@ -63424,7 +63424,7 @@
 	    function Options() {
 	        this.base_url = 'http://feiraup.herokuapp.com';
 	        // this.base_url = 'http://localhost:3000';
-	        // this.base_url = 'http://18b3de19.ngrok.io';
+	        // this.base_url = 'http://da0def2e.ngrok.io';
 	        // this.base_url = 'http://feiraup.ngrok.com';
 	        // this.base_url = 'http://192.168.1.12:3000';
 	        this.gmaps_key = 'AIzaSyDEdVkgms32J_TZad9VJO-XJHWvaQRUDqg';
@@ -64654,15 +64654,13 @@
 	var NewShopPage = (function () {
 	    function NewShopPage(nav, mapData, shopData, galleryData, routeData) {
 	        var _this = this;
+	        this.selectedCategories = [];
 	        this.nav = nav;
 	        this.mapData = mapData;
 	        this.shopData = shopData;
 	        this.galleryData = galleryData;
 	        this.routeData = routeData;
 	        this.galleries = [];
-	        // this.fieldCategories = new FieldCategories();
-	        // console.log(this.fieldCategories);
-	        // console.log(this.fieldCategories.getSelecteds());
 	        this.mapping = false;
 	        this.position = {};
 	        this.latLng = null;
@@ -64765,10 +64763,12 @@
 	            floor: this.floorModel,
 	            route: this.routeModel,
 	            position: this.position,
+	            categories: this.selectedCategories
 	        };
+	        console.log('data', data);
 	        var alert = index_1.Alert.create({
 	            title: 'Finalizando',
-	            message: 'Informe um nome para essa loja.',
+	            message: 'Incluir mesmo essa loja?',
 	            buttons: [{
 	                    text: 'Cancelar',
 	                    handler: function (data) { }
@@ -64832,6 +64832,9 @@
 	            _this.floors = Array(res.gallery.floors).join().split(',').map(function (item, index) { return ++index; });
 	        });
 	    };
+	    NewShopPage.prototype.categoriesChange = function (selected) {
+	        this.selectedCategories = selected;
+	    };
 	    NewShopPage = __decorate([
 	        index_1.Page({
 	            templateUrl: 'build/pages/shop/new-shop.html',
@@ -64864,6 +64867,7 @@
 	var options_1 = __webpack_require__(365);
 	var ShopData = (function () {
 	    function ShopData(http, user, options) {
+	        this.myValue = 2;
 	        this.http = http;
 	        this.userData = user;
 	        this.options = options;
@@ -64884,12 +64888,14 @@
 	        var data = [
 	            ("email=" + this.userData.loggedEmail),
 	            ("access_token=" + this.userData.loggedToken),
-	            ("name=" + data.gallery),
+	            ("name=" + data.name),
+	            ("gallery=" + data.gallery),
 	            ("street=" + data.street),
 	            ("streetCorner=" + data.streetCorner),
 	            ("floor=" + data.floor),
 	            ("route=" + data.route),
 	            ("position=" + JSON.stringify(data.position)),
+	            ("categories=" + JSON.stringify(data.categories))
 	        ];
 	        return new Promise(function (resolve) {
 	            _this.setHeaders();
@@ -64899,10 +64905,8 @@
 	                .subscribe(function (res) {
 	                resolve(res.json());
 	            }, function (err) {
-	                if (err) {
-	                    resolve(err.json());
-	                }
-	            }, function () { });
+	                resolve(err.json());
+	            });
 	        });
 	    };
 	    ShopData = __decorate([
@@ -64932,12 +64936,13 @@
 	var category_data_1 = __webpack_require__(379);
 	var FieldCategories = (function () {
 	    function FieldCategories(categoryData) {
+	        this.selectedCategoriesChange = new core_1.EventEmitter();
+	        this.selectedCategories = [];
 	        this.categoryData = categoryData;
 	        this.categories = [];
 	        this.getCategories();
 	        this.genreOpen = null;
 	        this.groupOpen = null;
-	        this.categoriesSelected = [];
 	    }
 	    Object.defineProperty(FieldCategories, "parameters", {
 	        get: function () {
@@ -64960,19 +64965,26 @@
 	    };
 	    FieldCategories.prototype.onChangeCategory = function (event, category) {
 	        if (event.checked) {
-	            if (!this.existsCategoryInSelecteds(category)) {
-	                this.categoriesSelected.push(category.id);
-	            }
+	            this.add(category);
 	        }
 	        else {
-	            if (this.existsCategoryInSelecteds(category)) {
-	                var index = this.categoriesSelected.indexOf(category.id);
-	                this.categoriesSelected.splice(index, 1);
-	            }
+	            this.remove(category);
+	        }
+	        this.selectedCategoriesChange.emit(this.selectedCategories);
+	    };
+	    FieldCategories.prototype.add = function (category) {
+	        if (!this.existsCategoryInSelecteds(category)) {
+	            this.selectedCategories.push(category.id);
+	        }
+	    };
+	    FieldCategories.prototype.remove = function (category) {
+	        if (this.existsCategoryInSelecteds(category)) {
+	            var index = this.selectedCategories.indexOf(category.id);
+	            this.selectedCategories.splice(index, 1);
 	        }
 	    };
 	    FieldCategories.prototype.existsCategoryInSelecteds = function (category) {
-	        return (this.categoriesSelected.find(function (i) { return i == category.id; }));
+	        return (this.selectedCategories.find(function (i) { return i == category.id; }));
 	    };
 	    FieldCategories.prototype.genreIcon = function (genre) {
 	        return (genre.id == this.genreOpen) ? 'arrow-dropup' : 'arrow-dropdown';
@@ -64981,8 +64993,12 @@
 	        return (group.id == this.groupOpen) ? 'arrow-dropup' : 'arrow-dropdown';
 	    };
 	    FieldCategories.prototype.getSelecteds = function () {
-	        return this.categoriesSelected;
+	        return this.selectedCategories;
 	    };
+	    __decorate([
+	        core_1.Output(), 
+	        __metadata('design:type', Object)
+	    ], FieldCategories.prototype, "selectedCategoriesChange", void 0);
 	    FieldCategories = __decorate([
 	        core_1.Component({
 	            selector: 'field-categories',

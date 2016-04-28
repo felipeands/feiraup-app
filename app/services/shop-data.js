@@ -32,11 +32,11 @@ export class ShopData {
       `email=${this.userData.loggedEmail}`,
       `access_token=${this.userData.loggedToken}`,
       `name=${data.name}`,
-      `gallery=${data.gallery}`,
+      `gallery_id=${data.gallery}`,
       `street=${data.street}`,
-      `streetCorner=${data.streetCorner}`,
+      `street_corner=${data.streetCorner}`,
       `floor=${data.floor}`,
-      `route=${data.route}`,
+      `route_id=${data.route}`,
       `position=${JSON.stringify(data.position)}`,
       `categories=${JSON.stringify(data.categories)}`
     ];

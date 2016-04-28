@@ -165,7 +165,6 @@ export class NewShopPage {
       position: this.position,
       categories: this.selectedCategories
     }
-    console.log('data',data);
 
     let alert = Alert.create({
       title: 'Finalizando',
