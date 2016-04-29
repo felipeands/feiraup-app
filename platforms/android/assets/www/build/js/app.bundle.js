@@ -64765,7 +64765,6 @@
 	            position: this.position,
 	            categories: this.selectedCategories
 	        };
-	        console.log('data', data);
 	        var alert = index_1.Alert.create({
 	            title: 'Finalizando',
 	            message: 'Incluir mesmo essa loja?',
@@ -64889,11 +64888,11 @@
 	            ("email=" + this.userData.loggedEmail),
 	            ("access_token=" + this.userData.loggedToken),
 	            ("name=" + data.name),
-	            ("gallery=" + data.gallery),
+	            ("gallery_id=" + data.gallery),
 	            ("street=" + data.street),
-	            ("streetCorner=" + data.streetCorner),
+	            ("street_corner=" + data.streetCorner),
 	            ("floor=" + data.floor),
-	            ("route=" + data.route),
+	            ("route_id=" + data.route),
 	            ("position=" + JSON.stringify(data.position)),
 	            ("categories=" + JSON.stringify(data.categories))
 	        ];
@@ -65002,8 +65001,8 @@
 	    FieldCategories = __decorate([
 	        core_1.Component({
 	            selector: 'field-categories',
-	            template: "\n  <div>\n    <div>Produtos vendidos</div>\n    <div>\n      <div *ngFor=\"#genre of categories\" class=\"genres\">\n\n        <div class=\"title\" (click)=\"onClickGenre(genre)\" [ngClass]=\"{active: genre.id == genreOpen}\">\n          <ion-icon [name]=\"genreIcon(genre)\"></ion-icon> {{genre.name}}\n        </div>\n        <div [ngClass]=\"{hide: genreOpen != genre.id}\" class=\"groups\">\n          <div *ngFor=\"#group of genre.children\">\n\n            <div class=\"title\" (click)=\"onClickGroup(group)\" [ngClass]=\"{active: group.id == groupOpen}\">\n              <ion-icon [name]=\"groupIcon(group)\"></ion-icon> {{group.name}}\n            </div>\n            <ion-list [ngClass]=\"{hide: groupOpen != group.id}\">\n              <ion-item *ngFor=\"#category of group.children\">\n\n                <ion-label>{{category.name}}</ion-label>\n                <ion-checkbox [checked]=\"existsCategoryInSelecteds(category)\" (change)=\"onChangeCategory($event,category)\"></ion-checkbox>\n\n              </ion-item>\n            </ion-list>\n            <!-- #categories -->\n\n          </div>\n        </div>\n        <!-- #groups -->\n\n      </div>\n    </div>\n    <!-- #genres -->\n\n  </div>\n  ",
-	            styles: ["\n  .title {\n    padding: 10px 0;\n    border-bottom: 1px solid #CCC;\n  }\n  .groups {\n    padding-left: 20px;\n  }\n  "],
+	            template: "\n  <div class=\"categories\">\n    <div>Categorias de produtos</div>\n    <div>\n      <div *ngFor=\"#genre of categories\" class=\"genres\">\n\n        <div class=\"title\" (click)=\"onClickGenre(genre)\" [ngClass]=\"{active: genre.id == genreOpen}\">\n          <ion-icon [name]=\"genreIcon(genre)\"></ion-icon> {{genre.name}}\n        </div>\n        <div [ngClass]=\"{hide: genreOpen != genre.id}\" class=\"groups\">\n          <div *ngFor=\"#group of genre.children\">\n\n            <div class=\"title\" (click)=\"onClickGroup(group)\" [ngClass]=\"{active: group.id == groupOpen}\">\n              <ion-icon [name]=\"groupIcon(group)\"></ion-icon> {{group.name}}\n            </div>\n            <ion-list [ngClass]=\"{hide: groupOpen != group.id}\">\n              <ion-item *ngFor=\"#category of group.children\">\n\n                <ion-label>{{category.name}}</ion-label>\n                <ion-checkbox [checked]=\"existsCategoryInSelecteds(category)\" (change)=\"onChangeCategory($event,category)\"></ion-checkbox>\n\n              </ion-item>\n            </ion-list>\n            <!-- #categories -->\n\n          </div>\n        </div>\n        <!-- #groups -->\n\n      </div>\n    </div>\n    <!-- #genres -->\n\n  </div>\n  ",
+	            styles: ["\n  .title {\n    padding: 10px 0;\n    border-bottom: 1px solid #CCC;\n  }\n  .groups {\n    padding-left: 20px;\n  }\n  .categories {\n    margin-top: 40px;\n  }\n  "],
 	            directives: [index_1.IONIC_DIRECTIVES],
 	        }), 
 	        __metadata('design:paramtypes', [Object])
