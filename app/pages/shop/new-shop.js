@@ -43,7 +43,6 @@ export class NewShopPage {
     this.routeData = routeData;
     this.galleries = [];
 
-    this.mapping = false;
     this.position = {};
 
     this.latLng = null;
@@ -66,8 +65,10 @@ export class NewShopPage {
     this.loadRoutes();
 
     this.mapData.waitGoogleMaps().then((win) => {
-      this.initMap();
-      this.loadFirstPos();
+      this.mapData.getCurPlaceLatLng().then((latLng) => {
+        this.updatePosition(latLng.latitude, latLng.longitude);
+        this.initMap();
+      })
     });
 
     let sdk = this.mapData.loadSdk();
@@ -75,25 +76,18 @@ export class NewShopPage {
       window.initMap();
     }
 
-
   }
 
   initMap() {
     let mapOptions = {
-      center: new google.maps.LatLng(-16.6667, -49.2500),
+      center: this.latLng,
       zoom: 19,
       mapTypeId: google.maps.MapTypeId.ROADMAP
     }
     this.map = new google.maps.Map(document.getElementById('map'), mapOptions);
-  }
-
-
-  loadFirstPos() {
-    this.mapData.getUpdatedPos().then((position) => {
-      this.updatePosition(position.latitude, position.longitude);
-      this.addMarker(this.latLng);
-    });
-
+    this.addMarker(this.latLng);
+    this.updated = true;
+    this.updating = false;
   }
 
   addMarker(latLng) {
@@ -123,12 +117,6 @@ export class NewShopPage {
       latitude: latitude,
       longitude: longitude
     }
-    this.updated = false;
-  }
-
-  onStart() {
-    this.mapping = true;
-    this.addPosition(this.currentLat, this.currentLng);
   }
 
   onUpdateLocation() {
@@ -152,7 +140,6 @@ export class NewShopPage {
   }
 
   onFinish() {
-    this.mapping = false;
 
     let data = {
       name: this.nameModel,
@@ -219,6 +206,7 @@ export class NewShopPage {
     this.currentLat = latitude;
     this.currentLng = longitude;
     this.latLng = new google.maps.LatLng(latitude, longitude);
+    this.addPosition(latitude, longitude);
     this.updating = false;
     this.updated = true;
   }

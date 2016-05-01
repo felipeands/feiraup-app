@@ -1,16 +1,19 @@
 import {Events} from 'ionic-framework/index';
 import {Injectable, Inject} from 'angular2/core';
+
+import {PlaceData} from './place-data';
 import {Options} from './../options';
 
 @Injectable()
 export class MapData {
 
   static get parameters() {
-    return [[Options]];
+    return [[Options],[PlaceData]];
   }
 
-  constructor(options) {
+  constructor(options, placeData) {
     this.options = options;
+    this.placeData = placeData;
   }
 
   loadSdk() {
@@ -41,6 +44,14 @@ export class MapData {
       navigator.geolocation.getCurrentPosition((position) => {
         resolve(position.coords);
       },()=>{}, options);
+    });
+  }
+
+  getCurPlaceLatLng() {
+    return this.placeData.getCurrent().then((placeId) => {
+      return this.placeData.getPlaceInfo(placeId).then((res) => {
+        return res.place;
+      })
     });
   }
 
