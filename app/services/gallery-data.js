@@ -27,7 +27,6 @@ export class GalleryData {
       `email=${this.userData.loggedEmail}`,
       `access_token=${this.userData.loggedToken}`,
       `name=${data.name}`,
-      `number=${data.number}`,
       `floors=${data.floors}`,
       `address=${data.address}`,
       `place_id=${this.placeData.placeId}`,

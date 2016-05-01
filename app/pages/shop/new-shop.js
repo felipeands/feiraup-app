@@ -10,7 +10,7 @@ import {FieldCategories} from '../../components/field-categories';
   styles: [`
   #map {
     width: 100%;
-    height: 100%;
+    height: 80%;
   }
   field-categories {
     margin-top: 20px;
@@ -86,8 +86,6 @@ export class NewShopPage {
     }
     this.map = new google.maps.Map(document.getElementById('map'), mapOptions);
     this.addMarker(this.latLng);
-    this.updated = true;
-    this.updating = false;
   }
 
   addMarker(latLng) {
@@ -140,7 +138,6 @@ export class NewShopPage {
   }
 
   onFinish() {
-
     let data = {
       name: this.nameModel,
       number: this.numberModel,

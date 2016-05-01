@@ -82,11 +82,11 @@
 
   </form>
 
-  <button (click)="onUpdateLocation()" type="submit" [disabled]="updating" primary><ion-icon name="refresh-circle"> Atualizar</ion-icon></button>
+  <button (click)="onFinish()" type="submit" block large>ADICIONAR</button>
 
   <p>Minha Localização. Lat: {{currentLat}}, Lng: {{currentLng}}</p>
 
-  <button (click)="onFinish()" type="submit" block large>ADICIONAR</button>
+  <button (click)="onUpdateLocation()" type="submit" [disabled]="updating" primary><ion-icon name="refresh-circle"> Localizar</ion-icon></button>
 
   <div id="map"></div>
 

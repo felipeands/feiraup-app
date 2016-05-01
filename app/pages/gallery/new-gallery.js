@@ -7,7 +7,7 @@ import {GalleryData} from '../../services/gallery-data';
   styles: [`
   #map {
     width: 100%;
-    height: 100%;
+    height: 80%;
   }
   `]
 })
@@ -26,7 +26,6 @@ export class NewGalleryPage {
     this.mapData = mapData;
     this.galleryData = galleryData;
 
-    this.mapping = false;
     this.positions = [];
 
     this.latLng = null;
@@ -41,8 +40,10 @@ export class NewGalleryPage {
     this.poly = null;
 
     this.mapData.waitGoogleMaps().then((win) => {
-      this.initMap();
-      this.loadFirstPos();
+      this.mapData.getCurPlaceLatLng().then((latLng) => {
+        this.updatePosition(latLng.latitude, latLng.longitude);
+        this.initMap();
+      })
     });
 
     let sdk = this.mapData.loadSdk();
@@ -54,20 +55,13 @@ export class NewGalleryPage {
 
   initMap() {
     let mapOptions = {
-      center: new google.maps.LatLng(-16.6667, -49.2500),
+      center: this.latLng,
       zoom: 19,
       mapTypeId: google.maps.MapTypeId.ROADMAP
     }
     this.map = new google.maps.Map(document.getElementById('map'), mapOptions);
-  }
-
-
-  loadFirstPos() {
-    this.mapData.getUpdatedPos().then((position) => {
-      this.updatePosition(position.latitude, position.longitude);
-      this.addMarker(this.latLng);
-    });
-
+    this.startPoly();
+    this.addMarker(this.latLng);
   }
 
   addMarker(latLng) {
@@ -104,19 +98,15 @@ export class NewGalleryPage {
       longitude: longitude
     }
     this.positions.push(pos);
-    this.updated = false;
-
     this.updatePoly();
 
   }
 
-  onStart() {
-    this.mapping = true;
+  startPoly() {
     this.poly = new google.maps.Polygon({
       map: this.map,
       path: []
     });
-    this.addPosition(this.currentLat, this.currentLng);
   }
 
   onUpdateLocation() {

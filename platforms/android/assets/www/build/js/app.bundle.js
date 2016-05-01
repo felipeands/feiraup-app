@@ -63423,14 +63423,11 @@
 	var Options = (function () {
 	    function Options() {
 	        this.base_url = 'http://feiraup.herokuapp.com';
-	        // this.base_url = 'http://localhost:3000';
-	        // this.base_url = 'http://da0def2e.ngrok.io';
-	        // this.base_url = 'http://feiraup.ngrok.com';
-	        // this.base_url = 'http://192.168.1.12:3000';
+	        // this.base_url = 'http://2a9cd5e8.ngrok.io';
 	        this.gmaps_key = 'AIzaSyDEdVkgms32J_TZad9VJO-XJHWvaQRUDqg';
 	        this.gmaps_timeout = 100000;
 	        this.gmaps_accuracy = true;
-	        this.gmaps_sensor = ''; // '&sensor=true';  }
+	        this.gmaps_sensor = ''; // '&sensor=true';
 	    }
 	    Options = __decorate([
 	        core_1.Component(), 
@@ -63511,6 +63508,14 @@
 	        var _this = this;
 	        return new Promise(function (resolve) {
 	            _this.http.get(_this.options.base_url + "/place-full/" + placeId).subscribe(function (res) {
+	                resolve(res.json());
+	            });
+	        });
+	    };
+	    PlaceData.prototype.getPlaceInfo = function (placeId) {
+	        var _this = this;
+	        return new Promise(function (resolve) {
+	            _this.http.get(_this.options.base_url + "/place-info/" + placeId).subscribe(function (res) {
 	                resolve(res.json());
 	            });
 	        });
@@ -63929,14 +63934,16 @@
 	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 	};
 	var core_1 = __webpack_require__(7);
+	var place_data_1 = __webpack_require__(366);
 	var options_1 = __webpack_require__(365);
 	var MapData = (function () {
-	    function MapData(options) {
+	    function MapData(options, placeData) {
 	        this.options = options;
+	        this.placeData = placeData;
 	    }
 	    Object.defineProperty(MapData, "parameters", {
 	        get: function () {
-	            return [[options_1.Options]];
+	            return [[options_1.Options], [place_data_1.PlaceData]];
 	        },
 	        enumerable: true,
 	        configurable: true
@@ -63970,9 +63977,17 @@
 	            }, function () { }, options);
 	        });
 	    };
+	    MapData.prototype.getCurPlaceLatLng = function () {
+	        var _this = this;
+	        return this.placeData.getCurrent().then(function (placeId) {
+	            return _this.placeData.getPlaceInfo(placeId).then(function (res) {
+	                return res.place;
+	            });
+	        });
+	    };
 	    MapData = __decorate([
 	        core_1.Injectable(), 
-	        __metadata('design:paramtypes', [Object])
+	        __metadata('design:paramtypes', [Object, Object])
 	    ], MapData);
 	    return MapData;
 	})();
@@ -64661,7 +64676,6 @@
 	        this.galleryData = galleryData;
 	        this.routeData = routeData;
 	        this.galleries = [];
-	        this.mapping = false;
 	        this.position = {};
 	        this.latLng = null;
 	        this.currentLat = 0;
@@ -64677,8 +64691,10 @@
 	        this.loadGalleries();
 	        this.loadRoutes();
 	        this.mapData.waitGoogleMaps().then(function (win) {
-	            _this.initMap();
-	            _this.loadFirstPos();
+	            _this.mapData.getCurPlaceLatLng().then(function (latLng) {
+	                _this.updatePosition(latLng.latitude, latLng.longitude);
+	                _this.initMap();
+	            });
 	        });
 	        var sdk = this.mapData.loadSdk();
 	        if (sdk == false) {
@@ -64694,18 +64710,14 @@
 	    });
 	    NewShopPage.prototype.initMap = function () {
 	        var mapOptions = {
-	            center: new google.maps.LatLng(-16.6667, -49.2500),
+	            center: this.latLng,
 	            zoom: 19,
 	            mapTypeId: google.maps.MapTypeId.ROADMAP
 	        };
 	        this.map = new google.maps.Map(document.getElementById('map'), mapOptions);
-	    };
-	    NewShopPage.prototype.loadFirstPos = function () {
-	        var _this = this;
-	        this.mapData.getUpdatedPos().then(function (position) {
-	            _this.updatePosition(position.latitude, position.longitude);
-	            _this.addMarker(_this.latLng);
-	        });
+	        this.addMarker(this.latLng);
+	        this.updated = true;
+	        this.updating = false;
 	    };
 	    NewShopPage.prototype.addMarker = function (latLng) {
 	        this.marker = new google.maps.Marker({
@@ -64729,11 +64741,6 @@
 	            latitude: latitude,
 	            longitude: longitude
 	        };
-	        this.updated = false;
-	    };
-	    NewShopPage.prototype.onStart = function () {
-	        this.mapping = true;
-	        this.addPosition(this.currentLat, this.currentLng);
 	    };
 	    NewShopPage.prototype.onUpdateLocation = function () {
 	        var _this = this;
@@ -64753,7 +64760,6 @@
 	    };
 	    NewShopPage.prototype.onFinish = function () {
 	        var _this = this;
-	        this.mapping = false;
 	        var data = {
 	            name: this.nameModel,
 	            number: this.numberModel,
@@ -64810,6 +64816,7 @@
 	        this.currentLat = latitude;
 	        this.currentLng = longitude;
 	        this.latLng = new google.maps.LatLng(latitude, longitude);
+	        this.addPosition(latitude, longitude);
 	        this.updating = false;
 	        this.updated = true;
 	    };
@@ -64837,7 +64844,7 @@
 	    NewShopPage = __decorate([
 	        index_1.Page({
 	            templateUrl: 'build/pages/shop/new-shop.html',
-	            styles: ["\n  #map {\n    width: 100%;\n    height: 100%;\n  }\n  field-categories {\n    margin-top: 20px;\n  }\n  "],
+	            styles: ["\n  #map {\n    width: 100%;\n    height: 80%;\n  }\n  field-categories {\n    margin-top: 20px;\n  }\n  "],
 	            directives: [field_categories_1.FieldCategories]
 	        }), 
 	        __metadata('design:paramtypes', [Object, Object, Object, Object, Object])

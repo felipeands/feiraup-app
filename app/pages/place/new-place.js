@@ -7,7 +7,7 @@ import {PlaceData} from '../../services/place-data';
   styles: [`
   #map {
     width: 100%;
-    height: 100%;
+    height: 80%;
   }
   `]
 })
@@ -24,7 +24,6 @@ export class NewPlacePage {
     this.mapData = mapData;
     this.placeData = placeData;
 
-    this.mapping = false;
     this.position = {};
 
     this.latLng = null;
@@ -38,8 +37,10 @@ export class NewPlacePage {
     this.marker = null;
 
     this.mapData.waitGoogleMaps().then((win) => {
-      this.initMap();
-      this.loadFirstPos();
+      this.mapData.getCurPlaceLatLng().then((latLng) => {
+        this.updatePosition(latLng.latitude, latLng.longitude);
+        this.initMap();
+      })
     });
 
     let sdk = this.mapData.loadSdk();
@@ -51,20 +52,12 @@ export class NewPlacePage {
 
   initMap() {
     let mapOptions = {
-      center: new google.maps.LatLng(-16.6667, -49.2500),
+      center: this.latLng,
       zoom: 19,
       mapTypeId: google.maps.MapTypeId.ROADMAP
     }
     this.map = new google.maps.Map(document.getElementById('map'), mapOptions);
-  }
-
-
-  loadFirstPos() {
-    this.mapData.getUpdatedPos().then((position) => {
-      this.updatePosition(position.latitude, position.longitude);
-      this.addMarker(this.latLng);
-    });
-
+    this.addMarker(this.latLng);
   }
 
   addMarker(latLng) {
@@ -95,11 +88,6 @@ export class NewPlacePage {
       longitude: longitude
     }
     this.updated = false;
-  }
-
-  onStart() {
-    this.mapping = true;
-    this.addPosition(this.currentLat, this.currentLng);
   }
 
   onUpdateLocation() {
@@ -183,6 +171,7 @@ export class NewPlacePage {
     this.currentLat = latitude;
     this.currentLng = longitude;
     this.latLng = new google.maps.LatLng(latitude, longitude);
+    this.addPosition(latitude, longitude);
     this.updating = false;
     this.updated = true;
   }
