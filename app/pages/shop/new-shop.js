@@ -63,7 +63,11 @@ export class NewShopPage {
 
     this.loadGalleries();
     this.loadRoutes();
+    this.prepareMap();
 
+  }
+
+  prepareMap() {
     this.mapData.waitGoogleMaps().then((win) => {
       this.mapData.getCurPlaceLatLng().then((latLng) => {
         this.updatePosition(latLng.latitude, latLng.longitude);
@@ -75,7 +79,6 @@ export class NewShopPage {
     if (sdk==false) {
       window.initMap();
     }
-
   }
 
   initMap() {

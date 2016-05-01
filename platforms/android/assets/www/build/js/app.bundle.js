@@ -3210,8 +3210,8 @@
 	        this.loggedIn = false;
 	        this.loggedRole = false;
 	        this.userData = userData;
-	        this.root = new_shop_1.NewShopPage;
-	        // this.root = LocationPage;
+	        // this.root = NewGalleryPage;
+	        this.root = location_1.LocationPage;
 	        this.footerPages = [
 	            { title: 'Aleatório', component: random_1.RandomPage, icon: 'sync', fab: 'fab-left' },
 	            { title: '', component: cart_1.CartPage, icon: 'cart', fab: 'fab-center' },
@@ -63423,7 +63423,7 @@
 	var Options = (function () {
 	    function Options() {
 	        this.base_url = 'http://feiraup.herokuapp.com';
-	        // this.base_url = 'http://2a9cd5e8.ngrok.io';
+	        // this.base_url = 'http://5af919c2.ngrok.io';
 	        this.gmaps_key = 'AIzaSyDEdVkgms32J_TZad9VJO-XJHWvaQRUDqg';
 	        this.gmaps_timeout = 100000;
 	        this.gmaps_accuracy = true;
@@ -63765,11 +63765,9 @@
 	var place_data_1 = __webpack_require__(366);
 	var NewPlacePage = (function () {
 	    function NewPlacePage(nav, mapData, placeData) {
-	        var _this = this;
 	        this.nav = nav;
 	        this.mapData = mapData;
 	        this.placeData = placeData;
-	        this.mapping = false;
 	        this.position = {};
 	        this.latLng = null;
 	        this.currentLat = 0;
@@ -63778,14 +63776,7 @@
 	        this.updated = false;
 	        this.map = null;
 	        this.marker = null;
-	        this.mapData.waitGoogleMaps().then(function (win) {
-	            _this.initMap();
-	            _this.loadFirstPos();
-	        });
-	        var sdk = this.mapData.loadSdk();
-	        if (sdk == false) {
-	            window.initMap();
-	        }
+	        this.prepareMap();
 	    }
 	    Object.defineProperty(NewPlacePage, "parameters", {
 	        get: function () {
@@ -63794,20 +63785,27 @@
 	        enumerable: true,
 	        configurable: true
 	    });
+	    NewPlacePage.prototype.prepareMap = function () {
+	        var _this = this;
+	        this.mapData.waitGoogleMaps().then(function (win) {
+	            _this.mapData.getCurPlaceLatLng().then(function (latLng) {
+	                _this.updatePosition(latLng.latitude, latLng.longitude);
+	                _this.initMap();
+	            });
+	        });
+	        var sdk = this.mapData.loadSdk();
+	        if (sdk == false) {
+	            window.initMap();
+	        }
+	    };
 	    NewPlacePage.prototype.initMap = function () {
 	        var mapOptions = {
-	            center: new google.maps.LatLng(-16.6667, -49.2500),
+	            center: this.latLng,
 	            zoom: 19,
 	            mapTypeId: google.maps.MapTypeId.ROADMAP
 	        };
 	        this.map = new google.maps.Map(document.getElementById('map'), mapOptions);
-	    };
-	    NewPlacePage.prototype.loadFirstPos = function () {
-	        var _this = this;
-	        this.mapData.getUpdatedPos().then(function (position) {
-	            _this.updatePosition(position.latitude, position.longitude);
-	            _this.addMarker(_this.latLng);
-	        });
+	        this.addMarker(this.latLng);
 	    };
 	    NewPlacePage.prototype.addMarker = function (latLng) {
 	        this.marker = new google.maps.Marker({
@@ -63832,10 +63830,6 @@
 	            longitude: longitude
 	        };
 	        this.updated = false;
-	    };
-	    NewPlacePage.prototype.onStart = function () {
-	        this.mapping = true;
-	        this.addPosition(this.currentLat, this.currentLng);
 	    };
 	    NewPlacePage.prototype.onUpdateLocation = function () {
 	        var _this = this;
@@ -63905,13 +63899,14 @@
 	        this.currentLat = latitude;
 	        this.currentLng = longitude;
 	        this.latLng = new google.maps.LatLng(latitude, longitude);
+	        this.addPosition(latitude, longitude);
 	        this.updating = false;
 	        this.updated = true;
 	    };
 	    NewPlacePage = __decorate([
 	        index_1.Page({
 	            templateUrl: 'build/pages/place/new-place.html',
-	            styles: ["\n  #map {\n    width: 100%;\n    height: 100%;\n  }\n  "]
+	            styles: ["\n  #map {\n    width: 100%;\n    height: 80%;\n  }\n  "]
 	        }), 
 	        __metadata('design:paramtypes', [Object, Object, Object])
 	    ], NewPlacePage);
@@ -64012,11 +64007,9 @@
 	var route_data_1 = __webpack_require__(372);
 	var NewRoutePage = (function () {
 	    function NewRoutePage(nav, mapData, routeData) {
-	        var _this = this;
 	        this.nav = nav;
 	        this.mapData = mapData;
 	        this.routeData = routeData;
-	        this.mapping = false;
 	        this.positions = [];
 	        this.latLng = null;
 	        this.currentLat = 0;
@@ -64026,14 +64019,7 @@
 	        this.map = null;
 	        this.market = null;
 	        this.poly = null;
-	        this.mapData.waitGoogleMaps().then(function (win) {
-	            _this.initMap();
-	            _this.loadFirstPos();
-	        });
-	        var sdk = this.mapData.loadSdk();
-	        if (sdk == false) {
-	            window.initMap();
-	        }
+	        this.prepareMap();
 	    }
 	    Object.defineProperty(NewRoutePage, "parameters", {
 	        get: function () {
@@ -64042,20 +64028,28 @@
 	        enumerable: true,
 	        configurable: true
 	    });
+	    NewRoutePage.prototype.prepareMap = function () {
+	        var _this = this;
+	        this.mapData.waitGoogleMaps().then(function (win) {
+	            _this.mapData.getCurPlaceLatLng().then(function (latLng) {
+	                _this.updatePosition(latLng.latitude, latLng.longitude);
+	                _this.initMap();
+	            });
+	        });
+	        var sdk = this.mapData.loadSdk();
+	        if (sdk == false) {
+	            window.initMap();
+	        }
+	    };
 	    NewRoutePage.prototype.initMap = function () {
 	        var mapOptions = {
-	            center: new google.maps.LatLng(-16.6667, -49.2500),
+	            center: this.latLng,
 	            zoom: 19,
 	            mapTypeId: google.maps.MapTypeId.ROADMAP
 	        };
 	        this.map = new google.maps.Map(document.getElementById('map'), mapOptions);
-	    };
-	    NewRoutePage.prototype.loadFirstPos = function () {
-	        var _this = this;
-	        this.mapData.getUpdatedPos().then(function (position) {
-	            _this.updatePosition(position.latitude, position.longitude);
-	            _this.addMarker(_this.latLng);
-	        });
+	        this.startPoly();
+	        this.addMarker(this.latLng);
 	    };
 	    NewRoutePage.prototype.addMarker = function (latLng) {
 	        this.marker = new google.maps.Marker({
@@ -64085,16 +64079,13 @@
 	            longitude: longitude
 	        };
 	        this.positions.push(pos);
-	        this.updated = false;
 	        this.updatePoly();
 	    };
-	    NewRoutePage.prototype.onStart = function () {
-	        this.mapping = true;
+	    NewRoutePage.prototype.startPoly = function () {
 	        this.poly = new google.maps.Polyline({
 	            map: this.map,
 	            path: []
 	        });
-	        this.addPosition(this.currentLat, this.currentLng);
 	    };
 	    NewRoutePage.prototype.onUpdateLocation = function () {
 	        var _this = this;
@@ -64173,7 +64164,7 @@
 	    NewRoutePage = __decorate([
 	        index_1.Page({
 	            templateUrl: 'build/pages/route/new-route.html',
-	            styles: ["\n  #map {\n    width: 100%;\n    height: 100%;\n  }\n  "]
+	            styles: ["\n  #map {\n    width: 100%;\n    height: 80%;\n  }\n  "]
 	        }), 
 	        __metadata('design:paramtypes', [Object, Object, Object])
 	    ], NewRoutePage);
@@ -64279,11 +64270,9 @@
 	var gallery_data_1 = __webpack_require__(374);
 	var NewGalleryPage = (function () {
 	    function NewGalleryPage(nav, mapData, galleryData) {
-	        var _this = this;
 	        this.nav = nav;
 	        this.mapData = mapData;
 	        this.galleryData = galleryData;
-	        this.mapping = false;
 	        this.positions = [];
 	        this.latLng = null;
 	        this.currentLat = 0;
@@ -64293,14 +64282,7 @@
 	        this.map = null;
 	        this.market = null;
 	        this.poly = null;
-	        this.mapData.waitGoogleMaps().then(function (win) {
-	            _this.initMap();
-	            _this.loadFirstPos();
-	        });
-	        var sdk = this.mapData.loadSdk();
-	        if (sdk == false) {
-	            window.initMap();
-	        }
+	        this.prepareMap();
 	    }
 	    Object.defineProperty(NewGalleryPage, "parameters", {
 	        get: function () {
@@ -64309,20 +64291,28 @@
 	        enumerable: true,
 	        configurable: true
 	    });
+	    NewGalleryPage.prototype.prepareMap = function () {
+	        var _this = this;
+	        this.mapData.waitGoogleMaps().then(function (win) {
+	            _this.mapData.getCurPlaceLatLng().then(function (latLng) {
+	                _this.updatePosition(latLng.latitude, latLng.longitude);
+	                _this.initMap();
+	            });
+	        });
+	        var sdk = this.mapData.loadSdk();
+	        if (sdk == false) {
+	            window.initMap();
+	        }
+	    };
 	    NewGalleryPage.prototype.initMap = function () {
 	        var mapOptions = {
-	            center: new google.maps.LatLng(-16.6667, -49.2500),
+	            center: this.latLng,
 	            zoom: 19,
 	            mapTypeId: google.maps.MapTypeId.ROADMAP
 	        };
 	        this.map = new google.maps.Map(document.getElementById('map'), mapOptions);
-	    };
-	    NewGalleryPage.prototype.loadFirstPos = function () {
-	        var _this = this;
-	        this.mapData.getUpdatedPos().then(function (position) {
-	            _this.updatePosition(position.latitude, position.longitude);
-	            _this.addMarker(_this.latLng);
-	        });
+	        this.startPoly();
+	        this.addMarker(this.latLng);
 	    };
 	    NewGalleryPage.prototype.addMarker = function (latLng) {
 	        this.marker = new google.maps.Marker({
@@ -64352,16 +64342,13 @@
 	            longitude: longitude
 	        };
 	        this.positions.push(pos);
-	        this.updated = false;
 	        this.updatePoly();
 	    };
-	    NewGalleryPage.prototype.onStart = function () {
-	        this.mapping = true;
+	    NewGalleryPage.prototype.startPoly = function () {
 	        this.poly = new google.maps.Polygon({
 	            map: this.map,
 	            path: []
 	        });
-	        this.addPosition(this.currentLat, this.currentLng);
 	    };
 	    NewGalleryPage.prototype.onUpdateLocation = function () {
 	        var _this = this;
@@ -64442,7 +64429,7 @@
 	    NewGalleryPage = __decorate([
 	        index_1.Page({
 	            templateUrl: 'build/pages/gallery/new-gallery.html',
-	            styles: ["\n  #map {\n    width: 100%;\n    height: 100%;\n  }\n  "]
+	            styles: ["\n  #map {\n    width: 100%;\n    height: 80%;\n  }\n  "]
 	        }), 
 	        __metadata('design:paramtypes', [Object, Object, Object])
 	    ], NewGalleryPage);
@@ -64489,7 +64476,6 @@
 	            ("email=" + this.userData.loggedEmail),
 	            ("access_token=" + this.userData.loggedToken),
 	            ("name=" + data.name),
-	            ("number=" + data.number),
 	            ("floors=" + data.floors),
 	            ("address=" + data.address),
 	            ("place_id=" + this.placeData.placeId),
@@ -64559,17 +64545,10 @@
 	var place_data_1 = __webpack_require__(366);
 	var ShowPlacePage = (function () {
 	    function ShowPlacePage(mapData, placeData) {
-	        var _this = this;
 	        this.mapData = mapData;
 	        this.placeData = placeData;
-	        this.placeData.getPlaceFull(this.placeData.placeId).then(function (result) {
-	            _this.processPlaceFull(result);
-	        });
+	        this.latLng = null;
 	        this.prepareMap();
-	        var sdk = this.mapData.loadSdk();
-	        if (sdk == false) {
-	            window.initMap();
-	        }
 	    }
 	    Object.defineProperty(ShowPlacePage, "parameters", {
 	        get: function () {
@@ -64587,6 +64566,12 @@
 	            });
 	        }
 	        return result;
+	    };
+	    ShowPlacePage.prototype.initPlaces = function () {
+	        var _this = this;
+	        this.placeData.getPlaceFull(this.placeData.placeId).then(function (result) {
+	            _this.processPlaceFull(result);
+	        });
 	    };
 	    ShowPlacePage.prototype.processPlaceFull = function (place) {
 	        this.addGalleries(place.galleries);
@@ -64620,12 +64605,21 @@
 	    ShowPlacePage.prototype.prepareMap = function () {
 	        var _this = this;
 	        this.mapData.waitGoogleMaps().then(function (win) {
-	            _this.initMap();
+	            _this.mapData.getCurPlaceLatLng().then(function (latLng) {
+	                _this.latLng = new google.maps.LatLng(latLng.latitude, latLng.longitude);
+	                ;
+	                _this.initMap();
+	                _this.initPlaces();
+	            });
 	        });
+	        var sdk = this.mapData.loadSdk();
+	        if (sdk == false) {
+	            window.initMap();
+	        }
 	    };
 	    ShowPlacePage.prototype.initMap = function () {
 	        var mapOptions = {
-	            center: new google.maps.LatLng(-16.6667, -49.2500),
+	            center: this.latLng,
 	            zoom: 19,
 	            mapTypeId: google.maps.MapTypeId.ROADMAP
 	        };
@@ -64668,7 +64662,6 @@
 	var field_categories_1 = __webpack_require__(378);
 	var NewShopPage = (function () {
 	    function NewShopPage(nav, mapData, shopData, galleryData, routeData) {
-	        var _this = this;
 	        this.selectedCategories = [];
 	        this.nav = nav;
 	        this.mapData = mapData;
@@ -64690,6 +64683,17 @@
 	        this.routes = null;
 	        this.loadGalleries();
 	        this.loadRoutes();
+	        this.prepareMap();
+	    }
+	    Object.defineProperty(NewShopPage, "parameters", {
+	        get: function () {
+	            return [[index_1.NavController], [map_data_1.MapData], [shop_data_1.ShopData], [gallery_data_1.GalleryData], [route_data_1.RouteData]];
+	        },
+	        enumerable: true,
+	        configurable: true
+	    });
+	    NewShopPage.prototype.prepareMap = function () {
+	        var _this = this;
 	        this.mapData.waitGoogleMaps().then(function (win) {
 	            _this.mapData.getCurPlaceLatLng().then(function (latLng) {
 	                _this.updatePosition(latLng.latitude, latLng.longitude);
@@ -64700,14 +64704,7 @@
 	        if (sdk == false) {
 	            window.initMap();
 	        }
-	    }
-	    Object.defineProperty(NewShopPage, "parameters", {
-	        get: function () {
-	            return [[index_1.NavController], [map_data_1.MapData], [shop_data_1.ShopData], [gallery_data_1.GalleryData], [route_data_1.RouteData]];
-	        },
-	        enumerable: true,
-	        configurable: true
-	    });
+	    };
 	    NewShopPage.prototype.initMap = function () {
 	        var mapOptions = {
 	            center: this.latLng,
@@ -64716,8 +64713,6 @@
 	        };
 	        this.map = new google.maps.Map(document.getElementById('map'), mapOptions);
 	        this.addMarker(this.latLng);
-	        this.updated = true;
-	        this.updating = false;
 	    };
 	    NewShopPage.prototype.addMarker = function (latLng) {
 	        this.marker = new google.maps.Marker({

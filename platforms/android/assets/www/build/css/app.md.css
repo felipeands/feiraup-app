@@ -9295,3 +9295,5 @@ footer {
     right: 3px; }
   footer .toolbar {
     overflow: initial; }
+  footer .toolbar-background {
+    background: initial; }

@@ -36,6 +36,11 @@ export class NewPlacePage {
     this.map = null;
     this.marker = null;
 
+    this.prepareMap();
+
+  }
+
+  prepareMap() {
     this.mapData.waitGoogleMaps().then((win) => {
       this.mapData.getCurPlaceLatLng().then((latLng) => {
         this.updatePosition(latLng.latitude, latLng.longitude);
@@ -47,7 +52,6 @@ export class NewPlacePage {
     if (sdk==false) {
       window.initMap();
     }
-
   }
 
   initMap() {

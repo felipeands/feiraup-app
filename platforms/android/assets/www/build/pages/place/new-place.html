@@ -20,13 +20,12 @@
 
   </form>
 
-  <button (click)="onUpdateLocation()" type="submit" [disabled]="!mapping || updating" primary><ion-icon name="refresh-circle"> Atualizar</ion-icon></button>
+  <button (click)="onFinish()" type="submit" block large>ADICIONAR</button>
 
   <p>Minha Localização. Lat: {{currentLat}}, Lng: {{currentLng}}</p>
 
-  <button (click)="onStart()" type="submit" [disabled]="mapping || updating" block large>COMEÇAR</button>
+  <button (click)="onUpdateLocation()" type="submit" [disabled]="updating" primary><ion-icon name="refresh-circle"> Atualizar</ion-icon></button>
 
-  <button (click)="onFinish()" type="submit" [disabled]="!mapping" block large>FINALIZAR</button>
 
   <div id="map"></div>
 

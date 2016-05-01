@@ -37,6 +37,11 @@ export class NewRoutePage {
     this.market = null;
     this.poly = null;
 
+    this.prepareMap();
+
+  }
+
+  prepareMap() {
     this.mapData.waitGoogleMaps().then((win) => {
       this.mapData.getCurPlaceLatLng().then((latLng) => {
         this.updatePosition(latLng.latitude, latLng.longitude);
@@ -48,7 +53,6 @@ export class NewRoutePage {
     if (sdk==false) {
       window.initMap();
     }
-
   }
 
   initMap() {

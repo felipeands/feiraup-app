@@ -21,18 +21,8 @@ export class ShowPlacePage {
   constructor(mapData, placeData) {
     this.mapData = mapData;
     this.placeData = placeData;
-
-    this.placeData.getPlaceFull(this.placeData.placeId).then((result) => {
-      this.processPlaceFull(result);
-    });
-
+    this.latLng = null;
     this.prepareMap();
-
-    let sdk = this.mapData.loadSdk();
-    if (sdk==false) {
-      window.initMap();
-    }
-
   }
 
   getPositions(obj) {
@@ -44,6 +34,12 @@ export class ShowPlacePage {
       });
     }
     return result;
+  }
+
+  initPlaces() {
+    this.placeData.getPlaceFull(this.placeData.placeId).then((result) => {
+      this.processPlaceFull(result);
+    });
   }
 
   processPlaceFull(place) {
@@ -82,13 +78,21 @@ export class ShowPlacePage {
 
   prepareMap() {
     this.mapData.waitGoogleMaps().then((win) => {
-      this.initMap();
+      this.mapData.getCurPlaceLatLng().then((latLng) => {
+        this.latLng = new google.maps.LatLng(latLng.latitude, latLng.longitude);;
+        this.initMap();
+        this.initPlaces();
+      })
     });
+    let sdk = this.mapData.loadSdk();
+    if (sdk==false) {
+      window.initMap();
+    }
   }
 
   initMap() {
     let mapOptions = {
-      center: new google.maps.LatLng(-16.6667, -49.2500),
+      center: this.latLng,
       zoom: 19,
       mapTypeId: google.maps.MapTypeId.ROADMAP
     }
