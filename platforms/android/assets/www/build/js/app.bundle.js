@@ -64604,7 +64604,7 @@
 	            draggable: false,
 	            clickable: true
 	        });
-	        var popupContent = "<b>Loja:</b> " + shop.name;
+	        var popupContent = "<b>Loja:</b> " + shop.info.name;
 	        this.createInfoWindow(marker, popupContent);
 	    };
 	    ShowPlacePage.prototype.addGalleries = function (galleries) {
@@ -64620,8 +64620,8 @@
 	            fillColor: "#ff0000",
 	            strokeOpacity: 0.4
 	        });
-	        // let popupContent = `<b>Galeria:</b> ${gallery.name}`
-	        // this.createInfoWindow(polygon, popupContent);
+	        var popupContent = "<b>Galeria:</b> " + gallery.info.name;
+	        this.createInfoWindow(polygon, popupContent);
 	    };
 	    ShowPlacePage.prototype.addRoutes = function (routes) {
 	        for (var route in routes) {
@@ -64635,8 +64635,8 @@
 	            strokeColor: "#5fba7d",
 	            strokeOpacity: 0.8
 	        });
-	        // let popupContent = `<b>Caminho:</b> ${route.name}`
-	        // this.createInfoWindow(polyline, popupContent);
+	        var popupContent = "<b>Caminho:</b> " + route.info.name;
+	        this.createInfoWindow(polyline, popupContent);
 	    };
 	    ShowPlacePage.prototype.prepareMap = function () {
 	        var _this = this;
@@ -64656,7 +64656,7 @@
 	    ShowPlacePage.prototype.initMap = function () {
 	        var mapOptions = {
 	            center: this.latLng,
-	            zoom: 20,
+	            zoom: 19,
 	            mapTypeId: google.maps.MapTypeId.SATELLITE
 	        };
 	        this.map = new google.maps.Map(document.getElementById('map'), mapOptions);

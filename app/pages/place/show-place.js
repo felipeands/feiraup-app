@@ -87,12 +87,13 @@ export class ShowPlacePage {
     let polygon = new google.maps.Polygon({
       map: this.map,
       path: this.getPositions(gallery),
+      title: gallery.info.name,
       strokeColor: "#ff0000",
       fillColor: "#ff0000",
       strokeOpacity: 0.4
     });
-    // let popupContent = `<b>Galeria:</b> ${gallery.name}`
-    // this.createInfoWindow(polygon, popupContent);
+    let popupContent = `<b>Galeria:</b> ${gallery.info.name}`
+    this.createInfoWindow(polygon, popupContent);
   }
 
   addRoutes(routes) {
@@ -105,11 +106,12 @@ export class ShowPlacePage {
     let = polyline = new google.maps.Polyline({
       map: this.map,
       path: this.getPositions(route),
+      title: route.info.name,
       strokeColor: "#5fba7d",
       strokeOpacity: 0.8
     });
-    // let popupContent = `<b>Caminho:</b> ${route.name}`
-    // this.createInfoWindow(polyline, popupContent);
+    let popupContent = `<b>Caminho:</b> ${route.info.name}`
+    this.createInfoWindow(polyline, popupContent);
   }
 
   prepareMap() {
@@ -129,7 +131,7 @@ export class ShowPlacePage {
   initMap() {
     let mapOptions = {
       center: this.latLng,
-      zoom: 20,
+      zoom: 19,
       mapTypeId: google.maps.MapTypeId.SATELLITE
     }
     this.map = new google.maps.Map(document.getElementById('map'), mapOptions);
@@ -146,6 +148,8 @@ export class ShowPlacePage {
     el.info = new google.maps.InfoWindow({
       content: popupContent
     });
+
+    el.info.setPosition(this.latLng);
 
     google.maps.event.addListener(el, 'click', function() {
       el.info.open(this.map, el);
