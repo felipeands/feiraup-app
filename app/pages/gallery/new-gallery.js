@@ -196,6 +196,27 @@ export class NewGalleryPage {
     this.addPosition(this.currentLat, this.currentLng);
   }
 
+  onNewDoor() {
+    this.addDoor(this.currentLat, this.currentLng);
+  }
+
+  addDoor(latitude, longitude) {
+    let door = 'build/images/door.png';
+    let marker = new google.maps.Marker({
+      map: this.map,
+      animation: google.maps.Animation.DROP,
+      position: new google.maps.LatLng(latitude, longitude),
+      icon: door,
+      draggable: true
+    });
+
+    $this = this;
+
+    this.marker.addListener('dragend', function(e) {
+      // $this.updatePosition(e.latLng.lat(), e.latLng.lng());
+    });
+  }
+
   updatePosition(latitude, longitude) {
     this.currentLat = latitude;
     this.currentLng = longitude;
