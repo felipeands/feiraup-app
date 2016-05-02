@@ -9,7 +9,6 @@ import {Options} from './../options';
 
 export class ShopData {
   public headers: Headers;
-  public myValue:number = 2;
 
   static get parameters() {
     return [[Http], [UserData], [Options]];
@@ -26,19 +25,30 @@ export class ShopData {
     this.headers.append('Content-Type', 'application/x-www-form-urlencoded');
   }
 
+  getPlaceShops(placeId) {
+    return new Promise((resolve) => {
+      this.http.get(`${this.options.base_url}/place/shops`)
+    });
+  }
+
   addShop(data) {
 
     let data = [
       `email=${this.userData.loggedEmail}`,
       `access_token=${this.userData.loggedToken}`,
       `name=${data.name}`,
+      `shop_email=${data.email}`,
+      `phone=${data.phone}`,
+      `phone2=${data.phone2}`,
       `gallery_id=${data.gallery}`,
       `street=${data.street}`,
       `street_corner=${data.streetCorner}`,
       `floor=${data.floor}`,
       `route_id=${data.route}`,
       `position=${JSON.stringify(data.position)}`,
-      `categories=${JSON.stringify(data.categories)}`
+      `categories=${JSON.stringify(data.categories)}`,
+      `place_id=${data.place}`,
+      `obs=${data.obs}`
     ];
 
     return new Promise(resolve => {

@@ -3193,14 +3193,14 @@
 	var new_route_1 = __webpack_require__(371);
 	var new_gallery_1 = __webpack_require__(373);
 	var show_place_1 = __webpack_require__(375);
-	var new_shop_1 = __webpack_require__(376);
+	var new_shop_1 = __webpack_require__(377);
 	var user_data_1 = __webpack_require__(367);
 	var city_data_1 = __webpack_require__(364);
 	var place_data_1 = __webpack_require__(366);
 	var map_data_1 = __webpack_require__(370);
 	var route_data_1 = __webpack_require__(372);
 	var gallery_data_1 = __webpack_require__(374);
-	var shop_data_1 = __webpack_require__(377);
+	var shop_data_1 = __webpack_require__(376);
 	var category_data_1 = __webpack_require__(379);
 	var options_1 = __webpack_require__(365);
 	var MyApp = (function () {
@@ -63423,7 +63423,7 @@
 	var Options = (function () {
 	    function Options() {
 	        this.base_url = 'http://feiraup.herokuapp.com';
-	        // this.base_url = 'http://5af919c2.ngrok.io';
+	        // this.base_url = 'http://daa11807.ngrok.io';
 	        this.gmaps_key = 'AIzaSyDEdVkgms32J_TZad9VJO-XJHWvaQRUDqg';
 	        this.gmaps_timeout = 100000;
 	        this.gmaps_accuracy = true;
@@ -63499,6 +63499,9 @@
 	    };
 	    PlaceData.prototype.getCurrent = function () {
 	        var _this = this;
+	        if (this.placeId) {
+	            return Promise.resolve(this.placeId);
+	        }
 	        return this.storage.get('placeId').then(function (value) {
 	            _this.placeId = JSON.parse(value);
 	            return _this.placeId;
@@ -64044,7 +64047,7 @@
 	    NewRoutePage.prototype.initMap = function () {
 	        var mapOptions = {
 	            center: this.latLng,
-	            zoom: 19,
+	            zoom: 20,
 	            mapTypeId: google.maps.MapTypeId.ROADMAP
 	        };
 	        this.map = new google.maps.Map(document.getElementById('map'), mapOptions);
@@ -64307,8 +64310,8 @@
 	    NewGalleryPage.prototype.initMap = function () {
 	        var mapOptions = {
 	            center: this.latLng,
-	            zoom: 19,
-	            mapTypeId: google.maps.MapTypeId.ROADMAP
+	            zoom: 21,
+	            mapTypeId: google.maps.MapTypeId.SATELLITE
 	        };
 	        this.map = new google.maps.Map(document.getElementById('map'), mapOptions);
 	        this.startPoly();
@@ -64543,16 +64546,18 @@
 	var index_1 = __webpack_require__(5);
 	var map_data_1 = __webpack_require__(370);
 	var place_data_1 = __webpack_require__(366);
+	var shop_data_1 = __webpack_require__(376);
 	var ShowPlacePage = (function () {
-	    function ShowPlacePage(mapData, placeData) {
+	    function ShowPlacePage(mapData, placeData, shopData) {
 	        this.mapData = mapData;
 	        this.placeData = placeData;
+	        this.shopData = shopData;
 	        this.latLng = null;
 	        this.prepareMap();
 	    }
 	    Object.defineProperty(ShowPlacePage, "parameters", {
 	        get: function () {
-	            return [[map_data_1.MapData], [place_data_1.PlaceData]];
+	            return [[map_data_1.MapData], [place_data_1.PlaceData], [shop_data_1.ShopData]];
 	        },
 	        enumerable: true,
 	        configurable: true
@@ -64569,16 +64574,38 @@
 	    };
 	    ShowPlacePage.prototype.initPlaces = function () {
 	        var _this = this;
-	        this.placeData.getPlaceFull(this.placeData.placeId).then(function (result) {
-	            _this.processPlaceFull(result);
+	        this.placeData.getPlaceFull(this.placeData.placeId).then(function (place) {
+	            _this.processPlaceFull(place);
 	        });
 	    };
 	    ShowPlacePage.prototype.processPlaceFull = function (place) {
-	        this.addGalleries(place.galleries);
-	        this.addRoutes(place.routes);
-	        var latitude = Number(place.place.latitude);
-	        var longitude = Number(place.place.longitude);
-	        this.setLatLng(latitude, longitude);
+	        if (place.galleries) {
+	            this.addGalleries(place.galleries);
+	        }
+	        if (place.routes) {
+	            this.addRoutes(place.routes);
+	        }
+	        if (place.shops) {
+	            this.addShops(place.shops);
+	        }
+	    };
+	    ShowPlacePage.prototype.addShops = function (shops) {
+	        for (var shop in shops) {
+	            this.addShop(shops[shop]);
+	        }
+	    };
+	    ShowPlacePage.prototype.addShop = function (shop) {
+	        var latLng = this.setLatLng(shop.latitude, shop.longitude);
+	        var marker = new google.maps.Marker({
+	            position: latLng,
+	            map: this.map,
+	            title: shop.name,
+	            animation: google.maps.Animation.DROP,
+	            draggable: false,
+	            clickable: true
+	        });
+	        var popupContent = "<b>Loja:</b> " + shop.name;
+	        this.createInfoWindow(marker, popupContent);
 	    };
 	    ShowPlacePage.prototype.addGalleries = function (galleries) {
 	        for (var gallery in galleries) {
@@ -64586,10 +64613,15 @@
 	        }
 	    };
 	    ShowPlacePage.prototype.addGallery = function (gallery) {
-	        new google.maps.Polygon({
+	        var polygon = new google.maps.Polygon({
 	            map: this.map,
-	            path: this.getPositions(gallery)
+	            path: this.getPositions(gallery),
+	            strokeColor: "#ff0000",
+	            fillColor: "#ff0000",
+	            strokeOpacity: 0.4
 	        });
+	        // let popupContent = `<b>Galeria:</b> ${gallery.name}`
+	        // this.createInfoWindow(polygon, popupContent);
 	    };
 	    ShowPlacePage.prototype.addRoutes = function (routes) {
 	        for (var route in routes) {
@@ -64597,10 +64629,14 @@
 	        }
 	    };
 	    ShowPlacePage.prototype.addRoute = function (route) {
-	        new google.maps.Polyline({
+	        let = polyline = new google.maps.Polyline({
 	            map: this.map,
-	            path: this.getPositions(route)
+	            path: this.getPositions(route),
+	            strokeColor: "#5fba7d",
+	            strokeOpacity: 0.8
 	        });
+	        // let popupContent = `<b>Caminho:</b> ${route.name}`
+	        // this.createInfoWindow(polyline, popupContent);
 	    };
 	    ShowPlacePage.prototype.prepareMap = function () {
 	        var _this = this;
@@ -64620,21 +64656,31 @@
 	    ShowPlacePage.prototype.initMap = function () {
 	        var mapOptions = {
 	            center: this.latLng,
-	            zoom: 19,
-	            mapTypeId: google.maps.MapTypeId.ROADMAP
+	            zoom: 20,
+	            mapTypeId: google.maps.MapTypeId.SATELLITE
 	        };
 	        this.map = new google.maps.Map(document.getElementById('map'), mapOptions);
+	        this.infoWindow = new google.maps.InfoWindow();
 	    };
 	    ShowPlacePage.prototype.setLatLng = function (latitude, longitude) {
 	        var latLng = new google.maps.LatLng(latitude, longitude);
 	        this.map.setCenter(latLng);
+	        return latLng;
+	    };
+	    ShowPlacePage.prototype.createInfoWindow = function (el, popupContent) {
+	        el.info = new google.maps.InfoWindow({
+	            content: popupContent
+	        });
+	        google.maps.event.addListener(el, 'click', function () {
+	            el.info.open(this.map, el);
+	        });
 	    };
 	    ShowPlacePage = __decorate([
 	        index_1.Page({
 	            templateUrl: 'build/pages/place/show-place.html',
 	            styles: ["\n  #map {\n    width: 100%;\n    height: 100%;\n  }\n  "]
 	        }), 
-	        __metadata('design:paramtypes', [Object, Object])
+	        __metadata('design:paramtypes', [Object, Object, Object])
 	    ], ShowPlacePage);
 	    return ShowPlacePage;
 	})();
@@ -64654,20 +64700,102 @@
 	var __metadata = (this && this.__metadata) || function (k, v) {
 	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 	};
+	var core_1 = __webpack_require__(7);
+	var http_1 = __webpack_require__(145);
+	var user_data_1 = __webpack_require__(367);
+	var options_1 = __webpack_require__(365);
+	var ShopData = (function () {
+	    function ShopData(http, user, options) {
+	        this.http = http;
+	        this.userData = user;
+	        this.options = options;
+	    }
+	    Object.defineProperty(ShopData, "parameters", {
+	        get: function () {
+	            return [[http_1.Http], [user_data_1.UserData], [options_1.Options]];
+	        },
+	        enumerable: true,
+	        configurable: true
+	    });
+	    ShopData.prototype.setHeaders = function () {
+	        this.headers = new http_1.Headers();
+	        this.headers.append('Content-Type', 'application/x-www-form-urlencoded');
+	    };
+	    ShopData.prototype.getPlaceShops = function (placeId) {
+	        var _this = this;
+	        return new Promise(function (resolve) {
+	            _this.http.get(_this.options.base_url + "/place/shops");
+	        });
+	    };
+	    ShopData.prototype.addShop = function (data) {
+	        var _this = this;
+	        var data = [
+	            ("email=" + this.userData.loggedEmail),
+	            ("access_token=" + this.userData.loggedToken),
+	            ("name=" + data.name),
+	            ("shop_email=" + data.email),
+	            ("phone=" + data.phone),
+	            ("phone2=" + data.phone2),
+	            ("gallery_id=" + data.gallery),
+	            ("street=" + data.street),
+	            ("street_corner=" + data.streetCorner),
+	            ("floor=" + data.floor),
+	            ("route_id=" + data.route),
+	            ("position=" + JSON.stringify(data.position)),
+	            ("categories=" + JSON.stringify(data.categories)),
+	            ("place_id=" + data.place),
+	            ("obs=" + data.obs)
+	        ];
+	        return new Promise(function (resolve) {
+	            _this.setHeaders();
+	            _this.http.post(_this.options.base_url + "/shop/add", data.join('&'), {
+	                headers: _this.headers
+	            })
+	                .subscribe(function (res) {
+	                resolve(res.json());
+	            }, function (err) {
+	                resolve(err.json());
+	            });
+	        });
+	    };
+	    ShopData = __decorate([
+	        core_1.Injectable(), 
+	        __metadata('design:paramtypes', [Object, Object, Object])
+	    ], ShopData);
+	    return ShopData;
+	})();
+	exports.ShopData = ShopData;
+
+
+/***/ },
+/* 377 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+	    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+	    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+	    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+	    return c > 3 && r && Object.defineProperty(target, key, r), r;
+	};
+	var __metadata = (this && this.__metadata) || function (k, v) {
+	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+	};
 	var index_1 = __webpack_require__(5);
 	var map_data_1 = __webpack_require__(370);
 	var gallery_data_1 = __webpack_require__(374);
 	var route_data_1 = __webpack_require__(372);
-	var shop_data_1 = __webpack_require__(377);
+	var shop_data_1 = __webpack_require__(376);
+	var place_data_1 = __webpack_require__(366);
 	var field_categories_1 = __webpack_require__(378);
 	var NewShopPage = (function () {
-	    function NewShopPage(nav, mapData, shopData, galleryData, routeData) {
+	    function NewShopPage(nav, mapData, shopData, galleryData, routeData, placeData) {
 	        this.selectedCategories = [];
 	        this.nav = nav;
 	        this.mapData = mapData;
 	        this.shopData = shopData;
 	        this.galleryData = galleryData;
 	        this.routeData = routeData;
+	        this.placeData = placeData;
 	        this.galleries = [];
 	        this.position = {};
 	        this.latLng = null;
@@ -64687,7 +64815,7 @@
 	    }
 	    Object.defineProperty(NewShopPage, "parameters", {
 	        get: function () {
-	            return [[index_1.NavController], [map_data_1.MapData], [shop_data_1.ShopData], [gallery_data_1.GalleryData], [route_data_1.RouteData]];
+	            return [[index_1.NavController], [map_data_1.MapData], [shop_data_1.ShopData], [gallery_data_1.GalleryData], [route_data_1.RouteData], [place_data_1.PlaceData]];
 	        },
 	        enumerable: true,
 	        configurable: true
@@ -64708,8 +64836,8 @@
 	    NewShopPage.prototype.initMap = function () {
 	        var mapOptions = {
 	            center: this.latLng,
-	            zoom: 19,
-	            mapTypeId: google.maps.MapTypeId.ROADMAP
+	            zoom: 20,
+	            mapTypeId: google.maps.MapTypeId.SATELLITE
 	        };
 	        this.map = new google.maps.Map(document.getElementById('map'), mapOptions);
 	        this.addMarker(this.latLng);
@@ -64755,57 +64883,63 @@
 	    };
 	    NewShopPage.prototype.onFinish = function () {
 	        var _this = this;
-	        var data = {
-	            name: this.nameModel,
-	            number: this.numberModel,
-	            gallery: this.galleryModel,
-	            street: this.streetModel,
-	            streetCorner: this.streetCornerModel,
-	            floor: this.floorModel,
-	            route: this.routeModel,
-	            position: this.position,
-	            categories: this.selectedCategories
-	        };
-	        var alert = index_1.Alert.create({
-	            title: 'Finalizando',
-	            message: 'Incluir mesmo essa loja?',
-	            buttons: [{
-	                    text: 'Cancelar',
-	                    handler: function (data) { }
-	                }, {
-	                    text: 'OK',
-	                    handler: function (form) {
-	                        _this.shopData.addShop(data).then(function (response) {
-	                            if (response.hasOwnProperty('message')) {
-	                                var alert = index_1.Alert.create({
-	                                    title: 'OK...',
-	                                    message: response.message,
-	                                    buttons: ['OK']
-	                                });
-	                            }
-	                            else if (response.hasOwnProperty('error')) {
-	                                var alert = index_1.Alert.create({
-	                                    title: 'Ops...',
-	                                    message: response.error,
-	                                    buttons: ['OK']
-	                                });
-	                            }
-	                            else {
-	                                var alert = index_1.Alert.create({
-	                                    title: 'Ops...',
-	                                    message: 'Não foi possível salvar!',
-	                                    buttons: ['OK']
-	                                });
-	                            }
-	                            var nav = _this.nav;
-	                            setTimeout(function () {
-	                                nav.present(alert);
-	                            }, 500);
-	                        });
-	                    }
-	                }]
+	        this.placeData.getCurrent().then(function (placeId) {
+	            var data = {
+	                name: _this.nameModel,
+	                email: _this.emailModel,
+	                phone: _this.phoneModel,
+	                phone2: _this.phone2Model,
+	                gallery: _this.galleryModel,
+	                street: _this.streetModel,
+	                streetCorner: _this.streetCornerModel,
+	                floor: _this.floorModel,
+	                route: _this.routeModel,
+	                position: _this.position,
+	                categories: _this.selectedCategories,
+	                obs: _this.obsModel,
+	                place: placeId
+	            };
+	            var alert = index_1.Alert.create({
+	                title: 'Finalizando',
+	                message: 'Incluir mesmo essa loja?',
+	                buttons: [{
+	                        text: 'Cancelar',
+	                        handler: function (data) { }
+	                    }, {
+	                        text: 'OK',
+	                        handler: function (form) {
+	                            _this.shopData.addShop(data).then(function (response) {
+	                                if (response.hasOwnProperty('message')) {
+	                                    var alert = index_1.Alert.create({
+	                                        title: 'OK...',
+	                                        message: response.message,
+	                                        buttons: ['OK']
+	                                    });
+	                                }
+	                                else if (response.hasOwnProperty('error')) {
+	                                    var alert = index_1.Alert.create({
+	                                        title: 'Ops...',
+	                                        message: response.error,
+	                                        buttons: ['OK']
+	                                    });
+	                                }
+	                                else {
+	                                    var alert = index_1.Alert.create({
+	                                        title: 'Ops...',
+	                                        message: 'Não foi possível salvar!',
+	                                        buttons: ['OK']
+	                                    });
+	                                }
+	                                var nav = _this.nav;
+	                                setTimeout(function () {
+	                                    nav.present(alert);
+	                                }, 500);
+	                            });
+	                        }
+	                    }]
+	            });
+	            _this.nav.present(alert);
 	        });
-	        this.nav.present(alert);
 	    };
 	    NewShopPage.prototype.updatePosition = function (latitude, longitude) {
 	        this.currentLat = latitude;
@@ -64842,81 +64976,11 @@
 	            styles: ["\n  #map {\n    width: 100%;\n    height: 80%;\n  }\n  field-categories {\n    margin-top: 20px;\n  }\n  "],
 	            directives: [field_categories_1.FieldCategories]
 	        }), 
-	        __metadata('design:paramtypes', [Object, Object, Object, Object, Object])
+	        __metadata('design:paramtypes', [Object, Object, Object, Object, Object, Object])
 	    ], NewShopPage);
 	    return NewShopPage;
 	})();
 	exports.NewShopPage = NewShopPage;
-
-
-/***/ },
-/* 377 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-	    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-	    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-	    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-	    return c > 3 && r && Object.defineProperty(target, key, r), r;
-	};
-	var __metadata = (this && this.__metadata) || function (k, v) {
-	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-	};
-	var core_1 = __webpack_require__(7);
-	var http_1 = __webpack_require__(145);
-	var user_data_1 = __webpack_require__(367);
-	var options_1 = __webpack_require__(365);
-	var ShopData = (function () {
-	    function ShopData(http, user, options) {
-	        this.myValue = 2;
-	        this.http = http;
-	        this.userData = user;
-	        this.options = options;
-	    }
-	    Object.defineProperty(ShopData, "parameters", {
-	        get: function () {
-	            return [[http_1.Http], [user_data_1.UserData], [options_1.Options]];
-	        },
-	        enumerable: true,
-	        configurable: true
-	    });
-	    ShopData.prototype.setHeaders = function () {
-	        this.headers = new http_1.Headers();
-	        this.headers.append('Content-Type', 'application/x-www-form-urlencoded');
-	    };
-	    ShopData.prototype.addShop = function (data) {
-	        var _this = this;
-	        var data = [
-	            ("email=" + this.userData.loggedEmail),
-	            ("access_token=" + this.userData.loggedToken),
-	            ("name=" + data.name),
-	            ("gallery_id=" + data.gallery),
-	            ("street=" + data.street),
-	            ("street_corner=" + data.streetCorner),
-	            ("floor=" + data.floor),
-	            ("route_id=" + data.route),
-	            ("position=" + JSON.stringify(data.position)),
-	            ("categories=" + JSON.stringify(data.categories))
-	        ];
-	        return new Promise(function (resolve) {
-	            _this.setHeaders();
-	            _this.http.post(_this.options.base_url + "/shop/add", data.join('&'), {
-	                headers: _this.headers
-	            })
-	                .subscribe(function (res) {
-	                resolve(res.json());
-	            }, function (err) {
-	                resolve(err.json());
-	            });
-	        });
-	    };
-	    ShopData = __decorate([
-	        core_1.Injectable(), 
-	        __metadata('design:paramtypes', [Object, Object, Object])
-	    ], ShopData);
-	    return ShopData;
-	})();
-	exports.ShopData = ShopData;
 
 
 /***/ },

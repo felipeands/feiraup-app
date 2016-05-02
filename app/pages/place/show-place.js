@@ -1,6 +1,7 @@
 import {Page} from 'ionic-framework/index';
 import {MapData} from '../../services/map-data';
 import {PlaceData} from '../../services/place-data';
+import {ShopData} from '../../services/shop-data';
 
 @Page ({
   templateUrl: 'build/pages/place/show-place.html',
@@ -15,12 +16,13 @@ import {PlaceData} from '../../services/place-data';
 export class ShowPlacePage {
 
   static get parameters() {
-    return [[MapData],[PlaceData]];
+    return [[MapData],[PlaceData],[ShopData]];
   }
 
-  constructor(mapData, placeData) {
+  constructor(mapData, placeData, shopData) {
     this.mapData = mapData;
     this.placeData = placeData;
+    this.shopData = shopData;
     this.latLng = null;
     this.prepareMap();
   }
@@ -37,17 +39,42 @@ export class ShowPlacePage {
   }
 
   initPlaces() {
-    this.placeData.getPlaceFull(this.placeData.placeId).then((result) => {
-      this.processPlaceFull(result);
+    this.placeData.getPlaceFull(this.placeData.placeId).then((place) => {
+      this.processPlaceFull(place);
     });
   }
 
   processPlaceFull(place) {
-    this.addGalleries(place.galleries);
-    this.addRoutes(place.routes);
-    let latitude = Number(place.place.latitude);
-    let longitude = Number(place.place.longitude);
-    this.setLatLng(latitude, longitude);
+    if(place.galleries) {
+      this.addGalleries(place.galleries);
+    }
+    if(place.routes) {
+      this.addRoutes(place.routes);
+    }
+    if(place.shops) {
+      this.addShops(place.shops);
+    }
+  }
+
+  addShops(shops) {
+    for (var shop in shops) {
+      this.addShop(shops[shop]);
+    }
+  }
+
+  addShop(shop) {
+    let latLng = this.setLatLng(shop.latitude, shop.longitude);
+    let marker = new google.maps.Marker({
+      position: latLng,
+      map: this.map,
+      title: shop.name,
+      animation: google.maps.Animation.DROP,
+      draggable: false,
+      clickable: true
+    });
+
+    let popupContent = `<b>Loja:</b> ${shop.name}`
+    this.createInfoWindow(marker, popupContent);
   }
 
   addGalleries(galleries) {
@@ -57,10 +84,15 @@ export class ShowPlacePage {
   }
 
   addGallery(gallery) {
-    new google.maps.Polygon({
+    let polygon = new google.maps.Polygon({
       map: this.map,
-      path: this.getPositions(gallery)
+      path: this.getPositions(gallery),
+      strokeColor: "#ff0000",
+      fillColor: "#ff0000",
+      strokeOpacity: 0.4
     });
+    // let popupContent = `<b>Galeria:</b> ${gallery.name}`
+    // this.createInfoWindow(polygon, popupContent);
   }
 
   addRoutes(routes) {
@@ -70,10 +102,14 @@ export class ShowPlacePage {
   }
 
   addRoute(route) {
-    new google.maps.Polyline({
+    let = polyline = new google.maps.Polyline({
       map: this.map,
-      path: this.getPositions(route)
+      path: this.getPositions(route),
+      strokeColor: "#5fba7d",
+      strokeOpacity: 0.8
     });
+    // let popupContent = `<b>Caminho:</b> ${route.name}`
+    // this.createInfoWindow(polyline, popupContent);
   }
 
   prepareMap() {
@@ -93,15 +129,27 @@ export class ShowPlacePage {
   initMap() {
     let mapOptions = {
       center: this.latLng,
-      zoom: 19,
-      mapTypeId: google.maps.MapTypeId.ROADMAP
+      zoom: 20,
+      mapTypeId: google.maps.MapTypeId.SATELLITE
     }
     this.map = new google.maps.Map(document.getElementById('map'), mapOptions);
+    this.infoWindow = new google.maps.InfoWindow();
   }
 
   setLatLng(latitude, longitude) {
     let latLng = new google.maps.LatLng(latitude, longitude);
     this.map.setCenter(latLng);
+    return latLng;
+  }
+
+  createInfoWindow (el, popupContent) {
+    el.info = new google.maps.InfoWindow({
+      content: popupContent
+    });
+
+    google.maps.event.addListener(el, 'click', function() {
+      el.info.open(this.map, el);
+    });
   }
 
 }

@@ -3,6 +3,7 @@ import {MapData} from '../../services/map-data';
 import {GalleryData} from '../../services/gallery-data';
 import {RouteData} from '../../services/route-data';
 import {ShopData} from '../../services/shop-data';
+import {PlaceData} from '../../services/place-data';
 import {FieldCategories} from '../../components/field-categories';
 
 @Page ({
@@ -21,6 +22,9 @@ import {FieldCategories} from '../../components/field-categories';
 
 export class NewShopPage {
   nameModel;
+  phoneModel;
+  phone2Model;
+  emailModel;
   isGalleryModel;
   galleryModel;
   numberModel;
@@ -29,18 +33,20 @@ export class NewShopPage {
   streetCornerModel;
   floorModel;
   routeModel;
-  selectedCategories : array = [];
+  selectedCategories: array = [];
+  obsModel;
 
   static get parameters() {
-    return [[NavController],[MapData],[ShopData],[GalleryData],[RouteData]];
+    return [[NavController],[MapData],[ShopData],[GalleryData],[RouteData],[PlaceData]];
   }
 
-  constructor(nav, mapData, shopData, galleryData, routeData) {
+  constructor(nav, mapData, shopData, galleryData, routeData, placeData) {
     this.nav = nav;
     this.mapData = mapData;
     this.shopData = shopData;
     this.galleryData = galleryData;
     this.routeData = routeData;
+    this.placeData = placeData;
     this.galleries = [];
 
     this.position = {};
@@ -84,8 +90,8 @@ export class NewShopPage {
   initMap() {
     let mapOptions = {
       center: this.latLng,
-      zoom: 19,
-      mapTypeId: google.maps.MapTypeId.ROADMAP
+      zoom: 20,
+      mapTypeId: google.maps.MapTypeId.SATELLITE
     }
     this.map = new google.maps.Map(document.getElementById('map'), mapOptions);
     this.addMarker(this.latLng);
@@ -141,65 +147,70 @@ export class NewShopPage {
   }
 
   onFinish() {
-    let data = {
-      name: this.nameModel,
-      number: this.numberModel,
-      gallery: this.galleryModel,
-      street: this.streetModel,
-      streetCorner: this.streetCornerModel,
-      floor: this.floorModel,
-      route: this.routeModel,
-      position: this.position,
-      categories: this.selectedCategories
-    }
+    this.placeData.getCurrent().then((placeId) => {
+      let data = {
+        name: this.nameModel,
+        email: this.emailModel,
+        phone: this.phoneModel,
+        phone2: this.phone2Model,
+        gallery: this.galleryModel,
+        street: this.streetModel,
+        streetCorner: this.streetCornerModel,
+        floor: this.floorModel,
+        route: this.routeModel,
+        position: this.position,
+        categories: this.selectedCategories,
+        obs: this.obsModel,
+        place: placeId;
+      }
 
-    let alert = Alert.create({
-      title: 'Finalizando',
-      message: 'Incluir mesmo essa loja?',
-      buttons: [{
-        text: 'Cancelar',
-        handler: data => {}
-      }, {
-        text: 'OK',
-        handler: (form) => {
-          this.shopData.addShop(data).then((response) => {
+      let alert = Alert.create({
+        title: 'Finalizando',
+        message: 'Incluir mesmo essa loja?',
+        buttons: [{
+          text: 'Cancelar',
+          handler: data => {}
+        }, {
+          text: 'OK',
+          handler: (form) => {
+            this.shopData.addShop(data).then((response) => {
 
-            if(response.hasOwnProperty('message')) {
+              if(response.hasOwnProperty('message')) {
 
-              var alert = Alert.create({
-                title: 'OK...',
-                message: response.message,
-                buttons: ['OK']
-              });
+                var alert = Alert.create({
+                  title: 'OK...',
+                  message: response.message,
+                  buttons: ['OK']
+                });
 
-            } else if(response.hasOwnProperty('error')) {
+              } else if(response.hasOwnProperty('error')) {
 
-              var alert = Alert.create({
-                title: 'Ops...',
-                message: response.error,
-                buttons: ['OK']
-              });
+                var alert = Alert.create({
+                  title: 'Ops...',
+                  message: response.error,
+                  buttons: ['OK']
+                });
 
-            } else {
+              } else {
 
-              var alert = Alert.create({
-                title: 'Ops...',
-                message: 'Não foi possível salvar!',
-                buttons: ['OK']
-              });
+                var alert = Alert.create({
+                  title: 'Ops...',
+                  message: 'Não foi possível salvar!',
+                  buttons: ['OK']
+                });
 
-            }
-            let nav = this.nav;
-            setTimeout(function() {
-              nav.present(alert);
-            }, 500);
+              }
+              let nav = this.nav;
+              setTimeout(function() {
+                nav.present(alert);
+              }, 500);
 
-          });
-        }
-      }]
+            });
+          }
+        }]
+      });
+      this.nav.present(alert);
     });
-    this.nav.present(alert);
-
   }
 
   updatePosition(latitude, longitude) {

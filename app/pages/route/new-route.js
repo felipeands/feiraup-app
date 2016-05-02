@@ -58,7 +58,7 @@ export class NewRoutePage {
   initMap() {
     let mapOptions = {
       center: this.latLng,
-      zoom: 19,
+      zoom: 20,
       mapTypeId: google.maps.MapTypeId.ROADMAP
     }
     this.map = new google.maps.Map(document.getElementById('map'), mapOptions);

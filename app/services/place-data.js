@@ -9,6 +9,7 @@ import {Options} from './../options';
 @Injectable()
 export class PlaceData {
   public headers: Headers;
+  placeId: number;
 
   static get parameters() {
     return [[Http], [UserData], [CityData], [Options]];
@@ -54,6 +55,10 @@ export class PlaceData {
   }
 
   getCurrent() {
+    if(this.placeId) {
+      return Promise.resolve(this.placeId);
+    }
+
     return this.storage.get('placeId').then((value) => {
       this.placeId = JSON.parse(value);
       return this.placeId;

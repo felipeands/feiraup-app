@@ -60,8 +60,8 @@ export class NewGalleryPage {
   initMap() {
     let mapOptions = {
       center: this.latLng,
-      zoom: 19,
-      mapTypeId: google.maps.MapTypeId.ROADMAP
+      zoom: 21,
+      mapTypeId: google.maps.MapTypeId.SATELLITE
     }
     this.map = new google.maps.Map(document.getElementById('map'), mapOptions);
     this.startPoly();
