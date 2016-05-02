@@ -64604,7 +64604,7 @@
 	            draggable: false,
 	            clickable: true
 	        });
-	        var popupContent = "<b>Loja:</b> " + shop.info.name;
+	        var popupContent = "<b>Loja:</b> " + shop.name;
 	        this.createInfoWindow(marker, popupContent);
 	    };
 	    ShowPlacePage.prototype.addGalleries = function (galleries) {
@@ -64616,6 +64616,7 @@
 	        var polygon = new google.maps.Polygon({
 	            map: this.map,
 	            path: this.getPositions(gallery),
+	            title: gallery.info.name,
 	            strokeColor: "#ff0000",
 	            fillColor: "#ff0000",
 	            strokeOpacity: 0.4
@@ -64632,6 +64633,7 @@
 	        let = polyline = new google.maps.Polyline({
 	            map: this.map,
 	            path: this.getPositions(route),
+	            title: route.info.name,
 	            strokeColor: "#5fba7d",
 	            strokeOpacity: 0.8
 	        });
@@ -64671,6 +64673,7 @@
 	        el.info = new google.maps.InfoWindow({
 	            content: popupContent
 	        });
+	        el.info.setPosition(this.latLng);
 	        google.maps.event.addListener(el, 'click', function () {
 	            el.info.open(this.map, el);
 	        });

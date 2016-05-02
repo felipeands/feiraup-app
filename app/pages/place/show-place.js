@@ -132,7 +132,7 @@ export class ShowPlacePage {
     let mapOptions = {
       center: this.latLng,
       zoom: 19,
-      mapTypeId: google.maps.MapTypeId.SATELLITE
+      mapTypeId: google.maps.MapTypeId.ROADMAP
     }
     this.map = new google.maps.Map(document.getElementById('map'), mapOptions);
     this.infoWindow = new google.maps.InfoWindow();
