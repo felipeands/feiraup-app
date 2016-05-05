@@ -30,7 +30,8 @@ export class GalleryData {
       `floors=${data.floors}`,
       `address=${data.address}`,
       `place_id=${this.placeData.placeId}`,
-      `positions=${JSON.stringify(data.positions)}`
+      `positions=${JSON.stringify(data.positions)}`,
+      `doors=${JSON.stringify(data.doors)}`
     ];
 
     this.headers = new Headers();

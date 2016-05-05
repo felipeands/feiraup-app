@@ -27,6 +27,7 @@ export class NewGalleryPage {
     this.galleryData = galleryData;
 
     this.positions = [];
+    this.doors = [];
 
     this.latLng = null;
     this.currentLat = 0;
@@ -38,6 +39,7 @@ export class NewGalleryPage {
     this.map = null;
     this.market = null;
     this.poly = null;
+    this.doorImage = 'build/images/door.png';
 
     this.prepareMap();
 
@@ -140,7 +142,8 @@ export class NewGalleryPage {
       name: this.nameModel,
       floors: this.floorsModel,
       address: this.addressModel,
-      positions: this.positions
+      positions: this.positions,
+      doors: this.doors
     }
 
     let alert = Alert.create({
@@ -201,20 +204,32 @@ export class NewGalleryPage {
   }
 
   addDoor(latitude, longitude) {
-    let door = 'build/images/door.png';
     let marker = new google.maps.Marker({
       map: this.map,
       animation: google.maps.Animation.DROP,
       position: new google.maps.LatLng(latitude, longitude),
-      icon: door,
+      icon: this.doorImage,
       draggable: true
     });
+    marker.set("id", this.doors.length);
+
+    let markerObj = {
+      latitude: latitude,
+      longitude: longitude
+    };
+    this.doors.push(markerObj);
 
     $this = this;
-
-    this.marker.addListener('dragend', function(e) {
-      // $this.updatePosition(e.latLng.lat(), e.latLng.lng());
+    marker.addListener('dragend', function(e) {
+      $this.updateDoorPosition(this.get('id'), e.latLng.lat(), e.latLng.lng());
     });
+  }
+
+  updateDoorPosition(markerId, latitude, longitude) {
+    this.doors[markerId] = {
+      latitude: latitude,
+      longitude: longitude
+    }
   }
 
   updatePosition(latitude, longitude) {

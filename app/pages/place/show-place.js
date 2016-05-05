@@ -24,6 +24,7 @@ export class ShowPlacePage {
     this.placeData = placeData;
     this.shopData = shopData;
     this.latLng = null;
+    this.doorImage = 'build/images/door.png';
     this.prepareMap();
   }
 
@@ -68,7 +69,7 @@ export class ShowPlacePage {
       position: latLng,
       map: this.map,
       title: shop.name,
-      animation: google.maps.Animation.DROP,
+      // animation: google.maps.Animation.DROP,
       draggable: false,
       clickable: true
     });
@@ -94,6 +95,25 @@ export class ShowPlacePage {
     });
     let popupContent = `<b>Galeria:</b> ${gallery.info.name}`
     this.createInfoWindow(polygon, popupContent);
+    this.addDoors(gallery.doors);
+  }
+
+  addDoors(doors) {
+    for (var door in doors) {
+      this.addDoor(doors[door]);
+    }
+  }
+
+  addDoor(door) {
+    let latLng = this.setLatLng(door.latitude, door.longitude);
+    let marker = new google.maps.Marker({
+      position: latLng,
+      map: this.map,
+      // animation: google.maps.Animation.DROP,
+      icon: this.doorImage,
+      draggable: false,
+      clickable: false
+    });
   }
 
   addRoutes(routes) {
@@ -131,7 +151,7 @@ export class ShowPlacePage {
   initMap() {
     let mapOptions = {
       center: this.latLng,
-      zoom: 19,
+      zoom: 20,
       mapTypeId: google.maps.MapTypeId.ROADMAP
     }
     this.map = new google.maps.Map(document.getElementById('map'), mapOptions);

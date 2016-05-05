@@ -34,7 +34,7 @@
 
   <button (click)="onUpdateLocation()" type="submit" [disabled]="updating" primary><ion-icon name="refresh-circle"> Atualizar</ion-icon></button>
 
-  <button (click)="onNewDoor()" type="submit" secondary><ion-icon name="add-circle"> Nova porta</ion-icon></button>
+  <button (click)="onNewDoor()" type="submit" [disabled]="positions < 3" secondary><ion-icon name="add-circle"> Nova porta</ion-icon></button>
 
   <p>Minha Localização. Lat: {{currentLat}}, Lng: {{currentLng}}</p>
 

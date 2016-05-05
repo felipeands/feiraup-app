@@ -53,7 +53,7 @@ export class MyApp {
     this.loggedRole = false;
     this.userData = userData;
 
-    // this.root = NewGalleryPage;
+    // this.root = ShowPlacePage;
     this.root = LocationPage;
 
     this.footerPages = [
