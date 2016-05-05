@@ -53,8 +53,8 @@ export class MyApp {
     this.loggedRole = false;
     this.userData = userData;
 
-    // this.root = ShowPlacePage;
-    this.root = LocationPage;
+    this.root = NewShopPage;
+    // this.root = LocationPage;
 
     this.footerPages = [
       {title: 'Aleatório', component: RandomPage, icon: 'sync', fab: 'fab-left'},

@@ -3210,7 +3210,7 @@
 	        this.loggedIn = false;
 	        this.loggedRole = false;
 	        this.userData = userData;
-	        // this.root = NewGalleryPage;
+	        // this.root = ShowPlacePage;
 	        this.root = location_1.LocationPage;
 	        this.footerPages = [
 	            { title: 'Aleatório', component: random_1.RandomPage, icon: 'sync', fab: 'fab-left' },
@@ -63423,7 +63423,7 @@
 	var Options = (function () {
 	    function Options() {
 	        this.base_url = 'http://feiraup.herokuapp.com';
-	        // this.base_url = 'http://daa11807.ngrok.io';
+	        // this.base_url = 'http://a770995e.ngrok.io';
 	        this.gmaps_key = 'AIzaSyDEdVkgms32J_TZad9VJO-XJHWvaQRUDqg';
 	        this.gmaps_timeout = 100000;
 	        this.gmaps_accuracy = true;
@@ -64277,6 +64277,7 @@
 	        this.mapData = mapData;
 	        this.galleryData = galleryData;
 	        this.positions = [];
+	        this.doors = [];
 	        this.latLng = null;
 	        this.currentLat = 0;
 	        this.currentLng = 0;
@@ -64285,6 +64286,7 @@
 	        this.map = null;
 	        this.market = null;
 	        this.poly = null;
+	        this.doorImage = 'build/images/door.png';
 	        this.prepareMap();
 	    }
 	    Object.defineProperty(NewGalleryPage, "parameters", {
@@ -64376,7 +64378,8 @@
 	            name: this.nameModel,
 	            floors: this.floorsModel,
 	            address: this.addressModel,
-	            positions: this.positions
+	            positions: this.positions,
+	            doors: this.doors
 	        };
 	        var alert = index_1.Alert.create({
 	            title: 'Finalizando',
@@ -64421,6 +64424,34 @@
 	    };
 	    NewGalleryPage.prototype.onNewMark = function () {
 	        this.addPosition(this.currentLat, this.currentLng);
+	    };
+	    NewGalleryPage.prototype.onNewDoor = function () {
+	        this.addDoor(this.currentLat, this.currentLng);
+	    };
+	    NewGalleryPage.prototype.addDoor = function (latitude, longitude) {
+	        var marker = new google.maps.Marker({
+	            map: this.map,
+	            animation: google.maps.Animation.DROP,
+	            position: new google.maps.LatLng(latitude, longitude),
+	            icon: this.doorImage,
+	            draggable: true
+	        });
+	        marker.set("id", this.doors.length);
+	        var markerObj = {
+	            latitude: latitude,
+	            longitude: longitude
+	        };
+	        this.doors.push(markerObj);
+	        $this = this;
+	        marker.addListener('dragend', function (e) {
+	            $this.updateDoorPosition(this.get('id'), e.latLng.lat(), e.latLng.lng());
+	        });
+	    };
+	    NewGalleryPage.prototype.updateDoorPosition = function (markerId, latitude, longitude) {
+	        this.doors[markerId] = {
+	            latitude: latitude,
+	            longitude: longitude
+	        };
 	    };
 	    NewGalleryPage.prototype.updatePosition = function (latitude, longitude) {
 	        this.currentLat = latitude;
@@ -64482,7 +64513,8 @@
 	            ("floors=" + data.floors),
 	            ("address=" + data.address),
 	            ("place_id=" + this.placeData.placeId),
-	            ("positions=" + JSON.stringify(data.positions))
+	            ("positions=" + JSON.stringify(data.positions)),
+	            ("doors=" + JSON.stringify(data.doors))
 	        ];
 	        this.headers = new http_1.Headers();
 	        this.headers.append('Content-Type', 'application/x-www-form-urlencoded');
@@ -64553,6 +64585,7 @@
 	        this.placeData = placeData;
 	        this.shopData = shopData;
 	        this.latLng = null;
+	        this.doorImage = 'build/images/door.png';
 	        this.prepareMap();
 	    }
 	    Object.defineProperty(ShowPlacePage, "parameters", {
@@ -64600,7 +64633,7 @@
 	            position: latLng,
 	            map: this.map,
 	            title: shop.name,
-	            animation: google.maps.Animation.DROP,
+	            // animation: google.maps.Animation.DROP,
 	            draggable: false,
 	            clickable: true
 	        });
@@ -64623,6 +64656,23 @@
 	        });
 	        var popupContent = "<b>Galeria:</b> " + gallery.info.name;
 	        this.createInfoWindow(polygon, popupContent);
+	        this.addDoors(gallery.doors);
+	    };
+	    ShowPlacePage.prototype.addDoors = function (doors) {
+	        for (var door in doors) {
+	            this.addDoor(doors[door]);
+	        }
+	    };
+	    ShowPlacePage.prototype.addDoor = function (door) {
+	        var latLng = this.setLatLng(door.latitude, door.longitude);
+	        var marker = new google.maps.Marker({
+	            position: latLng,
+	            map: this.map,
+	            // animation: google.maps.Animation.DROP,
+	            icon: this.doorImage,
+	            draggable: false,
+	            clickable: false
+	        });
 	    };
 	    ShowPlacePage.prototype.addRoutes = function (routes) {
 	        for (var route in routes) {
@@ -64658,7 +64708,7 @@
 	    ShowPlacePage.prototype.initMap = function () {
 	        var mapOptions = {
 	            center: this.latLng,
-	            zoom: 19,
+	            zoom: 20,
 	            mapTypeId: google.maps.MapTypeId.ROADMAP
 	        };
 	        this.map = new google.maps.Map(document.getElementById('map'), mapOptions);

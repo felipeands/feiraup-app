@@ -16,6 +16,9 @@ import {FieldCategories} from '../../components/field-categories';
   field-categories {
     margin-top: 20px;
   }
+  .submit {
+    margin-top: 20px;
+  }
   `],
   directives: [FieldCategories]
 })
@@ -66,6 +69,9 @@ export class NewShopPage {
     this.floors = [1];
     this.galleries = null;
     this.routes = null;
+
+    this.gallery = null;
+    this.route = null;
 
     this.loadGalleries();
     this.loadRoutes();
@@ -237,7 +243,36 @@ export class NewShopPage {
   onUpdateGallery() {
     this.galleryData.loadGalleryInfo(this.galleryModel).then(res => {
       this.floors = Array(res.gallery.floors).join().split(',').map(function(item,index){return ++index;});
+      this.updateMapGallery(res.positions);
     })
+  }
+
+  updateMapGallery(positions) {
+    this.clearMap();
+    this.gallery = new google.maps.Polygon({
+      map: this.map,
+      path: this.getPositions(positions),
+    });
+  }
+
+  clearMap() {
+    if (this.gallery) {
+      this.gallery.setMap(null);
+    }
+    if (this.route) {
+      this.route.setMap(null);
+    }
+  }
+
+  getPositions(positions) {
+    let result = [];
+    for (var position in positions) {
+      result.push({
+        lat: Number(positions[position].latitude),
+        lng: Number(positions[position].longitude)
+      })
+    }
+    return result;
   }
 
   categoriesChange(selected) {
