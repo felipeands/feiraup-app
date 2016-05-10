@@ -54,7 +54,7 @@ export class RouteData {
 
   loadRoutesFromPlace(placeId) {
     return new Promise(resolve => {
-      this.http.get(`${this.options.base_url}/route/place/${placeId}`).subscribe(res => {
+      this.http.get(`${this.options.base_url}/route/place/${placeId}`).subscribe((res) => {
         resolve(res.json());
       })
     })
@@ -63,6 +63,14 @@ export class RouteData {
   loadRoutesCurPlace() {
     return this.placeData.getCurrent().then((placeId) => {
       return this.loadRoutesFromPlace(placeId);
+    })
+  }
+
+  loadRouteInfo(routeId) {
+    return new Promise(resolve => {
+      this.http.get(`${this.options.base_url}/route/${routeId}`).subscribe((res) => {
+        resolve(res.json());
+      })
     })
   }
 

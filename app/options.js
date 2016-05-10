@@ -11,7 +11,7 @@ export class Options {
 
   constructor() {
     this.base_url = 'http://feiraup.herokuapp.com';
-    this.base_url = 'http://94d8fb6c.ngrok.io';
+    // this.base_url = 'http://ed305ac2.ngrok.io';
     this.gmaps_key = 'AIzaSyDEdVkgms32J_TZad9VJO-XJHWvaQRUDqg';
     this.gmaps_timeout = 100000;
     this.gmaps_accuracy = true;

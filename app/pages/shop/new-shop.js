@@ -241,7 +241,7 @@ export class NewShopPage {
   }
 
   onUpdateGallery() {
-    this.galleryData.loadGalleryInfo(this.galleryModel).then(res => {
+    this.galleryData.loadGalleryInfo(this.galleryModel).then((res) => {
       this.floors = Array(res.gallery.floors).join().split(',').map(function(item,index){return ++index;});
       this.updateMapGallery(res.positions);
     })
@@ -252,6 +252,22 @@ export class NewShopPage {
     this.gallery = new google.maps.Polygon({
       map: this.map,
       path: this.getPositions(positions),
+      clickable: false
+    });
+  }
+
+  onUpdateStreet() {
+    this.routeData.loadRouteInfo(this.routeModel).then((res) => {
+      this.updateMapRoute(res.positions);
+    })
+  }
+
+  updateMapRoute(positions) {
+    this.clearMap();
+    this.route = new google.maps.Polyline({
+      map: this.map,
+      path: this.getPositions(positions),
+      clickable: false
     });
   }
 
@@ -261,6 +277,19 @@ export class NewShopPage {
     }
     if (this.route) {
       this.route.setMap(null);
+    }
+  }
+
+  onIsGalleryChange() {
+    this.clearMap();
+    if (this.isGalleryModel) {
+      if (this.galleryModel) {
+        this.gallery.setMap(this.map);
+      }
+    } else {
+      if (this.routeModel) {
+        this.route.setMap(this.map);
+      }
     }
   }
 
