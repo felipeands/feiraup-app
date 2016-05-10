@@ -19,7 +19,8 @@
   "description": "tt: An Ionic project",
   "cordovaPlugins": [
     "cordova-plugin-geolocation",
-    "cordova-plugin-whitelist"
+    "cordova-plugin-whitelist",
+    "cordova-plugin-splashscreen"
   ],
   "cordovaPlatforms": [
     "ios",

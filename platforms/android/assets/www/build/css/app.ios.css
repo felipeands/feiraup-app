@@ -7742,3 +7742,6 @@ footer {
     overflow: initial; }
   footer .toolbar-background {
     background: initial; }
+
+.ui-loader {
+  bottom: 10px !important; }
