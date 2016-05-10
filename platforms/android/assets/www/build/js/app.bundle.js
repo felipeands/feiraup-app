@@ -3210,7 +3210,7 @@
 	        this.loggedIn = false;
 	        this.loggedRole = false;
 	        this.userData = userData;
-	        // this.root = ShowPlacePage;
+	        // this.root = NewShopPage;
 	        this.root = location_1.LocationPage;
 	        this.footerPages = [
 	            { title: 'Aleatório', component: random_1.RandomPage, icon: 'sync', fab: 'fab-left' },
@@ -63423,7 +63423,7 @@
 	var Options = (function () {
 	    function Options() {
 	        this.base_url = 'http://feiraup.herokuapp.com';
-	        // this.base_url = 'http://a770995e.ngrok.io';
+	        // this.base_url = 'http://ed305ac2.ngrok.io';
 	        this.gmaps_key = 'AIzaSyDEdVkgms32J_TZad9VJO-XJHWvaQRUDqg';
 	        this.gmaps_timeout = 100000;
 	        this.gmaps_accuracy = true;
@@ -64246,6 +64246,14 @@
 	            return _this.loadRoutesFromPlace(placeId);
 	        });
 	    };
+	    RouteData.prototype.loadRouteInfo = function (routeId) {
+	        var _this = this;
+	        return new Promise(function (resolve) {
+	            _this.http.get(_this.options.base_url + "/route/" + routeId).subscribe(function (res) {
+	                resolve(res.json());
+	            });
+	        });
+	    };
 	    RouteData = __decorate([
 	        core_1.Injectable(), 
 	        __metadata('design:paramtypes', [Object, Object, Object, Object])
@@ -64862,6 +64870,8 @@
 	        this.floors = [1];
 	        this.galleries = null;
 	        this.routes = null;
+	        this.gallery = null;
+	        this.route = null;
 	        this.loadGalleries();
 	        this.loadRoutes();
 	        this.prepareMap();
@@ -65018,7 +65028,61 @@
 	        var _this = this;
 	        this.galleryData.loadGalleryInfo(this.galleryModel).then(function (res) {
 	            _this.floors = Array(res.gallery.floors).join().split(',').map(function (item, index) { return ++index; });
+	            _this.updateMapGallery(res.positions);
 	        });
+	    };
+	    NewShopPage.prototype.updateMapGallery = function (positions) {
+	        this.clearMap();
+	        this.gallery = new google.maps.Polygon({
+	            map: this.map,
+	            path: this.getPositions(positions),
+	            clickable: false
+	        });
+	    };
+	    NewShopPage.prototype.onUpdateStreet = function () {
+	        var _this = this;
+	        this.routeData.loadRouteInfo(this.routeModel).then(function (res) {
+	            _this.updateMapRoute(res.positions);
+	        });
+	    };
+	    NewShopPage.prototype.updateMapRoute = function (positions) {
+	        this.clearMap();
+	        this.route = new google.maps.Polyline({
+	            map: this.map,
+	            path: this.getPositions(positions),
+	            clickable: false
+	        });
+	    };
+	    NewShopPage.prototype.clearMap = function () {
+	        if (this.gallery) {
+	            this.gallery.setMap(null);
+	        }
+	        if (this.route) {
+	            this.route.setMap(null);
+	        }
+	    };
+	    NewShopPage.prototype.onIsGalleryChange = function () {
+	        this.clearMap();
+	        if (this.isGalleryModel) {
+	            if (this.galleryModel) {
+	                this.gallery.setMap(this.map);
+	            }
+	        }
+	        else {
+	            if (this.routeModel) {
+	                this.route.setMap(this.map);
+	            }
+	        }
+	    };
+	    NewShopPage.prototype.getPositions = function (positions) {
+	        var result = [];
+	        for (var position in positions) {
+	            result.push({
+	                lat: Number(positions[position].latitude),
+	                lng: Number(positions[position].longitude)
+	            });
+	        }
+	        return result;
 	    };
 	    NewShopPage.prototype.categoriesChange = function (selected) {
 	        this.selectedCategories = selected;
@@ -65026,7 +65090,7 @@
 	    NewShopPage = __decorate([
 	        index_1.Page({
 	            templateUrl: 'build/pages/shop/new-shop.html',
-	            styles: ["\n  #map {\n    width: 100%;\n    height: 80%;\n  }\n  field-categories {\n    margin-top: 20px;\n  }\n  "],
+	            styles: ["\n  #map {\n    width: 100%;\n    height: 80%;\n  }\n  field-categories {\n    margin-top: 20px;\n  }\n  .submit {\n    margin-top: 20px;\n  }\n  "],
 	            directives: [field_categories_1.FieldCategories]
 	        }), 
 	        __metadata('design:paramtypes', [Object, Object, Object, Object, Object, Object])

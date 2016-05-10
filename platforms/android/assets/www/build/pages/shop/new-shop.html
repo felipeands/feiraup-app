@@ -37,7 +37,7 @@
 
       <ion-item>
         <ion-label>Dentro de uma galeria?</ion-label>
-        <ion-toggle [(ngModel)]="isGalleryModel" ngControl="isGallery" #isGallery></ion-toggle>
+        <ion-toggle [(ngModel)]="isGalleryModel" ngControl="isGallery" #isGallery (change)="onIsGalleryChange()"></ion-toggle>
       </ion-item>
 
 
@@ -84,7 +84,7 @@
 
         <ion-item>
           <ion-label>Rua</ion-label>
-          <ion-select [(ngModel)]="routeModel" ngControl="route">
+          <ion-select [(ngModel)]="routeModel" ngControl="route" (change)="onUpdateStreet()">
             <ion-option *ngFor="#r of routes" [value]="r.id">{{r.name}}</ion-option>
           </ion-select>
         </ion-item>
@@ -104,9 +104,10 @@
       </ion-item>
     </div>
 
+    <button (click)="onFinish()" type="submit" class="submit" block large>ADICIONAR</button>
+
   </form>
 
-  <button (click)="onFinish()" type="submit" block large>ADICIONAR</button>
 
   <p>Minha Localização. Lat: {{currentLat}}, Lng: {{currentLng}}</p>
 
