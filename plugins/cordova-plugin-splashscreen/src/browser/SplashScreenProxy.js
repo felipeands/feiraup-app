@@ -22,7 +22,7 @@
 // Default parameter values including image size can be changed in `config.xml`
 var splashImageWidth = 170;
 var splashImageHeight = 200;
-var position = { x: 0, y: 0, width: splashImageWidth, height: splashImageHeight }; 
+var position = { x: 0, y: 0, width: splashImageWidth, height: splashImageHeight };
 var localSplash; // the image to display
 var localSplashImage;
 var bgColor = "#464646";
@@ -110,7 +110,7 @@ function readPreferencesFromCfg(cfg) {
 /**
  * Shows and hides splashscreen if it is enabled, with a delay according the current preferences.
  */
-function showAndHide() {
+function showAndHide() {console.log('leu');
     if(showSplashScreen) {
         SplashScreen.show();
 

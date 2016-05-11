@@ -50475,15 +50475,15 @@
 	        return data;
 	    };
 	    __decorate([
-	        core_1.Input(), 
+	        core_1.Input(),
 	        __metadata('design:type', String)
 	    ], Spinner.prototype, "name", null);
 	    __decorate([
-	        core_1.Input(), 
+	        core_1.Input(),
 	        __metadata('design:type', Number)
 	    ], Spinner.prototype, "duration", null);
 	    __decorate([
-	        core_1.Input(), 
+	        core_1.Input(),
 	        __metadata('design:type', Boolean)
 	    ], Spinner.prototype, "paused", void 0);
 	    Spinner = __decorate([
@@ -50500,7 +50500,7 @@
 	                '[class]': '_applied',
 	                '[class.spinner-paused]': 'paused'
 	            }
-	        }), 
+	        }),
 	        __metadata('design:paramtypes', [config_1.Config])
 	    ], Spinner);
 	    return Spinner;

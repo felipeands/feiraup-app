@@ -50,7 +50,7 @@
     <preference name="BackupWebStorage" value="none" />
     <preference name="SplashScreen" value="screen" />
     <preference name="SplashScreenDelay" value="11000" />
-    <preference name="ShowSplashScreenSpinner" value="false" />
+    <preference name="ShowSplashScreenSpinner" value="true" />
     <preference name="FadeSplashScreenDuration" value="600" />
     <icon density="xhdpi" src="resources/android/icon/drawable-xhdpi-icon.png" />
 </widget>
