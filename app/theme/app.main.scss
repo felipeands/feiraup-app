@@ -9,6 +9,9 @@
   }
 }
 
+.keyboard-open footer {
+  display: none;
+}
 
 footer {
   position: fixed;
@@ -99,6 +102,10 @@ form {
   }
 }
 ion-menu {
+  &[type=overlay] {
+    z-index: 100;
+  }
+
   ion-list {
     .item, {
       border-bottom: 1px solid transparent !important;

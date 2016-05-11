@@ -76,4 +76,7 @@
     <preference name="ShowSplashScreenSpinner" value="true" />
     <preference name="FadeSplashScreenDuration" value="600" />
     <icon src="resources/android/icon/drawable-xhdpi-icon.png" />
+    <feature name="Keyboard">
+        <param name="ios-package" onload="true" value="IonicKeyboard" />
+    </feature>
 </widget>

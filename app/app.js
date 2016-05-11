@@ -116,5 +116,12 @@ export class MyApp {
       this.loggedIn = false;
       this.loggedRole = false;
     })
+
+    window.addEventListener('native.keyboardshow', function(){
+      document.body.classList.add('keyboard-open');
+    });
+    window.addEventListener('native.keyboardhide', function(){
+      document.body.classList.remove('keyboard-open');
+    });
   }
 }

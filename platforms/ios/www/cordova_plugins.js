@@ -34,6 +34,14 @@ module.exports = [
         "clobbers": [
             "navigator.splashscreen"
         ]
+    },
+    {
+        "file": "plugins/ionic-plugin-keyboard/www/ios/keyboard.js",
+        "id": "ionic-plugin-keyboard.keyboard",
+        "clobbers": [
+            "cordova.plugins.Keyboard"
+        ],
+        "runs": true
     }
 ];
 module.exports.metadata = 
@@ -41,7 +49,8 @@ module.exports.metadata =
 {
     "cordova-plugin-geolocation": "2.1.0",
     "cordova-plugin-whitelist": "1.2.1",
-    "cordova-plugin-splashscreen": "3.2.2"
+    "cordova-plugin-splashscreen": "3.2.2",
+    "ionic-plugin-keyboard": "2.2.0"
 }
 // BOTTOM OF METADATA
 });

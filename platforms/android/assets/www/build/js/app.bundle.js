@@ -3259,7 +3259,7 @@
 	            nav.present(alert_1);
 	        }
 	        else {
-	            nav.setRoot(page.component);
+	            nav.setRoot(page.component, {}, { animate: true, direction: 'foward' });
 	        }
 	    };
 	    MyApp.prototype.listenToEvents = function () {
@@ -3272,6 +3272,9 @@
 	            console.log('deslogou');
 	            _this.loggedIn = false;
 	            _this.loggedRole = false;
+	        });
+	        window.addEventListener('native.keyboardshow', function () {
+	            document.body.classList.add('keyboard-open');
 	        });
 	    };
 	    MyApp = __decorate([
@@ -63423,7 +63426,7 @@
 	var Options = (function () {
 	    function Options() {
 	        this.base_url = 'http://feiraup.herokuapp.com';
-	        // this.base_url = 'http://ed305ac2.ngrok.io';
+	        this.base_url = 'http://dd329668.ngrok.io';
 	        this.gmaps_key = 'AIzaSyDEdVkgms32J_TZad9VJO-XJHWvaQRUDqg';
 	        this.gmaps_timeout = 100000;
 	        this.gmaps_accuracy = true;

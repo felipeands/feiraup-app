@@ -33,6 +33,10 @@
                         {
                             "xml": "<feature name=\"SplashScreen\"><param name=\"android-package\" value=\"org.apache.cordova.splashscreen.SplashScreen\" /><param name=\"onload\" value=\"true\" /></feature>",
                             "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"Keyboard\"><param name=\"android-package\" value=\"io.ionic.keyboard.IonicKeyboard\" /><param name=\"onload\" value=\"true\" /></feature>",
+                            "count": 1
                         }
                     ]
                 }
@@ -47,6 +51,9 @@
             "PACKAGE_NAME": "br.com.feiraup"
         },
         "cordova-plugin-splashscreen": {
+            "PACKAGE_NAME": "br.com.feiraup"
+        },
+        "ionic-plugin-keyboard": {
             "PACKAGE_NAME": "br.com.feiraup"
         }
     },

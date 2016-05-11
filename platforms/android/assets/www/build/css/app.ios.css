@@ -7718,6 +7718,9 @@ body {
   margin-left: -40px;
   top: -25px; }
 
+.keyboard-open footer {
+  display: none; }
+
 footer {
   position: fixed;
   bottom: 0;

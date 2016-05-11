@@ -41,6 +41,7 @@
 		976FF35A3239480ABA3F0147 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1E875BB106D54F0CA895D3CC /* CoreLocation.framework */; };
 		E6E194B0145948088921133B /* CDVSplashScreen.m in Sources */ = {isa = PBXBuildFile; fileRef = C2406DA1420946A0A8F7B1F0 /* CDVSplashScreen.m */; };
 		6EDB573ED4FD4DA59991C023 /* CDVViewController+SplashScreen.m in Sources */ = {isa = PBXBuildFile; fileRef = C21EAB657A2D4DF99FD13A26 /* CDVViewController+SplashScreen.m */; };
+		FD29C9990E2C4E29AE716DDF /* IonicKeyboard.m in Sources */ = {isa = PBXBuildFile; fileRef = 41E517FF08094BE49CD587E9 /* IonicKeyboard.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -111,6 +112,8 @@
 		C21EAB657A2D4DF99FD13A26 /* CDVViewController+SplashScreen.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = "CDVViewController+SplashScreen.m"; path = "cordova-plugin-splashscreen/CDVViewController+SplashScreen.m"; sourceTree = "<group>"; fileEncoding = 4; };
 		A95C3D92435340DBBBF112FC /* CDVSplashScreen.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "CDVSplashScreen.h"; path = "cordova-plugin-splashscreen/CDVSplashScreen.h"; sourceTree = "<group>"; fileEncoding = 4; };
 		7BEF6896F0C241C792F16304 /* CDVViewController+SplashScreen.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "CDVViewController+SplashScreen.h"; path = "cordova-plugin-splashscreen/CDVViewController+SplashScreen.h"; sourceTree = "<group>"; fileEncoding = 4; };
+		41E517FF08094BE49CD587E9 /* IonicKeyboard.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = "IonicKeyboard.m"; path = "ionic-plugin-keyboard/IonicKeyboard.m"; sourceTree = "<group>"; fileEncoding = 4; };
+		28098CAFD6394C5AA0BA21D8 /* IonicKeyboard.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "IonicKeyboard.h"; path = "ionic-plugin-keyboard/IonicKeyboard.h"; sourceTree = "<group>"; fileEncoding = 4; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -237,6 +240,8 @@
 				C21EAB657A2D4DF99FD13A26 /* CDVViewController+SplashScreen.m */,
 				A95C3D92435340DBBBF112FC /* CDVSplashScreen.h */,
 				7BEF6896F0C241C792F16304 /* CDVViewController+SplashScreen.h */,
+				41E517FF08094BE49CD587E9 /* IonicKeyboard.m */,
+				28098CAFD6394C5AA0BA21D8 /* IonicKeyboard.h */,
 			);
 			name = Plugins;
 			path = "FEIRA UP/Plugins";
@@ -439,6 +444,7 @@
 				9D37C3DA3D56474ABF4B98FD /* CDVLocation.m in Sources */,
 				E6E194B0145948088921133B /* CDVSplashScreen.m in Sources */,
 				6EDB573ED4FD4DA59991C023 /* CDVViewController+SplashScreen.m in Sources */,
+				FD29C9990E2C4E29AE716DDF /* IonicKeyboard.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
