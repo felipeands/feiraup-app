@@ -5,34 +5,39 @@
   <ion-title>
     Novo caminho
   </ion-title>
+  <button-search></button-search>
 </ion-navbar>
 
-<ion-content padding class="route">
+<ion-content class="route">
 
-  <p>Cadastre ruas ou corredores dentro da localização atual. Adicione marcadores para cadastrar o caminho.</p>
+  <div padding>
 
-  <form #newRouteForm="ngForm">
+    <p>Cadastre ruas ou corredores dentro da localização atual. Adicione marcadores para cadastrar o caminho.</p>
 
-    <ion-list>
-      <ion-item>
-        <ion-label floating>Nome do caminho</ion-label>
-        <ion-input type="text" [(ngModel)]="nameModel" ngControl="name" #name required></ion-input>
-      </ion-item>
-    </ion-list>
+    <form #newRouteForm="ngForm">
 
-  </form>
+      <ion-list>
+        <ion-item>
+          <ion-label floating>Nome do caminho</ion-label>
+          <ion-input type="text" [(ngModel)]="nameModel" ngControl="name" #name required></ion-input>
+        </ion-item>
+      </ion-list>
 
-  <button (click)="onNewMark()" type="submit" [disabled]="!updated" secondary><ion-icon name="add-circle"> Adicionar</ion-icon></button>
+    </form>
 
-  <button (click)="onUpdateLocation()" type="submit" [disabled]="updating" primary><ion-icon name="refresh-circle"> Atualizar</ion-icon></button>
+    <button (click)="onNewMark()" type="submit" [disabled]="!updated" secondary><ion-icon name="add-circle"> Adicionar</ion-icon></button>
 
-  <p>Minha Localização. Lat: {{currentLat}}, Lng: {{currentLng}}</p>
+    <button (click)="onUpdateLocation()" type="submit" [disabled]="updating" primary><ion-icon name="refresh-circle"> Atualizar</ion-icon></button>
 
-  <button (click)="onFinish()" type="submit" [disabled]="positions == 0" block large>ADICIONAR</button>
+    <p>Minha Localização. Lat: {{currentLat}}, Lng: {{currentLng}}</p>
+
+    <button (click)="onFinish()" type="submit" [disabled]="positions == 0" block large>ADICIONAR</button>
+
+  </div>
 
   <div id="map"></div>
 
-  <ion-list>
+  <ion-list padding>
     <ion-item *ngFor="#position of positions.slice().reverse()">{{position.latitude}}, {{position.longitude}}</ion-item>
   </ion-list>
 

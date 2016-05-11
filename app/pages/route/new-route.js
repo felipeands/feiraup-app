@@ -1,6 +1,7 @@
 import {Page, NavController, Alert} from 'ionic-framework/index';
 import {MapData} from '../../services/map-data';
 import {RouteData} from '../../services/route-data';
+import {ButtonSearch} from '../../components/button-search';
 
 @Page ({
   templateUrl: 'build/pages/route/new-route.html',
@@ -9,7 +10,8 @@ import {RouteData} from '../../services/route-data';
     width: 100%;
     height: 80%;
   }
-  `]
+  `],
+  directives: [ButtonSearch]
 })
 
 export class NewRoutePage {

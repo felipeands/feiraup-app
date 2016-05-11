@@ -1,6 +1,7 @@
 import {Page, NavController, Alert} from 'ionic-framework/index';
 import {MapData} from '../../services/map-data';
 import {GalleryData} from '../../services/gallery-data';
+import {ButtonSearch} from '../../components/button-search';
 
 @Page ({
   templateUrl: 'build/pages/gallery/new-gallery.html',
@@ -9,7 +10,8 @@ import {GalleryData} from '../../services/gallery-data';
     width: 100%;
     height: 80%;
   }
-  `]
+  `],
+  directives: [ButtonSearch]
 })
 
 export class NewGalleryPage {

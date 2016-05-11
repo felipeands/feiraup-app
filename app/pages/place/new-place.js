@@ -1,6 +1,7 @@
 import {Page, NavController, Alert} from 'ionic-framework/index';
 import {MapData} from '../../services/map-data';
 import {PlaceData} from '../../services/place-data';
+import {ButtonSearch} from '../../components/button-search';
 
 @Page ({
   templateUrl: 'build/pages/place/new-place.html',
@@ -9,7 +10,8 @@ import {PlaceData} from '../../services/place-data';
     width: 100%;
     height: 80%;
   }
-  `]
+  `],
+  directives: [ButtonSearch]
 })
 
 export class NewPlacePage {

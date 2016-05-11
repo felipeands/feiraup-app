@@ -1,8 +1,10 @@
 import {Page, NavController, Alert} from 'ionic-framework/index';
 import {UserData} from '../../services/user-data';
+import {ButtonSearch} from '../../components/button-search';
 
 @Page ({
-  templateUrl: 'build/pages/login/login.html'
+  templateUrl: 'build/pages/login/login.html',
+  directives: [ButtonSearch]
 })
 
 export class LoginPage {

@@ -5,6 +5,7 @@ import {RouteData} from '../../services/route-data';
 import {ShopData} from '../../services/shop-data';
 import {PlaceData} from '../../services/place-data';
 import {FieldCategories} from '../../components/field-categories';
+import {ButtonSearch} from '../../components/button-search';
 
 @Page ({
   templateUrl: 'build/pages/shop/new-shop.html',
@@ -20,7 +21,7 @@ import {FieldCategories} from '../../components/field-categories';
     margin-top: 20px;
   }
   `],
-  directives: [FieldCategories]
+  directives: [FieldCategories, ButtonSearch]
 })
 
 export class NewShopPage {

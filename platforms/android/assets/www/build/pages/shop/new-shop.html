@@ -5,113 +5,118 @@
   <ion-title>
     Nova Loja
   </ion-title>
+  <button-search></button-search>
 </ion-navbar>
 
-<ion-content padding class="place">
+<ion-content class="place">
 
-  <p>Cadastre uma nova loja. Inform se essa loja fica dentro de uma galeria. Selecione a localização dessa loja no mapa.</p>
+  <div padding>
 
-  <form #newShopForm="ngForm">
+    <p>Cadastre uma nova loja. Inform se essa loja fica dentro de uma galeria. Selecione a localização dessa loja no mapa.</p>
 
-    <ion-list>
+    <form #newShopForm="ngForm">
 
-      <ion-item>
-        <ion-label floating>Nome da loja</ion-label>
-        <ion-input type="text" [(ngModel)]="nameModel" ngControl="name" #name></ion-input>
-      </ion-item>
-
-      <ion-item>
-        <ion-label floating>Telefone</ion-label>
-        <ion-input type="text" [(ngModel)]="phoneModel" ngControl="phone" #phone></ion-input>
-      </ion-item>
-
-      <ion-item>
-        <ion-label floating>Telefone 2</ion-label>
-        <ion-input type="text" [(ngModel)]="phone2Model" ngControl="phone2" #phone2></ion-input>
-      </ion-item>
-
-      <ion-item>
-        <ion-label floating>E-mail</ion-label>
-        <ion-input type="text" [(ngModel)]="emailModel" ngControl="email" #email></ion-input>
-      </ion-item>
-
-      <ion-item>
-        <ion-label>Dentro de uma galeria?</ion-label>
-        <ion-toggle [(ngModel)]="isGalleryModel" ngControl="isGallery" #isGallery (change)="onIsGalleryChange()"></ion-toggle>
-      </ion-item>
-
-
-      <div *ngIf="isGalleryModel">
+      <ion-list>
 
         <ion-item>
-          <ion-label>Galeria</ion-label>
-          <ion-select [(ngModel)]="galleryModel" ngControl="gallery" (change)="onUpdateGallery()">
-            <ion-option *ngFor="#g of galleries" [value]="g.id">{{g.name}}</ion-option>
-          </ion-select>
-        </ion-item>
-
-
-        <ion-item>
-          <ion-label floating>Número</ion-label>
-          <ion-input type="text" [(ngModel)]="numberModel" ngControl="number" #number></ion-input>
+          <ion-label floating>Nome da loja</ion-label>
+          <ion-input type="text" [(ngModel)]="nameModel" ngControl="name" #name></ion-input>
         </ion-item>
 
         <ion-item>
-          <ion-label floating>Corredor</ion-label>
-          <ion-input type="text" [(ngModel)]="streetModel" ngControl="street" #street></ion-input>
+          <ion-label floating>Telefone</ion-label>
+          <ion-input type="text" [(ngModel)]="phoneModel" ngControl="phone" #phone></ion-input>
         </ion-item>
 
         <ion-item>
-          <ion-label>Esquina</ion-label>
-          <ion-toggle [(ngModel)]="isCornerModel" ngControl="isCorner" #isCorner></ion-toggle>
-        </ion-item>
-
-        <ion-item *ngIf="isCornerModel">
-          <ion-label floating>Esquina com corredor</ion-label>
-          <ion-input type="text" [(ngModel)]="streetCornerModel" ngControl="streetCorner" #streetCorner></ion-input>
+          <ion-label floating>Telefone 2</ion-label>
+          <ion-input type="text" [(ngModel)]="phone2Model" ngControl="phone2" #phone2></ion-input>
         </ion-item>
 
         <ion-item>
-          <ion-label>Andar</ion-label>
-          <ion-select [(ngModel)]="floorModel" ngControl="floor">
-            <ion-option *ngFor="#f of floors" [value]="f">{{f}}</ion-option>
-          </ion-select>
+          <ion-label floating>E-mail</ion-label>
+          <ion-input type="text" [(ngModel)]="emailModel" ngControl="email" #email></ion-input>
         </ion-item>
-
-      </div>
-
-      <div *ngIf="!isGalleryModel">
 
         <ion-item>
-          <ion-label>Rua</ion-label>
-          <ion-select [(ngModel)]="routeModel" ngControl="route" (change)="onUpdateStreet()">
-            <ion-option *ngFor="#r of routes" [value]="r.id">{{r.name}}</ion-option>
-          </ion-select>
+          <ion-label>Dentro de uma galeria?</ion-label>
+          <ion-toggle [(ngModel)]="isGalleryModel" ngControl="isGallery" #isGallery (change)="onIsGalleryChange()"></ion-toggle>
         </ion-item>
 
-      </div>
+
+        <div *ngIf="isGalleryModel">
+
+          <ion-item>
+            <ion-label>Galeria</ion-label>
+            <ion-select [(ngModel)]="galleryModel" ngControl="gallery" (change)="onUpdateGallery()">
+              <ion-option *ngFor="#g of galleries" [value]="g.id">{{g.name}}</ion-option>
+            </ion-select>
+          </ion-item>
+
+
+          <ion-item>
+            <ion-label floating>Número</ion-label>
+            <ion-input type="text" [(ngModel)]="numberModel" ngControl="number" #number></ion-input>
+          </ion-item>
+
+          <ion-item>
+            <ion-label floating>Corredor</ion-label>
+            <ion-input type="text" [(ngModel)]="streetModel" ngControl="street" #street></ion-input>
+          </ion-item>
+
+          <ion-item>
+            <ion-label>Esquina</ion-label>
+            <ion-toggle [(ngModel)]="isCornerModel" ngControl="isCorner" #isCorner></ion-toggle>
+          </ion-item>
+
+          <ion-item *ngIf="isCornerModel">
+            <ion-label floating>Esquina com corredor</ion-label>
+            <ion-input type="text" [(ngModel)]="streetCornerModel" ngControl="streetCorner" #streetCorner></ion-input>
+          </ion-item>
+
+          <ion-item>
+            <ion-label>Andar</ion-label>
+            <ion-select [(ngModel)]="floorModel" ngControl="floor">
+              <ion-option *ngFor="#f of floors" [value]="f">{{f}}</ion-option>
+            </ion-select>
+          </ion-item>
+
+        </div>
+
+        <div *ngIf="!isGalleryModel">
+
+          <ion-item>
+            <ion-label>Rua</ion-label>
+            <ion-select [(ngModel)]="routeModel" ngControl="route" (change)="onUpdateStreet()">
+              <ion-option *ngFor="#r of routes" [value]="r.id">{{r.name}}</ion-option>
+            </ion-select>
+          </ion-item>
+
+        </div>
+
+        <div>
+          <field-categories (selectedCategoriesChange)="categoriesChange($event);"></field-categories>
+        </div>
+
+      </ion-list>
 
       <div>
-        <field-categories (selectedCategoriesChange)="categoriesChange($event);"></field-categories>
+        <ion-item>
+          <ion-label floating>Observação</ion-label>
+          <ion-textarea [(ngModel)]="obsModel" ngControl="obs" #obs></ion-textarea>
+        </ion-item>
       </div>
 
-    </ion-list>
+      <button (click)="onFinish()" type="submit" class="submit" block large>ADICIONAR</button>
 
-    <div>
-      <ion-item>
-        <ion-label floating>Observação</ion-label>
-        <ion-textarea [(ngModel)]="obsModel" ngControl="obs" #obs></ion-textarea>
-      </ion-item>
-    </div>
-
-    <button (click)="onFinish()" type="submit" class="submit" block large>ADICIONAR</button>
-
-  </form>
+    </form>
 
 
-  <p>Minha Localização. Lat: {{currentLat}}, Lng: {{currentLng}}</p>
+    <p>Minha Localização. Lat: {{currentLat}}, Lng: {{currentLng}}</p>
 
-  <button (click)="onUpdateLocation()" type="submit" [disabled]="updating" primary><ion-icon name="refresh-circle"> Localizar</ion-icon></button>
+    <button (click)="onUpdateLocation()" type="submit" [disabled]="updating" primary><ion-icon name="refresh-circle"> Localizar</ion-icon></button>
+
+  </div>
 
   <div id="map"></div>
 

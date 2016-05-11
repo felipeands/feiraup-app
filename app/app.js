@@ -112,7 +112,6 @@ export class MyApp {
     });
 
     this.events.subscribe('user:logout', () => {
-      console.log('deslogou');
       this.loggedIn = false;
       this.loggedRole = false;
     })

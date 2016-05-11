@@ -3186,23 +3186,23 @@
 	};
 	var index_1 = __webpack_require__(5);
 	var random_1 = __webpack_require__(361);
-	var cart_1 = __webpack_require__(362);
-	var location_1 = __webpack_require__(363);
-	var login_1 = __webpack_require__(368);
-	var new_place_1 = __webpack_require__(369);
-	var new_route_1 = __webpack_require__(371);
-	var new_gallery_1 = __webpack_require__(373);
-	var show_place_1 = __webpack_require__(375);
-	var new_shop_1 = __webpack_require__(377);
-	var user_data_1 = __webpack_require__(367);
-	var city_data_1 = __webpack_require__(364);
-	var place_data_1 = __webpack_require__(366);
-	var map_data_1 = __webpack_require__(370);
-	var route_data_1 = __webpack_require__(372);
-	var gallery_data_1 = __webpack_require__(374);
-	var shop_data_1 = __webpack_require__(376);
-	var category_data_1 = __webpack_require__(379);
-	var options_1 = __webpack_require__(365);
+	var cart_1 = __webpack_require__(364);
+	var location_1 = __webpack_require__(365);
+	var login_1 = __webpack_require__(370);
+	var new_place_1 = __webpack_require__(371);
+	var new_route_1 = __webpack_require__(373);
+	var new_gallery_1 = __webpack_require__(375);
+	var show_place_1 = __webpack_require__(377);
+	var new_shop_1 = __webpack_require__(379);
+	var user_data_1 = __webpack_require__(369);
+	var city_data_1 = __webpack_require__(366);
+	var place_data_1 = __webpack_require__(368);
+	var map_data_1 = __webpack_require__(372);
+	var route_data_1 = __webpack_require__(374);
+	var gallery_data_1 = __webpack_require__(376);
+	var shop_data_1 = __webpack_require__(378);
+	var category_data_1 = __webpack_require__(381);
+	var options_1 = __webpack_require__(367);
 	var MyApp = (function () {
 	    function MyApp(app, events, userData) {
 	        this.app = app;
@@ -3269,12 +3269,14 @@
 	            _this.loggedRole = _this.userData.loggedRole;
 	        });
 	        this.events.subscribe('user:logout', function () {
-	            console.log('deslogou');
 	            _this.loggedIn = false;
 	            _this.loggedRole = false;
 	        });
 	        window.addEventListener('native.keyboardshow', function () {
 	            document.body.classList.add('keyboard-open');
+	        });
+	        window.addEventListener('native.keyboardhide', function () {
+	            document.body.classList.remove('keyboard-open');
 	        });
 	    };
 	    MyApp = __decorate([
@@ -63161,25 +63163,14 @@
 	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 	};
 	var index_1 = __webpack_require__(5);
-	// import {Footer} from '../components/footer';
-	// import {Http, HTTP_PROVIDERS, Response} from 'angular2/http';
+	var button_search_1 = __webpack_require__(362);
 	var RandomPage = (function () {
 	    function RandomPage() {
-	        // this.http = http;
-	        // this.settings = new Settings();
-	        // var url = this.settings.url;
-	        // alert(url);
-	        // fetch('http://feiraup.ngrok.com/testes', {
-	        //   method: 'get'
-	        // }).then(function(response) {
-	        //   console.log('respondeu');
-	        // }).catch(function(err) {
-	        //   console.log('erro');
-	        // })
 	    }
 	    RandomPage = __decorate([
 	        index_1.Page({
 	            templateUrl: 'build/pages/random/random.html',
+	            directives: [button_search_1.ButtonSearch]
 	        }), 
 	        __metadata('design:paramtypes', [])
 	    ], RandomPage);
@@ -63201,40 +63192,35 @@
 	var __metadata = (this && this.__metadata) || function (k, v) {
 	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 	};
+	var core_1 = __webpack_require__(7);
 	var index_1 = __webpack_require__(5);
-	// import {Footer} from '../components/footer';
-	// import {Http, HTTP_PROVIDERS, Response} from 'angular2/http';
-	var CartPage = (function () {
-	    function CartPage(nav) {
+	var search_1 = __webpack_require__(363);
+	var ButtonSearch = (function () {
+	    function ButtonSearch(nav) {
 	        this.nav = nav;
-	        // this.http = http;
-	        // this.settings = new Settings();
-	        // var url = this.settings.url;
-	        // alert(url);
-	        // fetch('http://feiraup.ngrok.com/testes', {
-	        //   method: 'get'
-	        // }).then(function(response) {
-	        //   console.log('respondeu');
-	        // }).catch(function(err) {
-	        //   console.log('erro');
-	        // })
 	    }
-	    Object.defineProperty(CartPage, "parameters", {
+	    Object.defineProperty(ButtonSearch, "parameters", {
 	        get: function () {
 	            return [[index_1.NavController]];
 	        },
 	        enumerable: true,
 	        configurable: true
 	    });
-	    CartPage = __decorate([
-	        index_1.Page({
-	            templateUrl: 'build/pages/cart/cart.html',
+	    ButtonSearch.prototype.onButtonClick = function () {
+	        this.nav.push(search_1.SearchPage);
+	    };
+	    ButtonSearch = __decorate([
+	        core_1.Component({
+	            selector: 'button-search',
+	            template: "\n  <button (click)=\"onButtonClick()\" light clear class=\"search\">\n    <ion-icon name=\"search\"></ion-icon>\n  </button>\n  ",
+	            styles: ["\n  "],
+	            directives: [index_1.IONIC_DIRECTIVES],
 	        }), 
 	        __metadata('design:paramtypes', [Object])
-	    ], CartPage);
-	    return CartPage;
+	    ], ButtonSearch);
+	    return ButtonSearch;
 	})();
-	exports.CartPage = CartPage;
+	exports.ButtonSearch = ButtonSearch;
 
 
 /***/ },
@@ -63251,8 +63237,74 @@
 	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 	};
 	var index_1 = __webpack_require__(5);
-	var city_data_1 = __webpack_require__(364);
-	var place_data_1 = __webpack_require__(366);
+	var SearchPage = (function () {
+	    function SearchPage() {
+	    }
+	    SearchPage = __decorate([
+	        index_1.Page({
+	            templateUrl: 'build/pages/search/search.html'
+	        }), 
+	        __metadata('design:paramtypes', [])
+	    ], SearchPage);
+	    return SearchPage;
+	})();
+	exports.SearchPage = SearchPage;
+
+
+/***/ },
+/* 364 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+	    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+	    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+	    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+	    return c > 3 && r && Object.defineProperty(target, key, r), r;
+	};
+	var __metadata = (this && this.__metadata) || function (k, v) {
+	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+	};
+	var index_1 = __webpack_require__(5);
+	var button_search_1 = __webpack_require__(362);
+	var CartPage = (function () {
+	    function CartPage(nav) {
+	    }
+	    Object.defineProperty(CartPage, "parameters", {
+	        get: function () {
+	            return [[index_1.NavController]];
+	        },
+	        enumerable: true,
+	        configurable: true
+	    });
+	    CartPage = __decorate([
+	        index_1.Page({
+	            templateUrl: 'build/pages/cart/cart.html',
+	            directives: [button_search_1.ButtonSearch]
+	        }), 
+	        __metadata('design:paramtypes', [Object])
+	    ], CartPage);
+	    return CartPage;
+	})();
+	exports.CartPage = CartPage;
+
+
+/***/ },
+/* 365 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+	    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+	    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+	    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+	    return c > 3 && r && Object.defineProperty(target, key, r), r;
+	};
+	var __metadata = (this && this.__metadata) || function (k, v) {
+	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+	};
+	var index_1 = __webpack_require__(5);
+	var city_data_1 = __webpack_require__(366);
+	var place_data_1 = __webpack_require__(368);
+	var button_search_1 = __webpack_require__(362);
 	var LocationPage = (function () {
 	    function LocationPage(nav, cityData, placeData) {
 	        var _this = this;
@@ -63328,7 +63380,8 @@
 	    };
 	    LocationPage = __decorate([
 	        index_1.Page({
-	            templateUrl: 'build/pages/location/location.html'
+	            templateUrl: 'build/pages/location/location.html',
+	            directives: [button_search_1.ButtonSearch]
 	        }), 
 	        __metadata('design:paramtypes', [Object, Object, Object])
 	    ], LocationPage);
@@ -63338,7 +63391,7 @@
 
 
 /***/ },
-/* 364 */
+/* 366 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -63353,7 +63406,7 @@
 	var core_1 = __webpack_require__(7);
 	var index_1 = __webpack_require__(5);
 	var http_1 = __webpack_require__(145);
-	var options_1 = __webpack_require__(365);
+	var options_1 = __webpack_require__(367);
 	var CityData = (function () {
 	    function CityData(http, options) {
 	        this.http = http;
@@ -63410,7 +63463,7 @@
 
 
 /***/ },
-/* 365 */
+/* 367 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -63426,7 +63479,7 @@
 	var Options = (function () {
 	    function Options() {
 	        this.base_url = 'http://feiraup.herokuapp.com';
-	        this.base_url = 'http://dd329668.ngrok.io';
+	        // this.base_url = 'http://dd329668.ngrok.io';
 	        this.gmaps_key = 'AIzaSyDEdVkgms32J_TZad9VJO-XJHWvaQRUDqg';
 	        this.gmaps_timeout = 100000;
 	        this.gmaps_accuracy = true;
@@ -63442,7 +63495,7 @@
 
 
 /***/ },
-/* 366 */
+/* 368 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -63457,9 +63510,9 @@
 	var core_1 = __webpack_require__(7);
 	var index_1 = __webpack_require__(5);
 	var http_1 = __webpack_require__(145);
-	var user_data_1 = __webpack_require__(367);
-	var city_data_1 = __webpack_require__(364);
-	var options_1 = __webpack_require__(365);
+	var user_data_1 = __webpack_require__(369);
+	var city_data_1 = __webpack_require__(366);
+	var options_1 = __webpack_require__(367);
 	var PlaceData = (function () {
 	    function PlaceData(http, user, city, options) {
 	        this.http = http;
@@ -63560,7 +63613,7 @@
 
 
 /***/ },
-/* 367 */
+/* 369 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -63575,7 +63628,7 @@
 	var core_1 = __webpack_require__(7);
 	var index_1 = __webpack_require__(5);
 	var http_1 = __webpack_require__(145);
-	var options_1 = __webpack_require__(365);
+	var options_1 = __webpack_require__(367);
 	var UserData = (function () {
 	    function UserData(http, events, options, headers) {
 	        this.http = http;
@@ -63674,7 +63727,7 @@
 
 
 /***/ },
-/* 368 */
+/* 370 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -63687,7 +63740,8 @@
 	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 	};
 	var index_1 = __webpack_require__(5);
-	var user_data_1 = __webpack_require__(367);
+	var user_data_1 = __webpack_require__(369);
+	var button_search_1 = __webpack_require__(362);
 	var LoginPage = (function () {
 	    function LoginPage(nav, userData) {
 	        this.nav = nav;
@@ -63744,7 +63798,8 @@
 	    };
 	    LoginPage = __decorate([
 	        index_1.Page({
-	            templateUrl: 'build/pages/login/login.html'
+	            templateUrl: 'build/pages/login/login.html',
+	            directives: [button_search_1.ButtonSearch]
 	        }), 
 	        __metadata('design:paramtypes', [Object, Object])
 	    ], LoginPage);
@@ -63754,7 +63809,7 @@
 
 
 /***/ },
-/* 369 */
+/* 371 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -63767,8 +63822,9 @@
 	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 	};
 	var index_1 = __webpack_require__(5);
-	var map_data_1 = __webpack_require__(370);
-	var place_data_1 = __webpack_require__(366);
+	var map_data_1 = __webpack_require__(372);
+	var place_data_1 = __webpack_require__(368);
+	var button_search_1 = __webpack_require__(362);
 	var NewPlacePage = (function () {
 	    function NewPlacePage(nav, mapData, placeData) {
 	        this.nav = nav;
@@ -63912,7 +63968,8 @@
 	    NewPlacePage = __decorate([
 	        index_1.Page({
 	            templateUrl: 'build/pages/place/new-place.html',
-	            styles: ["\n  #map {\n    width: 100%;\n    height: 80%;\n  }\n  "]
+	            styles: ["\n  #map {\n    width: 100%;\n    height: 80%;\n  }\n  "],
+	            directives: [button_search_1.ButtonSearch]
 	        }), 
 	        __metadata('design:paramtypes', [Object, Object, Object])
 	    ], NewPlacePage);
@@ -63922,7 +63979,7 @@
 
 
 /***/ },
-/* 370 */
+/* 372 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -63935,8 +63992,8 @@
 	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 	};
 	var core_1 = __webpack_require__(7);
-	var place_data_1 = __webpack_require__(366);
-	var options_1 = __webpack_require__(365);
+	var place_data_1 = __webpack_require__(368);
+	var options_1 = __webpack_require__(367);
 	var MapData = (function () {
 	    function MapData(options, placeData) {
 	        this.options = options;
@@ -63996,7 +64053,7 @@
 
 
 /***/ },
-/* 371 */
+/* 373 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -64009,8 +64066,9 @@
 	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 	};
 	var index_1 = __webpack_require__(5);
-	var map_data_1 = __webpack_require__(370);
-	var route_data_1 = __webpack_require__(372);
+	var map_data_1 = __webpack_require__(372);
+	var route_data_1 = __webpack_require__(374);
+	var button_search_1 = __webpack_require__(362);
 	var NewRoutePage = (function () {
 	    function NewRoutePage(nav, mapData, routeData) {
 	        this.nav = nav;
@@ -64170,7 +64228,8 @@
 	    NewRoutePage = __decorate([
 	        index_1.Page({
 	            templateUrl: 'build/pages/route/new-route.html',
-	            styles: ["\n  #map {\n    width: 100%;\n    height: 80%;\n  }\n  "]
+	            styles: ["\n  #map {\n    width: 100%;\n    height: 80%;\n  }\n  "],
+	            directives: [button_search_1.ButtonSearch]
 	        }), 
 	        __metadata('design:paramtypes', [Object, Object, Object])
 	    ], NewRoutePage);
@@ -64180,7 +64239,7 @@
 
 
 /***/ },
-/* 372 */
+/* 374 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -64194,9 +64253,9 @@
 	};
 	var core_1 = __webpack_require__(7);
 	var http_1 = __webpack_require__(145);
-	var user_data_1 = __webpack_require__(367);
-	var place_data_1 = __webpack_require__(366);
-	var options_1 = __webpack_require__(365);
+	var user_data_1 = __webpack_require__(369);
+	var place_data_1 = __webpack_require__(368);
+	var options_1 = __webpack_require__(367);
 	var RouteData = (function () {
 	    function RouteData(http, user, place, options) {
 	        this.http = http;
@@ -64267,7 +64326,7 @@
 
 
 /***/ },
-/* 373 */
+/* 375 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -64280,8 +64339,9 @@
 	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 	};
 	var index_1 = __webpack_require__(5);
-	var map_data_1 = __webpack_require__(370);
-	var gallery_data_1 = __webpack_require__(374);
+	var map_data_1 = __webpack_require__(372);
+	var gallery_data_1 = __webpack_require__(376);
+	var button_search_1 = __webpack_require__(362);
 	var NewGalleryPage = (function () {
 	    function NewGalleryPage(nav, mapData, galleryData) {
 	        this.nav = nav;
@@ -64474,7 +64534,8 @@
 	    NewGalleryPage = __decorate([
 	        index_1.Page({
 	            templateUrl: 'build/pages/gallery/new-gallery.html',
-	            styles: ["\n  #map {\n    width: 100%;\n    height: 80%;\n  }\n  "]
+	            styles: ["\n  #map {\n    width: 100%;\n    height: 80%;\n  }\n  "],
+	            directives: [button_search_1.ButtonSearch]
 	        }), 
 	        __metadata('design:paramtypes', [Object, Object, Object])
 	    ], NewGalleryPage);
@@ -64484,7 +64545,7 @@
 
 
 /***/ },
-/* 374 */
+/* 376 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -64498,9 +64559,9 @@
 	};
 	var core_1 = __webpack_require__(7);
 	var http_1 = __webpack_require__(145);
-	var user_data_1 = __webpack_require__(367);
-	var place_data_1 = __webpack_require__(366);
-	var options_1 = __webpack_require__(365);
+	var user_data_1 = __webpack_require__(369);
+	var place_data_1 = __webpack_require__(368);
+	var options_1 = __webpack_require__(367);
 	var GalleryData = (function () {
 	    function GalleryData(http, user, place, options) {
 	        this.http = http;
@@ -64574,7 +64635,7 @@
 
 
 /***/ },
-/* 375 */
+/* 377 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -64587,9 +64648,10 @@
 	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 	};
 	var index_1 = __webpack_require__(5);
-	var map_data_1 = __webpack_require__(370);
-	var place_data_1 = __webpack_require__(366);
-	var shop_data_1 = __webpack_require__(376);
+	var map_data_1 = __webpack_require__(372);
+	var place_data_1 = __webpack_require__(368);
+	var shop_data_1 = __webpack_require__(378);
+	var button_search_1 = __webpack_require__(362);
 	var ShowPlacePage = (function () {
 	    function ShowPlacePage(mapData, placeData, shopData) {
 	        this.mapData = mapData;
@@ -64742,7 +64804,8 @@
 	    ShowPlacePage = __decorate([
 	        index_1.Page({
 	            templateUrl: 'build/pages/place/show-place.html',
-	            styles: ["\n  #map {\n    width: 100%;\n    height: 100%;\n  }\n  "]
+	            styles: ["\n  #map {\n    width: 100%;\n    height: 100%;\n  }\n  "],
+	            directives: [button_search_1.ButtonSearch]
 	        }), 
 	        __metadata('design:paramtypes', [Object, Object, Object])
 	    ], ShowPlacePage);
@@ -64752,7 +64815,7 @@
 
 
 /***/ },
-/* 376 */
+/* 378 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -64766,8 +64829,8 @@
 	};
 	var core_1 = __webpack_require__(7);
 	var http_1 = __webpack_require__(145);
-	var user_data_1 = __webpack_require__(367);
-	var options_1 = __webpack_require__(365);
+	var user_data_1 = __webpack_require__(369);
+	var options_1 = __webpack_require__(367);
 	var ShopData = (function () {
 	    function ShopData(http, user, options) {
 	        this.http = http;
@@ -64832,7 +64895,7 @@
 
 
 /***/ },
-/* 377 */
+/* 379 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -64845,12 +64908,13 @@
 	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 	};
 	var index_1 = __webpack_require__(5);
-	var map_data_1 = __webpack_require__(370);
-	var gallery_data_1 = __webpack_require__(374);
-	var route_data_1 = __webpack_require__(372);
-	var shop_data_1 = __webpack_require__(376);
-	var place_data_1 = __webpack_require__(366);
-	var field_categories_1 = __webpack_require__(378);
+	var map_data_1 = __webpack_require__(372);
+	var gallery_data_1 = __webpack_require__(376);
+	var route_data_1 = __webpack_require__(374);
+	var shop_data_1 = __webpack_require__(378);
+	var place_data_1 = __webpack_require__(368);
+	var field_categories_1 = __webpack_require__(380);
+	var button_search_1 = __webpack_require__(362);
 	var NewShopPage = (function () {
 	    function NewShopPage(nav, mapData, shopData, galleryData, routeData, placeData) {
 	        this.selectedCategories = [];
@@ -65094,7 +65158,7 @@
 	        index_1.Page({
 	            templateUrl: 'build/pages/shop/new-shop.html',
 	            styles: ["\n  #map {\n    width: 100%;\n    height: 80%;\n  }\n  field-categories {\n    margin-top: 20px;\n  }\n  .submit {\n    margin-top: 20px;\n  }\n  "],
-	            directives: [field_categories_1.FieldCategories]
+	            directives: [field_categories_1.FieldCategories, button_search_1.ButtonSearch]
 	        }), 
 	        __metadata('design:paramtypes', [Object, Object, Object, Object, Object, Object])
 	    ], NewShopPage);
@@ -65104,7 +65168,7 @@
 
 
 /***/ },
-/* 378 */
+/* 380 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -65118,7 +65182,7 @@
 	};
 	var core_1 = __webpack_require__(7);
 	var index_1 = __webpack_require__(5);
-	var category_data_1 = __webpack_require__(379);
+	var category_data_1 = __webpack_require__(381);
 	var FieldCategories = (function () {
 	    function FieldCategories(categoryData) {
 	        this.selectedCategoriesChange = new core_1.EventEmitter();
@@ -65199,7 +65263,7 @@
 
 
 /***/ },
-/* 379 */
+/* 381 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -65213,7 +65277,7 @@
 	};
 	var core_1 = __webpack_require__(7);
 	var http_1 = __webpack_require__(145);
-	var options_1 = __webpack_require__(365);
+	var options_1 = __webpack_require__(367);
 	var CategoryData = (function () {
 	    function CategoryData(http, options) {
 	        this.http = http;

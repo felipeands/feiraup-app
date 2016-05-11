@@ -2,6 +2,7 @@ import {Page} from 'ionic-framework/index';
 import {MapData} from '../../services/map-data';
 import {PlaceData} from '../../services/place-data';
 import {ShopData} from '../../services/shop-data';
+import {ButtonSearch} from '../../components/button-search';
 
 @Page ({
   templateUrl: 'build/pages/place/show-place.html',
@@ -10,7 +11,8 @@ import {ShopData} from '../../services/shop-data';
     width: 100%;
     height: 100%;
   }
-  `]
+  `],
+  directives: [ButtonSearch]
 })
 
 export class ShowPlacePage {

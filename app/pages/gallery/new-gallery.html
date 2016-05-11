@@ -5,44 +5,49 @@
   <ion-title>
     Nova galeria
   </ion-title>
+  <button-search></button-search>
 </ion-navbar>
 
-<ion-content padding class="gallery">
+<ion-content class="gallery">
 
-  <p>Cadastrando uma nova galeria. Adicione marcações para definir a localização da galeria.</p>
+  <div padding>
 
-  <form #newGalleryForm="ngForm">
+    <p>Cadastrando uma nova galeria. Adicione marcações para definir a localização da galeria.</p>
 
-    <ion-list>
-      <ion-item>
-        <ion-label floating>Nome da galeria</ion-label>
-        <ion-input type="text" [(ngModel)]="nameModel" ngControl="name" #name required></ion-input>
-      </ion-item>
-      <ion-item>
-        <ion-label floating>Quantidade de andares</ion-label>
-        <ion-input type="text" [(ngModel)]="floorsModel" ngControl="floors" #floors></ion-input>
-      </ion-item>
-      <ion-item>
-        <ion-label floating>Endereço</ion-label>
-        <ion-textarea [(ngModel)]="addressModel" ngControl="address" #address></ion-textarea>
-      </ion-item>
-    </ion-list>
+    <form #newGalleryForm="ngForm">
 
-  </form>
+      <ion-list>
+        <ion-item>
+          <ion-label floating>Nome da galeria</ion-label>
+          <ion-input type="text" [(ngModel)]="nameModel" ngControl="name" #name required></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-label floating>Quantidade de andares</ion-label>
+          <ion-input type="text" [(ngModel)]="floorsModel" ngControl="floors" #floors></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-label floating>Endereço</ion-label>
+          <ion-textarea [(ngModel)]="addressModel" ngControl="address" #address></ion-textarea>
+        </ion-item>
+      </ion-list>
 
-  <button (click)="onNewMark()" type="submit" [disabled]="!updated" secondary><ion-icon name="add-circle"> Adicionar</ion-icon></button>
+    </form>
 
-  <button (click)="onUpdateLocation()" type="submit" [disabled]="updating" primary><ion-icon name="refresh-circle"> Atualizar</ion-icon></button>
+    <button (click)="onNewMark()" type="submit" [disabled]="!updated" secondary><ion-icon name="add-circle"> Adicionar</ion-icon></button>
 
-  <button (click)="onNewDoor()" type="submit" [disabled]="positions < 3" secondary><ion-icon name="add-circle"> Nova porta</ion-icon></button>
+    <button (click)="onUpdateLocation()" type="submit" [disabled]="updating" primary><ion-icon name="refresh-circle"> Atualizar</ion-icon></button>
 
-  <p>Minha Localização. Lat: {{currentLat}}, Lng: {{currentLng}}</p>
+    <button (click)="onNewDoor()" type="submit" [disabled]="positions < 3" secondary><ion-icon name="add-circle"> Nova porta</ion-icon></button>
 
-  <button (click)="onFinish()" type="submit" [disabled]="positions == 0" block large>ADICIONAR</button>
+    <p>Minha Localização. Lat: {{currentLat}}, Lng: {{currentLng}}</p>
+
+    <button (click)="onFinish()" type="submit" [disabled]="positions == 0" block large>ADICIONAR</button>
+
+  </div>
 
   <div id="map"></div>
 
-  <ion-list>
+  <ion-list padding>
     <ion-item *ngFor="#position of positions.slice().reverse()">{{position.latitude}}, {{position.longitude}}</ion-item>
   </ion-list>
 

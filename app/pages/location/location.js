@@ -1,9 +1,11 @@
 import {Page, NavController, Alert} from 'ionic-framework/index';
 import {CityData} from '../../services/city-data';
 import {PlaceData} from '../../services/place-data';
+import {ButtonSearch} from '../../components/button-search';
 
 @Page ({
-  templateUrl: 'build/pages/location/location.html'
+  templateUrl: 'build/pages/location/location.html',
+  directives: [ButtonSearch]
 })
 
 export class LocationPage {

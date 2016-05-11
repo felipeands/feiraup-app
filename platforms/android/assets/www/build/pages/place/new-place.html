@@ -5,29 +5,33 @@
   <ion-title>
     Novo Local
   </ion-title>
+  <button-search></button-search>
 </ion-navbar>
 
-<ion-content padding class="place">
+<ion-content class="place">
 
-  <p>Cadastre um novo local ou região de compras na cidade atual. Exemplo: Feira dos importados.</p>
+  <div padding>
 
-  <form #newPlaceForm="ngForm">
+    <p>Cadastre um novo local ou região de compras na cidade atual. Exemplo: Feira dos importados.</p>
 
-    <ion-list>
-      <ion-item>
-        <ion-label floating>Nome do local</ion-label>
-        <ion-input type="text" [(ngModel)]="nameModel" ngControl="name" #name required></ion-input>
-      </ion-item>
-    </ion-list>
+    <form #newPlaceForm="ngForm">
 
-  </form>
+      <ion-list>
+        <ion-item>
+          <ion-label floating>Nome do local</ion-label>
+          <ion-input type="text" [(ngModel)]="nameModel" ngControl="name" #name required></ion-input>
+        </ion-item>
+      </ion-list>
 
-  <button (click)="onFinish()" type="submit" block large>ADICIONAR</button>
+    </form>
 
-  <p>Minha Localização. Lat: {{currentLat}}, Lng: {{currentLng}}</p>
+    <button (click)="onFinish()" type="submit" block large>ADICIONAR</button>
 
-  <button (click)="onUpdateLocation()" type="submit" [disabled]="updating" primary><ion-icon name="refresh-circle"> Atualizar</ion-icon></button>
+    <p>Minha Localização. Lat: {{currentLat}}, Lng: {{currentLng}}</p>
 
+    <button (click)="onUpdateLocation()" type="submit" [disabled]="updating" primary><ion-icon name="refresh-circle"> Atualizar</ion-icon></button>
+
+  </div>
 
   <div id="map"></div>
 

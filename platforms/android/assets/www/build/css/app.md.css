@@ -9322,6 +9322,11 @@ ion-navbar .toolbar-background {
 ion-navbar .toolbar-title {
   color: #fff; }
 
+ion-navbar .search {
+  position: absolute;
+  right: 5px;
+  top: 5px; }
+
 form .item {
   background: transparent; }
   form .item .item-inner {
@@ -9334,6 +9339,9 @@ form .item-label-floating ion-label {
   color: #fff; }
   .bar-button-menutoggle ion-icon {
     font-size: 3.1em; }
+
+ion-menu[type=overlay] {
+  z-index: 100; }
 
 ion-menu ion-list .item {
   border-bottom: 1px solid transparent !important;
