@@ -20,14 +20,17 @@
 // Both iOS and MD colors can be further customized if colors
 // are different per mode.
 
-$primary: #387ef5;
+$primary: #D8484B;
+$secondary: #FCA35A;
 
 $colors: (
   primary:    $primary,
-  secondary:  #32db64,
+  secondary:  $secondary,
   danger:     #f53d3d,
   light:      #f4f4f4,
   dark:       #222,
   favorite:   #69BB7B,
-  master:     #0080FF
+  master:     #FFF
 );
+
+// $background-color: red;

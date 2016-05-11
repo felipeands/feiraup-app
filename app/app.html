@@ -7,26 +7,26 @@
 
   <ion-content class="outer-content">
 
-    <io-list *ngIf="loggedIn && loggedRole=='admin'">
+    <ion-list *ngIf="loggedIn && loggedRole=='admin'">
       <button ion-item menuClose *ngFor="#p of adminPages" (click)="openPage(p)">
         <ion-icon item-left [name]="p.icon"></ion-icon>
         {{p.title}}
       </button>
-    </io-list>
+    </ion-list>
 
-    <io-list *ngIf="!loggedIn">
+    <ion-list *ngIf="!loggedIn">
       <button ion-item menuClose *ngFor="#p of loggedOutPages" (click)="openPage(p)">
         <ion-icon item-left [name]="p.icon"></ion-icon>
         {{p.title}}
       </button>
-    </io-list>
+    </ion-list>
 
-    <io-list *ngIf="loggedIn">
+    <ion-list *ngIf="loggedIn">
       <button ion-item menuClose *ngFor="#p of loggedInPages" (click)="openPage(p)">
         <ion-icon item-left [name]="p.icon"></ion-icon>
         {{p.title}}
       </button>
-    </io-list>
+    </ion-list>
 
   </ion-content>
 
