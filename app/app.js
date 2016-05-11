@@ -101,7 +101,7 @@ export class MyApp {
       });
       nav.present(alert);
     } else {
-      nav.setRoot(page.component);
+      nav.setRoot(page.component, {}, {animate: true, direction: 'foward'});
     }
   }
 
