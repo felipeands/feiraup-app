@@ -7,16 +7,30 @@
 
 <ion-content class="search">
 
-  <div padding>
-  Pesquisa
+  <form>
+    <ion-searchbar (input)="onGetShops($event)"></ion-searchbar>
+    <div text-center>
+      <a href="#">Busca avançada</a>
+    </div>
+  </form>
 
-  <ion-card>
-    <ion-card-content>
-      <ion-card-title>
-      Teste
-      </ion-card-title>
-    </ion-card-content>
+  <div class="results">
+    <ion-card *ngFor="#shop of shops">
+      <img src="{{shop.image}}">
 
+      <div class="icon">
+        <button fab fab-right fab-top>
+          <ion-icon name="return-right"></ion-icon>
+        </button>
+      </div>
+
+      <ion-card-content>
+        <ion-card-title>
+          Teste
+        </ion-card-title>
+        <p>Algo sobre a loja</p>
+      </ion-card-content>
+    </ion-card>
   </div>
 
 </ion-content>

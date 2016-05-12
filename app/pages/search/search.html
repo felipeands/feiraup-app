@@ -7,12 +7,12 @@
 
 <ion-content class="search">
 
-  <ion-toolbar secondary>
+  <form>
     <ion-searchbar (input)="onGetShops($event)"></ion-searchbar>
     <div text-center>
       <a href="#">Busca avançada</a>
     </div>
-  </ion-toolbar>
+  </form>
 
   <div class="results">
     <ion-card *ngFor="#shop of shops">
@@ -20,7 +20,7 @@
 
       <div class="icon">
         <button fab fab-right fab-top>
-          <ion-icon name="ios-more"></ion-icon>
+          <ion-icon name="return-right"></ion-icon>
         </button>
       </div>
 

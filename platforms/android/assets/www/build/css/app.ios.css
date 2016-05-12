@@ -7780,9 +7780,9 @@ form .item {
 form .item-label-floating ion-label {
   color: #fff; }
 
-.bar-button-menutoggle {
+.bar-button-menutoggle, .back-button-icon {
   color: #fff; }
-  .bar-button-menutoggle ion-icon {
+  .bar-button-menutoggle ion-icon, .back-button-icon ion-icon {
     font-size: 3.1em; }
 
 ion-menu[type=overlay] {

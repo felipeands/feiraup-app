@@ -6,6 +6,7 @@ import {ShopData} from '../../services/shop-data';
 import {PlaceData} from '../../services/place-data';
 import {FieldCategories} from '../../components/field-categories';
 import {ButtonSearch} from '../../components/button-search';
+import {PhotoUpload} from '../../components/photo-upload';
 
 @Page ({
   templateUrl: 'build/pages/shop/new-shop.html',
@@ -17,11 +18,14 @@ import {ButtonSearch} from '../../components/button-search';
   field-categories {
     margin-top: 20px;
   }
+  .obs {
+    margin-bottom: 20px;
+  }
   .submit {
     margin-top: 20px;
   }
   `],
-  directives: [FieldCategories, ButtonSearch]
+  directives: [FieldCategories, ButtonSearch, PhotoUpload]
 })
 
 export class NewShopPage {
