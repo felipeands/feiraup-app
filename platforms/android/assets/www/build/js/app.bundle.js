@@ -3201,7 +3201,7 @@
 	var route_data_1 = __webpack_require__(374);
 	var gallery_data_1 = __webpack_require__(376);
 	var shop_data_1 = __webpack_require__(378);
-	var category_data_1 = __webpack_require__(449);
+	var category_data_1 = __webpack_require__(381);
 	var options_1 = __webpack_require__(367);
 	var MyApp = (function () {
 	    function MyApp(app, events, userData) {
@@ -64920,14 +64920,14 @@
 	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 	};
 	var index_1 = __webpack_require__(5);
-	var ionic_native_1 = __webpack_require__(380);
 	var map_data_1 = __webpack_require__(372);
 	var gallery_data_1 = __webpack_require__(376);
 	var route_data_1 = __webpack_require__(374);
 	var shop_data_1 = __webpack_require__(378);
 	var place_data_1 = __webpack_require__(368);
-	var field_categories_1 = __webpack_require__(448);
+	var field_categories_1 = __webpack_require__(380);
 	var button_search_1 = __webpack_require__(362);
+	var photo_upload_1 = __webpack_require__(382);
 	var NewShopPage = (function () {
 	    function NewShopPage(nav, mapData, shopData, galleryData, routeData, placeData) {
 	        this.selectedCategories = [];
@@ -65167,7 +65167,197 @@
 	    NewShopPage.prototype.categoriesChange = function (selected) {
 	        this.selectedCategories = selected;
 	    };
-	    NewShopPage.prototype.onUploadPhoto = function () {
+	    NewShopPage = __decorate([
+	        index_1.Page({
+	            templateUrl: 'build/pages/shop/new-shop.html',
+	            styles: ["\n  #map {\n    width: 100%;\n    height: 80%;\n  }\n  field-categories {\n    margin-top: 20px;\n  }\n  .obs {\n    margin-bottom: 20px;\n  }\n  .submit {\n    margin-top: 20px;\n  }\n  "],
+	            directives: [field_categories_1.FieldCategories, button_search_1.ButtonSearch, photo_upload_1.PhotoUpload]
+	        }), 
+	        __metadata('design:paramtypes', [Object, Object, Object, Object, Object, Object])
+	    ], NewShopPage);
+	    return NewShopPage;
+	})();
+	exports.NewShopPage = NewShopPage;
+
+
+/***/ },
+/* 380 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+	    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+	    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+	    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+	    return c > 3 && r && Object.defineProperty(target, key, r), r;
+	};
+	var __metadata = (this && this.__metadata) || function (k, v) {
+	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+	};
+	var core_1 = __webpack_require__(7);
+	var index_1 = __webpack_require__(5);
+	var category_data_1 = __webpack_require__(381);
+	var FieldCategories = (function () {
+	    function FieldCategories(categoryData) {
+	        this.selectedCategoriesChange = new core_1.EventEmitter();
+	        this.selectedCategories = [];
+	        this.categoryData = categoryData;
+	        this.categories = [];
+	        this.getCategories();
+	        this.genreOpen = null;
+	        this.groupOpen = null;
+	    }
+	    Object.defineProperty(FieldCategories, "parameters", {
+	        get: function () {
+	            return [[category_data_1.CategoryData]];
+	        },
+	        enumerable: true,
+	        configurable: true
+	    });
+	    FieldCategories.prototype.getCategories = function () {
+	        var _this = this;
+	        this.categoryData.loadCategories().then(function (categories) {
+	            _this.categories = categories;
+	        });
+	    };
+	    FieldCategories.prototype.onClickGenre = function (genre) {
+	        this.genreOpen = this.genreOpen == genre.id ? null : genre.id;
+	    };
+	    FieldCategories.prototype.onClickGroup = function (group) {
+	        this.groupOpen = this.groupOpen == group.id ? null : group.id;
+	    };
+	    FieldCategories.prototype.onChangeCategory = function (event, category) {
+	        if (event.checked) {
+	            this.add(category);
+	        }
+	        else {
+	            this.remove(category);
+	        }
+	        this.selectedCategoriesChange.emit(this.selectedCategories);
+	    };
+	    FieldCategories.prototype.add = function (category) {
+	        if (!this.existsCategoryInSelecteds(category)) {
+	            this.selectedCategories.push(category.id);
+	        }
+	    };
+	    FieldCategories.prototype.remove = function (category) {
+	        if (this.existsCategoryInSelecteds(category)) {
+	            var index = this.selectedCategories.indexOf(category.id);
+	            this.selectedCategories.splice(index, 1);
+	        }
+	    };
+	    FieldCategories.prototype.existsCategoryInSelecteds = function (category) {
+	        return (this.selectedCategories.find(function (i) { return i == category.id; }));
+	    };
+	    FieldCategories.prototype.genreIcon = function (genre) {
+	        return (genre.id == this.genreOpen) ? 'arrow-dropup' : 'arrow-dropdown';
+	    };
+	    FieldCategories.prototype.groupIcon = function (group) {
+	        return (group.id == this.groupOpen) ? 'arrow-dropup' : 'arrow-dropdown';
+	    };
+	    FieldCategories.prototype.getSelecteds = function () {
+	        return this.selectedCategories;
+	    };
+	    __decorate([
+	        core_1.Output(), 
+	        __metadata('design:type', Object)
+	    ], FieldCategories.prototype, "selectedCategoriesChange", void 0);
+	    FieldCategories = __decorate([
+	        core_1.Component({
+	            selector: 'field-categories',
+	            template: "\n  <div class=\"categories\">\n    <div>Categorias de produtos</div>\n    <div>\n      <div *ngFor=\"#genre of categories\" class=\"genres\">\n\n        <div class=\"title\" (click)=\"onClickGenre(genre)\" [ngClass]=\"{active: genre.id == genreOpen}\">\n          <ion-icon [name]=\"genreIcon(genre)\"></ion-icon> {{genre.name}}\n        </div>\n        <div [ngClass]=\"{hide: genreOpen != genre.id}\" class=\"groups\">\n          <div *ngFor=\"#group of genre.children\">\n\n            <div class=\"title\" (click)=\"onClickGroup(group)\" [ngClass]=\"{active: group.id == groupOpen}\">\n              <ion-icon [name]=\"groupIcon(group)\"></ion-icon> {{group.name}}\n            </div>\n            <ion-list [ngClass]=\"{hide: groupOpen != group.id}\">\n              <ion-item *ngFor=\"#category of group.children\">\n\n                <ion-label>{{category.name}}</ion-label>\n                <ion-checkbox [checked]=\"existsCategoryInSelecteds(category)\" (change)=\"onChangeCategory($event,category)\"></ion-checkbox>\n\n              </ion-item>\n            </ion-list>\n            <!-- #categories -->\n\n          </div>\n        </div>\n        <!-- #groups -->\n\n      </div>\n    </div>\n    <!-- #genres -->\n\n  </div>\n  ",
+	            styles: ["\n  .title {\n    padding: 10px 0;\n    border-bottom: 1px solid #CCC;\n  }\n  .groups {\n    padding-left: 20px;\n  }\n  .categories {\n    margin-top: 40px;\n  }\n  "],
+	            directives: [index_1.IONIC_DIRECTIVES],
+	        }), 
+	        __metadata('design:paramtypes', [Object])
+	    ], FieldCategories);
+	    return FieldCategories;
+	})();
+	exports.FieldCategories = FieldCategories;
+
+
+/***/ },
+/* 381 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+	    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+	    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+	    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+	    return c > 3 && r && Object.defineProperty(target, key, r), r;
+	};
+	var __metadata = (this && this.__metadata) || function (k, v) {
+	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+	};
+	var core_1 = __webpack_require__(7);
+	var http_1 = __webpack_require__(145);
+	var options_1 = __webpack_require__(367);
+	var CategoryData = (function () {
+	    function CategoryData(http, options) {
+	        this.http = http;
+	        this.options = options;
+	        this.selected = [];
+	        this.categories = null;
+	    }
+	    Object.defineProperty(CategoryData, "parameters", {
+	        get: function () {
+	            return [[http_1.Http], [options_1.Options]];
+	        },
+	        enumerable: true,
+	        configurable: true
+	    });
+	    CategoryData.prototype.loadCategories = function () {
+	        var _this = this;
+	        if (this.categories) {
+	            return Promise.resolve(this.categories);
+	        }
+	        return new Promise(function (resolve) {
+	            _this.http.get(_this.options.base_url + "/category/list").subscribe(function (res) {
+	                _this.categories = _this.processData(res.json());
+	                resolve(_this.categories);
+	            });
+	        });
+	    };
+	    CategoryData.prototype.processData = function (data) {
+	        return data.data;
+	    };
+	    CategoryData = __decorate([
+	        core_1.Injectable(), 
+	        __metadata('design:paramtypes', [Object, Object])
+	    ], CategoryData);
+	    return CategoryData;
+	})();
+	exports.CategoryData = CategoryData;
+
+
+/***/ },
+/* 382 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+	    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+	    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+	    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+	    return c > 3 && r && Object.defineProperty(target, key, r), r;
+	};
+	var __metadata = (this && this.__metadata) || function (k, v) {
+	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+	};
+	var core_1 = __webpack_require__(7);
+	var index_1 = __webpack_require__(5);
+	var ionic_native_1 = __webpack_require__(383);
+	var PhotoUpload = (function () {
+	    function PhotoUpload(nav) {
+	        this.nav = nav;
+	        this.photo = null;
+	    }
+	    Object.defineProperty(PhotoUpload, "parameters", {
+	        get: function () {
+	            return [[index_1.NavController]];
+	        },
+	        enumerable: true,
+	        configurable: true
+	    });
+	    PhotoUpload.prototype.onUploadPhoto = function () {
 	        var _this = this;
 	        var actionSheet = index_1.ActionSheet.create({
 	            title: 'Escolha uma opção',
@@ -65182,167 +65372,172 @@
 	                    handler: function () {
 	                        _this.onOpenPhotoLibrary();
 	                    }
+	                }, {
+	                    text: '',
+	                    role: 'cancel',
+	                    handler: function () { }
 	                }
 	            ]
 	        });
 	        this.nav.present(actionSheet);
 	    };
-	    NewShopPage.prototype.onOpenPhotoLibrary = function () {
-	        var option = {
+	    PhotoUpload.prototype.onOpenPhotoLibrary = function () {
+	        var options = {
 	            quality: 80,
 	            saveToPhotoAlbum: false,
 	            destinationType: ionic_native_1.Camera.DestinationType.DATA_URL,
-	            sourceType: ionic_native_1.Camera.PictureSourceType.CAMERA,
+	            sourceType: ionic_native_1.Camera.PictureSourceType.PHOTOLIBRARY,
 	            allowEdit: false,
 	            encodingType: ionic_native_1.Camera.EncodingType.JPEG,
 	            saveToPhotoAlbum: false
 	        };
 	        this.startCameraPlugin(options);
 	    };
-	    NewShopPage.prototype.onStartCamera = function () {
+	    PhotoUpload.prototype.onStartCamera = function () {
 	        var options = {
 	            quality: 80,
 	            destinationType: ionic_native_1.Camera.DestinationType.DATA_URL,
-	            sourceType: ionic_native_1.Camera.PictureSourceType.PHOTOLIBRARY,
+	            sourceType: ionic_native_1.Camera.PictureSourceType.CAMERA,
 	            allowEdit: false,
 	            encodingType: ionic_native_1.Camera.EncodingType.JPEG,
 	        };
 	        this.startCameraPlugin(options);
 	    };
-	    NewShopPage.prototype.startCameraPlugin = function (options) {
+	    PhotoUpload.prototype.startCameraPlugin = function (options) {
 	        ionic_native_1.Camera.getPicture(options).then(function (imageData) {
 	            var base64Image = "data:image/jpeg;base64," + imageData;
 	            console.log(base64Image);
 	        });
 	    };
-	    NewShopPage = __decorate([
-	        index_1.Page({
-	            templateUrl: 'build/pages/shop/new-shop.html',
-	            styles: ["\n  #map {\n    width: 100%;\n    height: 80%;\n  }\n  field-categories {\n    margin-top: 20px;\n  }\n  .submit {\n    margin-top: 20px;\n  }\n  "],
-	            directives: [field_categories_1.FieldCategories, button_search_1.ButtonSearch]
+	    PhotoUpload = __decorate([
+	        core_1.Component({
+	            selector: 'photo-upload',
+	            template: "\n  <button primary (click)=\"onUploadPhoto()\">Foto</button>\n  ",
+	            styles: ["\n  "],
+	            directives: [index_1.IONIC_DIRECTIVES],
 	        }), 
-	        __metadata('design:paramtypes', [Object, Object, Object, Object, Object, Object])
-	    ], NewShopPage);
-	    return NewShopPage;
+	        __metadata('design:paramtypes', [Object])
+	    ], PhotoUpload);
+	    return PhotoUpload;
 	})();
-	exports.NewShopPage = NewShopPage;
+	exports.PhotoUpload = PhotoUpload;
 
 
 /***/ },
-/* 380 */
+/* 383 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	function __export(m) {
 	    for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
 	}
-	var ng1_1 = __webpack_require__(381);
+	var ng1_1 = __webpack_require__(384);
 	ng1_1.initAngular1();
 	var DEVICE_READY_TIMEOUT = 2000;
-	var actionsheet_1 = __webpack_require__(382);
+	var actionsheet_1 = __webpack_require__(385);
 	exports.ActionSheet = actionsheet_1.ActionSheet;
-	var admob_1 = __webpack_require__(398);
+	var admob_1 = __webpack_require__(401);
 	exports.AdMob = admob_1.AdMob;
-	var appavailability_1 = __webpack_require__(399);
+	var appavailability_1 = __webpack_require__(402);
 	exports.AppAvailability = appavailability_1.AppAvailability;
-	var apprate_1 = __webpack_require__(400);
+	var apprate_1 = __webpack_require__(403);
 	exports.AppRate = apprate_1.AppRate;
-	var appversion_1 = __webpack_require__(401);
+	var appversion_1 = __webpack_require__(404);
 	exports.AppVersion = appversion_1.AppVersion;
-	var badge_1 = __webpack_require__(402);
+	var badge_1 = __webpack_require__(405);
 	exports.Badge = badge_1.Badge;
-	var barcodescanner_1 = __webpack_require__(403);
+	var barcodescanner_1 = __webpack_require__(406);
 	exports.BarcodeScanner = barcodescanner_1.BarcodeScanner;
-	var base64togallery_1 = __webpack_require__(404);
+	var base64togallery_1 = __webpack_require__(407);
 	exports.Base64ToGallery = base64togallery_1.Base64ToGallery;
-	var batterystatus_1 = __webpack_require__(405);
+	var batterystatus_1 = __webpack_require__(408);
 	exports.BatteryStatus = batterystatus_1.BatteryStatus;
-	var ble_1 = __webpack_require__(406);
+	var ble_1 = __webpack_require__(409);
 	exports.BLE = ble_1.BLE;
-	var bluetoothserial_1 = __webpack_require__(407);
+	var bluetoothserial_1 = __webpack_require__(410);
 	exports.BluetoothSerial = bluetoothserial_1.BluetoothSerial;
-	var calendar_1 = __webpack_require__(408);
+	var calendar_1 = __webpack_require__(411);
 	exports.Calendar = calendar_1.Calendar;
-	var camera_1 = __webpack_require__(409);
+	var camera_1 = __webpack_require__(412);
 	exports.Camera = camera_1.Camera;
-	var clipboard_1 = __webpack_require__(410);
+	var clipboard_1 = __webpack_require__(413);
 	exports.Clipboard = clipboard_1.Clipboard;
-	var contacts_1 = __webpack_require__(411);
+	var contacts_1 = __webpack_require__(414);
 	exports.Contacts = contacts_1.Contacts;
-	var datepicker_1 = __webpack_require__(412);
+	var datepicker_1 = __webpack_require__(415);
 	exports.DatePicker = datepicker_1.DatePicker;
-	var dbmeter_1 = __webpack_require__(413);
+	var dbmeter_1 = __webpack_require__(416);
 	exports.DBMeter = dbmeter_1.DBMeter;
-	var device_1 = __webpack_require__(414);
+	var device_1 = __webpack_require__(417);
 	exports.Device = device_1.Device;
-	var deviceaccounts_1 = __webpack_require__(415);
+	var deviceaccounts_1 = __webpack_require__(418);
 	exports.DeviceAccounts = deviceaccounts_1.DeviceAccounts;
-	var devicemotion_1 = __webpack_require__(416);
+	var devicemotion_1 = __webpack_require__(419);
 	exports.DeviceMotion = devicemotion_1.DeviceMotion;
-	var deviceorientation_1 = __webpack_require__(417);
+	var deviceorientation_1 = __webpack_require__(420);
 	exports.DeviceOrientation = deviceorientation_1.DeviceOrientation;
-	var diagnostic_1 = __webpack_require__(418);
+	var diagnostic_1 = __webpack_require__(421);
 	exports.Diagnostic = diagnostic_1.Diagnostic;
-	var dialogs_1 = __webpack_require__(419);
+	var dialogs_1 = __webpack_require__(422);
 	exports.Dialogs = dialogs_1.Dialogs;
-	var emailcomposer_1 = __webpack_require__(420);
+	var emailcomposer_1 = __webpack_require__(423);
 	exports.EmailComposer = emailcomposer_1.EmailComposer;
-	var facebook_1 = __webpack_require__(421);
+	var facebook_1 = __webpack_require__(424);
 	exports.Facebook = facebook_1.Facebook;
-	var file_1 = __webpack_require__(422);
+	var file_1 = __webpack_require__(425);
 	exports.File = file_1.File;
-	var flashlight_1 = __webpack_require__(423);
+	var flashlight_1 = __webpack_require__(426);
 	exports.Flashlight = flashlight_1.Flashlight;
-	var geolocation_1 = __webpack_require__(424);
+	var geolocation_1 = __webpack_require__(427);
 	exports.Geolocation = geolocation_1.Geolocation;
-	var globalization_1 = __webpack_require__(425);
+	var globalization_1 = __webpack_require__(428);
 	exports.Globalization = globalization_1.Globalization;
-	var googlemaps_1 = __webpack_require__(426);
+	var googlemaps_1 = __webpack_require__(429);
 	exports.GoogleMaps = googlemaps_1.GoogleMaps;
-	var googleanalytics_1 = __webpack_require__(427);
+	var googleanalytics_1 = __webpack_require__(430);
 	exports.GoogleAnalytics = googleanalytics_1.GoogleAnalytics;
-	var hotspot_1 = __webpack_require__(428);
+	var hotspot_1 = __webpack_require__(431);
 	exports.Hotspot = hotspot_1.Hotspot;
-	var imagepicker_1 = __webpack_require__(429);
+	var imagepicker_1 = __webpack_require__(432);
 	exports.ImagePicker = imagepicker_1.ImagePicker;
-	var inappbrowser_1 = __webpack_require__(430);
+	var inappbrowser_1 = __webpack_require__(433);
 	exports.InAppBrowser = inappbrowser_1.InAppBrowser;
-	var keyboard_1 = __webpack_require__(431);
+	var keyboard_1 = __webpack_require__(434);
 	exports.Keyboard = keyboard_1.Keyboard;
-	var launchnavigator_1 = __webpack_require__(432);
+	var launchnavigator_1 = __webpack_require__(435);
 	exports.LaunchNavigator = launchnavigator_1.LaunchNavigator;
-	var localnotifications_1 = __webpack_require__(433);
+	var localnotifications_1 = __webpack_require__(436);
 	exports.LocalNotifications = localnotifications_1.LocalNotifications;
-	var media_1 = __webpack_require__(434);
+	var media_1 = __webpack_require__(437);
 	exports.MediaPlugin = media_1.MediaPlugin;
-	var network_1 = __webpack_require__(435);
+	var network_1 = __webpack_require__(438);
 	exports.Network = network_1.Network;
 	exports.Connection = network_1.Connection;
-	var push_1 = __webpack_require__(436);
+	var push_1 = __webpack_require__(439);
 	exports.Push = push_1.Push;
-	var screenshot_1 = __webpack_require__(437);
+	var screenshot_1 = __webpack_require__(440);
 	exports.Screenshot = screenshot_1.Screenshot;
-	var sms_1 = __webpack_require__(438);
+	var sms_1 = __webpack_require__(441);
 	exports.SMS = sms_1.SMS;
-	var socialsharing_1 = __webpack_require__(439);
+	var socialsharing_1 = __webpack_require__(442);
 	exports.SocialSharing = socialsharing_1.SocialSharing;
-	var spinnerdialog_1 = __webpack_require__(440);
+	var spinnerdialog_1 = __webpack_require__(443);
 	exports.SpinnerDialog = spinnerdialog_1.SpinnerDialog;
-	var splashscreen_1 = __webpack_require__(441);
+	var splashscreen_1 = __webpack_require__(444);
 	exports.Splashscreen = splashscreen_1.Splashscreen;
-	var sqlite_1 = __webpack_require__(442);
+	var sqlite_1 = __webpack_require__(445);
 	exports.SQLite = sqlite_1.SQLite;
-	var statusbar_1 = __webpack_require__(443);
+	var statusbar_1 = __webpack_require__(446);
 	exports.StatusBar = statusbar_1.StatusBar;
-	var toast_1 = __webpack_require__(444);
+	var toast_1 = __webpack_require__(447);
 	exports.Toast = toast_1.Toast;
-	var touchid_1 = __webpack_require__(445);
+	var touchid_1 = __webpack_require__(448);
 	exports.TouchID = touchid_1.TouchID;
-	var vibration_1 = __webpack_require__(446);
+	var vibration_1 = __webpack_require__(449);
 	exports.Vibration = vibration_1.Vibration;
-	var webintent_1 = __webpack_require__(447);
+	var webintent_1 = __webpack_require__(450);
 	exports.WebIntent = webintent_1.WebIntent;
-	__export(__webpack_require__(383));
+	__export(__webpack_require__(386));
 	// Window export to use outside of a module loading system
 	window['IonicNative'] = {
 	    ActionSheet: actionsheet_1.ActionSheet,
@@ -65416,7 +65611,7 @@
 	//# sourceMappingURL=index.js.map
 
 /***/ },
-/* 381 */
+/* 384 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -65446,7 +65641,7 @@
 	//# sourceMappingURL=ng1.js.map
 
 /***/ },
-/* 382 */
+/* 385 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -65456,7 +65651,7 @@
 	    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
 	    return c > 3 && r && Object.defineProperty(target, key, r), r;
 	};
-	var plugin_1 = __webpack_require__(383);
+	var plugin_1 = __webpack_require__(386);
 	/**
 	 * @name Action Sheet
 	 * @description
@@ -65526,12 +65721,12 @@
 	//# sourceMappingURL=actionsheet.js.map
 
 /***/ },
-/* 383 */
+/* 386 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
-	var util_1 = __webpack_require__(384);
-	var Observable_1 = __webpack_require__(385);
+	var util_1 = __webpack_require__(387);
+	var Observable_1 = __webpack_require__(388);
 	/**
 	 * @private
 	 * @param pluginRef
@@ -65875,7 +66070,7 @@
 	//# sourceMappingURL=plugin.js.map
 
 /***/ },
-/* 384 */
+/* 387 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -65893,15 +66088,15 @@
 	//# sourceMappingURL=util.js.map
 
 /***/ },
-/* 385 */
+/* 388 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
-	var root_1 = __webpack_require__(386);
-	var SymbolShim_1 = __webpack_require__(387);
-	var toSubscriber_1 = __webpack_require__(388);
-	var tryCatch_1 = __webpack_require__(394);
-	var errorObject_1 = __webpack_require__(395);
+	var root_1 = __webpack_require__(389);
+	var SymbolShim_1 = __webpack_require__(390);
+	var toSubscriber_1 = __webpack_require__(391);
+	var tryCatch_1 = __webpack_require__(397);
+	var errorObject_1 = __webpack_require__(398);
 	/**
 	 * A representation of any set of values over any amount of time. This the most basic building block
 	 * of RxJS.
@@ -66022,7 +66217,7 @@
 	//# sourceMappingURL=Observable.js.map
 
 /***/ },
-/* 386 */
+/* 389 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(module, global) {"use strict";
@@ -66046,11 +66241,11 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(65)(module), (function() { return this; }())))
 
 /***/ },
-/* 387 */
+/* 390 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
-	var root_1 = __webpack_require__(386);
+	var root_1 = __webpack_require__(389);
 	function polyfillSymbol(root) {
 	    var Symbol = ensureSymbol(root);
 	    ensureIterator(Symbol, root);
@@ -66120,12 +66315,12 @@
 	//# sourceMappingURL=SymbolShim.js.map
 
 /***/ },
-/* 388 */
+/* 391 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
-	var Subscriber_1 = __webpack_require__(389);
-	var rxSubscriber_1 = __webpack_require__(396);
+	var Subscriber_1 = __webpack_require__(392);
+	var rxSubscriber_1 = __webpack_require__(399);
 	function toSubscriber(nextOrObserver, error, complete) {
 	    if (nextOrObserver && typeof nextOrObserver === 'object') {
 	        if (nextOrObserver instanceof Subscriber_1.Subscriber) {
@@ -66141,7 +66336,7 @@
 	//# sourceMappingURL=toSubscriber.js.map
 
 /***/ },
-/* 389 */
+/* 392 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -66150,10 +66345,10 @@
 	    function __() { this.constructor = d; }
 	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 	};
-	var isFunction_1 = __webpack_require__(390);
-	var Subscription_1 = __webpack_require__(391);
-	var rxSubscriber_1 = __webpack_require__(396);
-	var Observer_1 = __webpack_require__(397);
+	var isFunction_1 = __webpack_require__(393);
+	var Subscription_1 = __webpack_require__(394);
+	var rxSubscriber_1 = __webpack_require__(399);
+	var Observer_1 = __webpack_require__(400);
 	var Subscriber = (function (_super) {
 	    __extends(Subscriber, _super);
 	    function Subscriber(destinationOrNext, error, complete) {
@@ -66338,7 +66533,7 @@
 	//# sourceMappingURL=Subscriber.js.map
 
 /***/ },
-/* 390 */
+/* 393 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -66349,7 +66544,7 @@
 	//# sourceMappingURL=isFunction.js.map
 
 /***/ },
-/* 391 */
+/* 394 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -66358,11 +66553,11 @@
 	    function __() { this.constructor = d; }
 	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 	};
-	var isArray_1 = __webpack_require__(392);
-	var isObject_1 = __webpack_require__(393);
-	var isFunction_1 = __webpack_require__(390);
-	var tryCatch_1 = __webpack_require__(394);
-	var errorObject_1 = __webpack_require__(395);
+	var isArray_1 = __webpack_require__(395);
+	var isObject_1 = __webpack_require__(396);
+	var isFunction_1 = __webpack_require__(393);
+	var tryCatch_1 = __webpack_require__(397);
+	var errorObject_1 = __webpack_require__(398);
 	var Subscription = (function () {
 	    function Subscription(_unsubscribe) {
 	        this.isUnsubscribed = false;
@@ -66474,7 +66669,7 @@
 	//# sourceMappingURL=Subscription.js.map
 
 /***/ },
-/* 392 */
+/* 395 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -66482,7 +66677,7 @@
 	//# sourceMappingURL=isArray.js.map
 
 /***/ },
-/* 393 */
+/* 396 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -66493,11 +66688,11 @@
 	//# sourceMappingURL=isObject.js.map
 
 /***/ },
-/* 394 */
+/* 397 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
-	var errorObject_1 = __webpack_require__(395);
+	var errorObject_1 = __webpack_require__(398);
 	var tryCatchTarget;
 	function tryCatcher() {
 	    try {
@@ -66517,7 +66712,7 @@
 	//# sourceMappingURL=tryCatch.js.map
 
 /***/ },
-/* 395 */
+/* 398 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -66526,11 +66721,11 @@
 	//# sourceMappingURL=errorObject.js.map
 
 /***/ },
-/* 396 */
+/* 399 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
-	var SymbolShim_1 = __webpack_require__(387);
+	var SymbolShim_1 = __webpack_require__(390);
 	/**
 	 * rxSubscriber symbol is a symbol for retreiving an "Rx safe" Observer from an object
 	 * "Rx safety" can be defined as an object that has all of the traits of an Rx Subscriber,
@@ -66541,7 +66736,7 @@
 	//# sourceMappingURL=rxSubscriber.js.map
 
 /***/ },
-/* 397 */
+/* 400 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -66554,7 +66749,7 @@
 	//# sourceMappingURL=Observer.js.map
 
 /***/ },
-/* 398 */
+/* 401 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -66564,7 +66759,7 @@
 	    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
 	    return c > 3 && r && Object.defineProperty(target, key, r), r;
 	};
-	var plugin_1 = __webpack_require__(383);
+	var plugin_1 = __webpack_require__(386);
 	/**
 	 * @name AdMob
 	 * @description
@@ -66762,7 +66957,7 @@
 	//# sourceMappingURL=admob.js.map
 
 /***/ },
-/* 399 */
+/* 402 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -66772,7 +66967,7 @@
 	    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
 	    return c > 3 && r && Object.defineProperty(target, key, r), r;
 	};
-	var plugin_1 = __webpack_require__(383);
+	var plugin_1 = __webpack_require__(386);
 	/**
 	 * @name App Availability
 	 * @description
@@ -66826,7 +67021,7 @@
 	//# sourceMappingURL=appavailability.js.map
 
 /***/ },
-/* 400 */
+/* 403 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -66836,7 +67031,7 @@
 	    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
 	    return c > 3 && r && Object.defineProperty(target, key, r), r;
 	};
-	var plugin_1 = __webpack_require__(383);
+	var plugin_1 = __webpack_require__(386);
 	/**
 	 * @name App Rate
 	 * @description
@@ -66911,7 +67106,7 @@
 	//# sourceMappingURL=apprate.js.map
 
 /***/ },
-/* 401 */
+/* 404 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -66921,7 +67116,7 @@
 	    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
 	    return c > 3 && r && Object.defineProperty(target, key, r), r;
 	};
-	var plugin_1 = __webpack_require__(383);
+	var plugin_1 = __webpack_require__(386);
 	/**
 	 * @name App Version
 	 * @description
@@ -66989,7 +67184,7 @@
 	//# sourceMappingURL=appversion.js.map
 
 /***/ },
-/* 402 */
+/* 405 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -66999,7 +67194,7 @@
 	    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
 	    return c > 3 && r && Object.defineProperty(target, key, r), r;
 	};
-	var plugin_1 = __webpack_require__(383);
+	var plugin_1 = __webpack_require__(386);
 	/**
 	 * @name Badge
 	 * @description
@@ -67091,7 +67286,7 @@
 	//# sourceMappingURL=badge.js.map
 
 /***/ },
-/* 403 */
+/* 406 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -67101,7 +67296,7 @@
 	    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
 	    return c > 3 && r && Object.defineProperty(target, key, r), r;
 	};
-	var plugin_1 = __webpack_require__(383);
+	var plugin_1 = __webpack_require__(386);
 	/**
 	 * @name Barcode Scanner
 	 * @description
@@ -67146,7 +67341,7 @@
 	//# sourceMappingURL=barcodescanner.js.map
 
 /***/ },
-/* 404 */
+/* 407 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -67156,7 +67351,7 @@
 	    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
 	    return c > 3 && r && Object.defineProperty(target, key, r), r;
 	};
-	var plugin_1 = __webpack_require__(383);
+	var plugin_1 = __webpack_require__(386);
 	/**
 	 * @name Base64 To Gallery
 	 * @description This plugin allows you to save base64 data as a png image into the device
@@ -67199,7 +67394,7 @@
 	//# sourceMappingURL=base64togallery.js.map
 
 /***/ },
-/* 405 */
+/* 408 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -67209,7 +67404,7 @@
 	    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
 	    return c > 3 && r && Object.defineProperty(target, key, r), r;
 	};
-	var plugin_1 = __webpack_require__(383);
+	var plugin_1 = __webpack_require__(386);
 	/**
 	 * @name Battery Status
 	 * @description
@@ -67282,7 +67477,7 @@
 	//# sourceMappingURL=batterystatus.js.map
 
 /***/ },
-/* 406 */
+/* 409 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -67292,7 +67487,7 @@
 	    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
 	    return c > 3 && r && Object.defineProperty(target, key, r), r;
 	};
-	var plugin_1 = __webpack_require__(383);
+	var plugin_1 = __webpack_require__(386);
 	/**
 	 * @name BLE
 	 * @description
@@ -67710,7 +67905,7 @@
 	//# sourceMappingURL=ble.js.map
 
 /***/ },
-/* 407 */
+/* 410 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -67720,7 +67915,7 @@
 	    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
 	    return c > 3 && r && Object.defineProperty(target, key, r), r;
 	};
-	var plugin_1 = __webpack_require__(383);
+	var plugin_1 = __webpack_require__(386);
 	/**
 	 * @name Bluetooth Serial
 	 * @description This plugin enables serial communication over Bluetooth. It was written for communicating between Android or iOS and an Arduino.
@@ -67971,7 +68166,7 @@
 	//# sourceMappingURL=bluetoothserial.js.map
 
 /***/ },
-/* 408 */
+/* 411 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -67981,7 +68176,7 @@
 	    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
 	    return c > 3 && r && Object.defineProperty(target, key, r), r;
 	};
-	var plugin_1 = __webpack_require__(383);
+	var plugin_1 = __webpack_require__(386);
 	/**
 	 * @name Calendar
 	 * @description
@@ -68282,7 +68477,7 @@
 	//# sourceMappingURL=calendar.js.map
 
 /***/ },
-/* 409 */
+/* 412 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -68292,7 +68487,7 @@
 	    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
 	    return c > 3 && r && Object.defineProperty(target, key, r), r;
 	};
-	var plugin_1 = __webpack_require__(383);
+	var plugin_1 = __webpack_require__(386);
 	/**
 	 * @name Camera
 	 * @description
@@ -68414,7 +68609,7 @@
 	//# sourceMappingURL=camera.js.map
 
 /***/ },
-/* 410 */
+/* 413 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -68424,7 +68619,7 @@
 	    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
 	    return c > 3 && r && Object.defineProperty(target, key, r), r;
 	};
-	var plugin_1 = __webpack_require__(383);
+	var plugin_1 = __webpack_require__(386);
 	/**
 	 * @name Clipboard
 	 * @description
@@ -68486,7 +68681,7 @@
 	//# sourceMappingURL=clipboard.js.map
 
 /***/ },
-/* 411 */
+/* 414 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -68496,7 +68691,7 @@
 	    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
 	    return c > 3 && r && Object.defineProperty(target, key, r), r;
 	};
-	var plugin_1 = __webpack_require__(383);
+	var plugin_1 = __webpack_require__(386);
 	/**
 	 * @name Contacts
 	 * @description
@@ -68582,7 +68777,7 @@
 	//# sourceMappingURL=contacts.js.map
 
 /***/ },
-/* 412 */
+/* 415 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -68592,7 +68787,7 @@
 	    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
 	    return c > 3 && r && Object.defineProperty(target, key, r), r;
 	};
-	var plugin_1 = __webpack_require__(383);
+	var plugin_1 = __webpack_require__(386);
 	/**
 	 * @name Date Picker
 	 * @description
@@ -68643,7 +68838,7 @@
 	//# sourceMappingURL=datepicker.js.map
 
 /***/ },
-/* 413 */
+/* 416 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -68653,7 +68848,7 @@
 	    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
 	    return c > 3 && r && Object.defineProperty(target, key, r), r;
 	};
-	var plugin_1 = __webpack_require__(383);
+	var plugin_1 = __webpack_require__(386);
 	/**
 	 * @name DB Meter
 	 * @description This plugin defines a global DBMeter object, which permits to get the decibel values from the microphone.
@@ -68735,7 +68930,7 @@
 	//# sourceMappingURL=dbmeter.js.map
 
 /***/ },
-/* 414 */
+/* 417 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -68745,7 +68940,7 @@
 	    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
 	    return c > 3 && r && Object.defineProperty(target, key, r), r;
 	};
-	var plugin_1 = __webpack_require__(383);
+	var plugin_1 = __webpack_require__(386);
 	/**
 	 * @name Device
 	 * @description
@@ -68789,7 +68984,7 @@
 	//# sourceMappingURL=device.js.map
 
 /***/ },
-/* 415 */
+/* 418 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -68799,7 +68994,7 @@
 	    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
 	    return c > 3 && r && Object.defineProperty(target, key, r), r;
 	};
-	var plugin_1 = __webpack_require__(383);
+	var plugin_1 = __webpack_require__(386);
 	var DeviceAccounts = (function () {
 	    function DeviceAccounts() {
 	    }
@@ -68845,7 +69040,7 @@
 	//# sourceMappingURL=deviceaccounts.js.map
 
 /***/ },
-/* 416 */
+/* 419 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -68855,7 +69050,7 @@
 	    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
 	    return c > 3 && r && Object.defineProperty(target, key, r), r;
 	};
-	var plugin_1 = __webpack_require__(383);
+	var plugin_1 = __webpack_require__(386);
 	/**
 	 * @name Device Motion
 	 * @description
@@ -68935,7 +69130,7 @@
 	//# sourceMappingURL=devicemotion.js.map
 
 /***/ },
-/* 417 */
+/* 420 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -68945,7 +69140,7 @@
 	    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
 	    return c > 3 && r && Object.defineProperty(target, key, r), r;
 	};
-	var plugin_1 = __webpack_require__(383);
+	var plugin_1 = __webpack_require__(386);
 	/**
 	 * @name Device Orientation
 	 * @description
@@ -69011,7 +69206,7 @@
 	//# sourceMappingURL=deviceorientation.js.map
 
 /***/ },
-/* 418 */
+/* 421 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -69021,7 +69216,7 @@
 	    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
 	    return c > 3 && r && Object.defineProperty(target, key, r), r;
 	};
-	var plugin_1 = __webpack_require__(383);
+	var plugin_1 = __webpack_require__(386);
 	var Diagnostic = (function () {
 	    function Diagnostic() {
 	    }
@@ -69226,7 +69421,7 @@
 	//# sourceMappingURL=diagnostic.js.map
 
 /***/ },
-/* 419 */
+/* 422 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -69236,7 +69431,7 @@
 	    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
 	    return c > 3 && r && Object.defineProperty(target, key, r), r;
 	};
-	var plugin_1 = __webpack_require__(383);
+	var plugin_1 = __webpack_require__(386);
 	/**
 	 * @name Dialogs
 	 * @description
@@ -69335,7 +69530,7 @@
 	//# sourceMappingURL=dialogs.js.map
 
 /***/ },
-/* 420 */
+/* 423 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -69345,7 +69540,7 @@
 	    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
 	    return c > 3 && r && Object.defineProperty(target, key, r), r;
 	};
-	var plugin_1 = __webpack_require__(383);
+	var plugin_1 = __webpack_require__(386);
 	/**
 	 * @name Email Composer
 	 * @description
@@ -69436,7 +69631,7 @@
 	//# sourceMappingURL=emailcomposer.js.map
 
 /***/ },
-/* 421 */
+/* 424 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -69446,7 +69641,7 @@
 	    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
 	    return c > 3 && r && Object.defineProperty(target, key, r), r;
 	};
-	var plugin_1 = __webpack_require__(383);
+	var plugin_1 = __webpack_require__(386);
 	/**
 	 * @name Facebook
 	 * @description
@@ -69698,7 +69893,7 @@
 	//# sourceMappingURL=facebook.js.map
 
 /***/ },
-/* 422 */
+/* 425 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -69708,7 +69903,7 @@
 	    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
 	    return c > 3 && r && Object.defineProperty(target, key, r), r;
 	};
-	var plugin_1 = __webpack_require__(383);
+	var plugin_1 = __webpack_require__(386);
 	/**
 	 * @name File
 	 * @description
@@ -70225,7 +70420,7 @@
 	//# sourceMappingURL=file.js.map
 
 /***/ },
-/* 423 */
+/* 426 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -70235,7 +70430,7 @@
 	    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
 	    return c > 3 && r && Object.defineProperty(target, key, r), r;
 	};
-	var plugin_1 = __webpack_require__(383);
+	var plugin_1 = __webpack_require__(386);
 	/**
 	 * @name Flashlight
 	 * @description This plugin allows you to switch the flashlight / torch of the device on and off.
@@ -70308,7 +70503,7 @@
 	//# sourceMappingURL=flashlight.js.map
 
 /***/ },
-/* 424 */
+/* 427 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -70318,7 +70513,7 @@
 	    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
 	    return c > 3 && r && Object.defineProperty(target, key, r), r;
 	};
-	var plugin_1 = __webpack_require__(383);
+	var plugin_1 = __webpack_require__(386);
 	/**
 	 * @name Geolocation
 	 * @description
@@ -70397,7 +70592,7 @@
 	//# sourceMappingURL=geolocation.js.map
 
 /***/ },
-/* 425 */
+/* 428 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -70407,7 +70602,7 @@
 	    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
 	    return c > 3 && r && Object.defineProperty(target, key, r), r;
 	};
-	var plugin_1 = __webpack_require__(383);
+	var plugin_1 = __webpack_require__(386);
 	/**
 	 * @name Globalization
 	 * @description
@@ -70552,7 +70747,7 @@
 	//# sourceMappingURL=globalization.js.map
 
 /***/ },
-/* 426 */
+/* 429 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -70562,8 +70757,8 @@
 	    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
 	    return c > 3 && r && Object.defineProperty(target, key, r), r;
 	};
-	var plugin_1 = __webpack_require__(383);
-	var plugin_2 = __webpack_require__(383);
+	var plugin_1 = __webpack_require__(386);
+	var plugin_2 = __webpack_require__(386);
 	/**
 	 * @name Google Maps
 	 */
@@ -70598,7 +70793,7 @@
 	//# sourceMappingURL=googlemaps.js.map
 
 /***/ },
-/* 427 */
+/* 430 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -70608,7 +70803,7 @@
 	    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
 	    return c > 3 && r && Object.defineProperty(target, key, r), r;
 	};
-	var plugin_1 = __webpack_require__(383);
+	var plugin_1 = __webpack_require__(386);
 	/**
 	 * @name Google Analytics
 	 * @description
@@ -70749,7 +70944,7 @@
 	//# sourceMappingURL=googleanalytics.js.map
 
 /***/ },
-/* 428 */
+/* 431 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -70759,7 +70954,7 @@
 	    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
 	    return c > 3 && r && Object.defineProperty(target, key, r), r;
 	};
-	var plugin_1 = __webpack_require__(383);
+	var plugin_1 = __webpack_require__(386);
 	/**
 	 * @name Hotspot
 	 * @description
@@ -71011,7 +71206,7 @@
 	//# sourceMappingURL=hotspot.js.map
 
 /***/ },
-/* 429 */
+/* 432 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -71021,7 +71216,7 @@
 	    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
 	    return c > 3 && r && Object.defineProperty(target, key, r), r;
 	};
-	var plugin_1 = __webpack_require__(383);
+	var plugin_1 = __webpack_require__(386);
 	/**
 	 * @name Image Picker
 	 * @description
@@ -71072,7 +71267,7 @@
 	//# sourceMappingURL=imagepicker.js.map
 
 /***/ },
-/* 430 */
+/* 433 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -71082,7 +71277,7 @@
 	    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
 	    return c > 3 && r && Object.defineProperty(target, key, r), r;
 	};
-	var plugin_1 = __webpack_require__(383);
+	var plugin_1 = __webpack_require__(386);
 	var InAppBrowser = (function () {
 	    function InAppBrowser() {
 	    }
@@ -71112,7 +71307,7 @@
 	//# sourceMappingURL=inappbrowser.js.map
 
 /***/ },
-/* 431 */
+/* 434 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -71122,7 +71317,7 @@
 	    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
 	    return c > 3 && r && Object.defineProperty(target, key, r), r;
 	};
-	var plugin_1 = __webpack_require__(383);
+	var plugin_1 = __webpack_require__(386);
 	/**
 	 * @name Keyboard
 	 * @description
@@ -71210,7 +71405,7 @@
 	//# sourceMappingURL=keyboard.js.map
 
 /***/ },
-/* 432 */
+/* 435 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -71220,7 +71415,7 @@
 	    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
 	    return c > 3 && r && Object.defineProperty(target, key, r), r;
 	};
-	var plugin_1 = __webpack_require__(383);
+	var plugin_1 = __webpack_require__(386);
 	/**
 	 * @name Launch Navigator
 	 * @description
@@ -71272,7 +71467,7 @@
 	//# sourceMappingURL=launchnavigator.js.map
 
 /***/ },
-/* 433 */
+/* 436 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -71282,7 +71477,7 @@
 	    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
 	    return c > 3 && r && Object.defineProperty(target, key, r), r;
 	};
-	var plugin_1 = __webpack_require__(383);
+	var plugin_1 = __webpack_require__(386);
 	/**
 	 * @name Local Notifications
 	 * @description
@@ -71500,7 +71695,7 @@
 	//# sourceMappingURL=localnotifications.js.map
 
 /***/ },
-/* 434 */
+/* 437 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -71510,7 +71705,7 @@
 	    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
 	    return c > 3 && r && Object.defineProperty(target, key, r), r;
 	};
-	var plugin_1 = __webpack_require__(383);
+	var plugin_1 = __webpack_require__(386);
 	/**
 	 * @name MediaPlugin
 	 * @description
@@ -71699,7 +71894,7 @@
 	//# sourceMappingURL=media.js.map
 
 /***/ },
-/* 435 */
+/* 438 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -71709,7 +71904,7 @@
 	    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
 	    return c > 3 && r && Object.defineProperty(target, key, r), r;
 	};
-	var plugin_1 = __webpack_require__(383);
+	var plugin_1 = __webpack_require__(386);
 	/**
 	 * @name Network
 	 * @description
@@ -71846,7 +72041,7 @@
 	//# sourceMappingURL=network.js.map
 
 /***/ },
-/* 436 */
+/* 439 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -71856,7 +72051,7 @@
 	    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
 	    return c > 3 && r && Object.defineProperty(target, key, r), r;
 	};
-	var plugin_1 = __webpack_require__(383);
+	var plugin_1 = __webpack_require__(386);
 	/**
 	 * @name Push
 	 * @description
@@ -71924,7 +72119,7 @@
 	//# sourceMappingURL=push.js.map
 
 /***/ },
-/* 437 */
+/* 440 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -71934,7 +72129,7 @@
 	    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
 	    return c > 3 && r && Object.defineProperty(target, key, r), r;
 	};
-	var plugin_1 = __webpack_require__(383);
+	var plugin_1 = __webpack_require__(386);
 	var Screenshot = (function () {
 	    function Screenshot() {
 	    }
@@ -71980,7 +72175,7 @@
 	//# sourceMappingURL=screenshot.js.map
 
 /***/ },
-/* 438 */
+/* 441 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -71990,7 +72185,7 @@
 	    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
 	    return c > 3 && r && Object.defineProperty(target, key, r), r;
 	};
-	var plugin_1 = __webpack_require__(383);
+	var plugin_1 = __webpack_require__(386);
 	/**
 	 * @name SMS
 	 * @description
@@ -72036,7 +72231,7 @@
 	//# sourceMappingURL=sms.js.map
 
 /***/ },
-/* 439 */
+/* 442 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -72046,7 +72241,7 @@
 	    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
 	    return c > 3 && r && Object.defineProperty(target, key, r), r;
 	};
-	var plugin_1 = __webpack_require__(383);
+	var plugin_1 = __webpack_require__(386);
 	/**
 	 * @name Social Sharing
 	 * @description
@@ -72199,7 +72394,7 @@
 	//# sourceMappingURL=socialsharing.js.map
 
 /***/ },
-/* 440 */
+/* 443 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -72209,7 +72404,7 @@
 	    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
 	    return c > 3 && r && Object.defineProperty(target, key, r), r;
 	};
-	var plugin_1 = __webpack_require__(383);
+	var plugin_1 = __webpack_require__(386);
 	/**
 	 * @name Spinner Dialog
 	 * @description
@@ -72263,7 +72458,7 @@
 	//# sourceMappingURL=spinnerdialog.js.map
 
 /***/ },
-/* 441 */
+/* 444 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -72273,7 +72468,7 @@
 	    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
 	    return c > 3 && r && Object.defineProperty(target, key, r), r;
 	};
-	var plugin_1 = __webpack_require__(383);
+	var plugin_1 = __webpack_require__(386);
 	/**
 	 * @name Splashscreen
 	 * @description This plugin displays and hides a splash screen during application launch. The methods below allows showing and hiding the splashscreen after the app has loaded.
@@ -72322,7 +72517,7 @@
 	//# sourceMappingURL=splashscreen.js.map
 
 /***/ },
-/* 442 */
+/* 445 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -72332,7 +72527,7 @@
 	    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
 	    return c > 3 && r && Object.defineProperty(target, key, r), r;
 	};
-	var plugin_1 = __webpack_require__(383);
+	var plugin_1 = __webpack_require__(386);
 	/**
 	 * @name SQLite
 	 */
@@ -72455,7 +72650,7 @@
 	//# sourceMappingURL=sqlite.js.map
 
 /***/ },
-/* 443 */
+/* 446 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -72465,7 +72660,7 @@
 	    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
 	    return c > 3 && r && Object.defineProperty(target, key, r), r;
 	};
-	var plugin_1 = __webpack_require__(383);
+	var plugin_1 = __webpack_require__(386);
 	/**
 	 * @name Status Bar
 	 * @description
@@ -72614,7 +72809,7 @@
 	//# sourceMappingURL=statusbar.js.map
 
 /***/ },
-/* 444 */
+/* 447 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -72624,7 +72819,7 @@
 	    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
 	    return c > 3 && r && Object.defineProperty(target, key, r), r;
 	};
-	var plugin_1 = __webpack_require__(383);
+	var plugin_1 = __webpack_require__(386);
 	/**
 	 * @name Toast
 	 * @description
@@ -72768,7 +72963,7 @@
 	//# sourceMappingURL=toast.js.map
 
 /***/ },
-/* 445 */
+/* 448 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -72778,7 +72973,7 @@
 	    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
 	    return c > 3 && r && Object.defineProperty(target, key, r), r;
 	};
-	var plugin_1 = __webpack_require__(383);
+	var plugin_1 = __webpack_require__(386);
 	/**
 	 * @name TouchID
 	 * @description
@@ -72862,7 +73057,7 @@
 	//# sourceMappingURL=touchid.js.map
 
 /***/ },
-/* 446 */
+/* 449 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -72872,7 +73067,7 @@
 	    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
 	    return c > 3 && r && Object.defineProperty(target, key, r), r;
 	};
-	var plugin_1 = __webpack_require__(383);
+	var plugin_1 = __webpack_require__(386);
 	/**
 	 * @name Vibration
 	 * @description Vibrates the device
@@ -72922,7 +73117,7 @@
 	//# sourceMappingURL=vibration.js.map
 
 /***/ },
-/* 447 */
+/* 450 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -72932,7 +73127,7 @@
 	    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
 	    return c > 3 && r && Object.defineProperty(target, key, r), r;
 	};
-	var plugin_1 = __webpack_require__(383);
+	var plugin_1 = __webpack_require__(386);
 	var WebIntent = (function () {
 	    function WebIntent() {
 	    }
@@ -72993,155 +73188,6 @@
 	}());
 	exports.WebIntent = WebIntent;
 	//# sourceMappingURL=webintent.js.map
-
-/***/ },
-/* 448 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-	    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-	    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-	    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-	    return c > 3 && r && Object.defineProperty(target, key, r), r;
-	};
-	var __metadata = (this && this.__metadata) || function (k, v) {
-	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-	};
-	var core_1 = __webpack_require__(7);
-	var index_1 = __webpack_require__(5);
-	var category_data_1 = __webpack_require__(449);
-	var FieldCategories = (function () {
-	    function FieldCategories(categoryData) {
-	        this.selectedCategoriesChange = new core_1.EventEmitter();
-	        this.selectedCategories = [];
-	        this.categoryData = categoryData;
-	        this.categories = [];
-	        this.getCategories();
-	        this.genreOpen = null;
-	        this.groupOpen = null;
-	    }
-	    Object.defineProperty(FieldCategories, "parameters", {
-	        get: function () {
-	            return [[category_data_1.CategoryData]];
-	        },
-	        enumerable: true,
-	        configurable: true
-	    });
-	    FieldCategories.prototype.getCategories = function () {
-	        var _this = this;
-	        this.categoryData.loadCategories().then(function (categories) {
-	            _this.categories = categories;
-	        });
-	    };
-	    FieldCategories.prototype.onClickGenre = function (genre) {
-	        this.genreOpen = this.genreOpen == genre.id ? null : genre.id;
-	    };
-	    FieldCategories.prototype.onClickGroup = function (group) {
-	        this.groupOpen = this.groupOpen == group.id ? null : group.id;
-	    };
-	    FieldCategories.prototype.onChangeCategory = function (event, category) {
-	        if (event.checked) {
-	            this.add(category);
-	        }
-	        else {
-	            this.remove(category);
-	        }
-	        this.selectedCategoriesChange.emit(this.selectedCategories);
-	    };
-	    FieldCategories.prototype.add = function (category) {
-	        if (!this.existsCategoryInSelecteds(category)) {
-	            this.selectedCategories.push(category.id);
-	        }
-	    };
-	    FieldCategories.prototype.remove = function (category) {
-	        if (this.existsCategoryInSelecteds(category)) {
-	            var index = this.selectedCategories.indexOf(category.id);
-	            this.selectedCategories.splice(index, 1);
-	        }
-	    };
-	    FieldCategories.prototype.existsCategoryInSelecteds = function (category) {
-	        return (this.selectedCategories.find(function (i) { return i == category.id; }));
-	    };
-	    FieldCategories.prototype.genreIcon = function (genre) {
-	        return (genre.id == this.genreOpen) ? 'arrow-dropup' : 'arrow-dropdown';
-	    };
-	    FieldCategories.prototype.groupIcon = function (group) {
-	        return (group.id == this.groupOpen) ? 'arrow-dropup' : 'arrow-dropdown';
-	    };
-	    FieldCategories.prototype.getSelecteds = function () {
-	        return this.selectedCategories;
-	    };
-	    __decorate([
-	        core_1.Output(), 
-	        __metadata('design:type', Object)
-	    ], FieldCategories.prototype, "selectedCategoriesChange", void 0);
-	    FieldCategories = __decorate([
-	        core_1.Component({
-	            selector: 'field-categories',
-	            template: "\n  <div class=\"categories\">\n    <div>Categorias de produtos</div>\n    <div>\n      <div *ngFor=\"#genre of categories\" class=\"genres\">\n\n        <div class=\"title\" (click)=\"onClickGenre(genre)\" [ngClass]=\"{active: genre.id == genreOpen}\">\n          <ion-icon [name]=\"genreIcon(genre)\"></ion-icon> {{genre.name}}\n        </div>\n        <div [ngClass]=\"{hide: genreOpen != genre.id}\" class=\"groups\">\n          <div *ngFor=\"#group of genre.children\">\n\n            <div class=\"title\" (click)=\"onClickGroup(group)\" [ngClass]=\"{active: group.id == groupOpen}\">\n              <ion-icon [name]=\"groupIcon(group)\"></ion-icon> {{group.name}}\n            </div>\n            <ion-list [ngClass]=\"{hide: groupOpen != group.id}\">\n              <ion-item *ngFor=\"#category of group.children\">\n\n                <ion-label>{{category.name}}</ion-label>\n                <ion-checkbox [checked]=\"existsCategoryInSelecteds(category)\" (change)=\"onChangeCategory($event,category)\"></ion-checkbox>\n\n              </ion-item>\n            </ion-list>\n            <!-- #categories -->\n\n          </div>\n        </div>\n        <!-- #groups -->\n\n      </div>\n    </div>\n    <!-- #genres -->\n\n  </div>\n  ",
-	            styles: ["\n  .title {\n    padding: 10px 0;\n    border-bottom: 1px solid #CCC;\n  }\n  .groups {\n    padding-left: 20px;\n  }\n  .categories {\n    margin-top: 40px;\n  }\n  "],
-	            directives: [index_1.IONIC_DIRECTIVES],
-	        }), 
-	        __metadata('design:paramtypes', [Object])
-	    ], FieldCategories);
-	    return FieldCategories;
-	})();
-	exports.FieldCategories = FieldCategories;
-
-
-/***/ },
-/* 449 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-	    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-	    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-	    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-	    return c > 3 && r && Object.defineProperty(target, key, r), r;
-	};
-	var __metadata = (this && this.__metadata) || function (k, v) {
-	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-	};
-	var core_1 = __webpack_require__(7);
-	var http_1 = __webpack_require__(145);
-	var options_1 = __webpack_require__(367);
-	var CategoryData = (function () {
-	    function CategoryData(http, options) {
-	        this.http = http;
-	        this.options = options;
-	        this.selected = [];
-	        this.categories = null;
-	    }
-	    Object.defineProperty(CategoryData, "parameters", {
-	        get: function () {
-	            return [[http_1.Http], [options_1.Options]];
-	        },
-	        enumerable: true,
-	        configurable: true
-	    });
-	    CategoryData.prototype.loadCategories = function () {
-	        var _this = this;
-	        if (this.categories) {
-	            return Promise.resolve(this.categories);
-	        }
-	        return new Promise(function (resolve) {
-	            _this.http.get(_this.options.base_url + "/category/list").subscribe(function (res) {
-	                _this.categories = _this.processData(res.json());
-	                resolve(_this.categories);
-	            });
-	        });
-	    };
-	    CategoryData.prototype.processData = function (data) {
-	        return data.data;
-	    };
-	    CategoryData = __decorate([
-	        core_1.Injectable(), 
-	        __metadata('design:paramtypes', [Object, Object])
-	    ], CategoryData);
-	    return CategoryData;
-	})();
-	exports.CategoryData = CategoryData;
-
 
 /***/ }
 /******/ ]);

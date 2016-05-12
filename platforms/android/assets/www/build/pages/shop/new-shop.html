@@ -100,14 +100,14 @@
 
       </ion-list>
 
-      <div>
+      <div class="obs">
         <ion-item>
           <ion-label floating>Observação</ion-label>
           <ion-textarea [(ngModel)]="obsModel" ngControl="obs" #obs></ion-textarea>
         </ion-item>
       </div>
 
-       <button primary (click)="onNPhoto()">Foto</button>
+       <photo-upload></photo-upload>
 
       <button (click)="onFinish()" type="submit" class="submit" block large>ADICIONAR</button>
 

@@ -41,7 +41,7 @@
     <name>FEIRA UP</name>
     <description>Encontre o que deseja para sua próxima viagem.</description>
     <author email="felipe.andrada@gmail.com" href="http://felipeandrada.com.br/">Felipe A</author>
-    <content original-src="index.html" src="http://192.168.0.10:8100" />
+    <content src="index.html" />
     <access launch-external="yes" origin="*" />
     <allow-navigation href="*" />
     <allow-intent href="http://*/*" />
@@ -56,7 +56,7 @@
     <preference name="android-minSdkVersion" value="16" />
     <preference name="BackupWebStorage" value="none" />
     <preference name="SplashScreen" value="screen" />
-    <preference name="SplashScreenDelay" value="11000" />
+    <preference name="SplashScreenDelay" value="10000" />
     <preference name="ShowSplashScreenSpinner" value="true" />
     <preference name="FadeSplashScreenDuration" value="600" />
     <icon density="xhdpi" src="resources/android/icon/drawable-xhdpi-icon.png" />
