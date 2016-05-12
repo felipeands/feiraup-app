@@ -5,6 +5,32 @@
   <ion-title>Pesquisa</ion-title>
 </ion-navbar>
 
-<ion-content padding class="search">
-  Pesquisa
+<ion-content class="search">
+
+  <ion-toolbar secondary>
+    <ion-searchbar (input)="onGetShops($event)"></ion-searchbar>
+    <div text-center>
+      <a href="#">Busca avançada</a>
+    </div>
+  </ion-toolbar>
+
+  <div class="results">
+    <ion-card *ngFor="#shop of shops">
+      <img src="{{shop.image}}">
+
+      <div class="icon">
+        <button fab fab-right fab-top>
+          <ion-icon name="ios-more"></ion-icon>
+        </button>
+      </div>
+
+      <ion-card-content>
+        <ion-card-title>
+          Teste
+        </ion-card-title>
+        <p>Algo sobre a loja</p>
+      </ion-card-content>
+    </ion-card>
+  </div>
+
 </ion-content>
