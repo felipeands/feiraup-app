@@ -1,11 +1,15 @@
-import {Component} from 'angular2/core';
-import {IONIC_DIRECTIVES, NavController, ActionSheet} from 'ionic-framework/index';
+import {Component, Output, EventEmitter} from 'angular2/core';
+import {IONIC_DIRECTIVES, NavController, ActionSheet, Platform} from 'ionic-framework/index';
 import {Camera} from 'ionic-native';
+import {ImageData} from '../services/image-data';
 
 @Component({
   selector: 'photo-upload',
   template: `
-  <button primary (click)="onUploadPhoto()">Foto</button>
+  <button primary (click)="onClickButton()">Foto</button>
+  <div *ngIf="photoPreview">
+    <img class="preview" src="{{photoPreview}}"/>
+  </div>
   `,
   styles: [`
   `]
@@ -13,17 +17,21 @@ import {Camera} from 'ionic-native';
 })
 
 export class PhotoUpload {
+  @Output() photoChange = new EventEmitter();
 
   static get parameters() {
-    return [[NavController]];
+    return [[NavController],[Platform],[ImageData]];
   }
 
-  constructor(nav) {
+  constructor(nav, platform, imageData) {
     this.nav = nav;
+    this.platform = platform;
+    this.imageData = imageData;
     this.photo = null;
+    this.photoPreview = null;
   }
 
-  onUploadPhoto() {
+  onClickButton() {
     let actionSheet = ActionSheet.create({
       title: 'Escolha uma opção',
       buttons: [
@@ -72,10 +80,28 @@ export class PhotoUpload {
   }
 
   startCameraPlugin(options) {
-    Camera.getPicture(options).then((imageData) => {
-      let base64Image = "data:image/jpeg;base64," + imageData;
-      console.log(base64Image);
-    })
+    options = this.preparePlatform(options);
+    Camera.getPicture(options).then((image) => {
+      this.uploadPhoto(image);
+    });
+  }
+
+  preparePlatform(options) {
+    if(this.platform.is('ios')) {
+      options.destinationType = Camera.DestinationType.NATIVE_URI;
+    }
+    if(this.platform.is('android')) {
+      options.destinationType = Camera.DestinationType.FILE_URI;
+    }
+    return options;
+  }
+
+  uploadPhoto(image) {
+    this.imageData.uploadImage(image).then((res) => {
+      this.photo = res;
+      this.photoPreview = this.imageData.getCloudinaryPreview(res);
+      this.photoChange.emit(res);
+    });
   }
 
 }

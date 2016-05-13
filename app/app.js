@@ -19,6 +19,7 @@ import {RouteData} from './services/route-data';
 import {GalleryData} from './services/gallery-data';
 import {ShopData} from './services/shop-data';
 import {CategoryData} from './services/category-data';
+import {ImageData} from './services/image-data';
 import {Options} from './options';
 
 
@@ -33,6 +34,7 @@ import {Options} from './options';
     GalleryData,
     ShopData,
     CategoryData,
+    ImageData,
     Options
   ],
   config: {

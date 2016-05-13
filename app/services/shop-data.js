@@ -48,7 +48,8 @@ export class ShopData {
       `position=${JSON.stringify(data.position)}`,
       `categories=${JSON.stringify(data.categories)}`,
       `place_id=${data.place}`,
-      `obs=${data.obs}`
+      `obs=${data.obs}`,
+      `photo=${data.photo}`
     ];
 
     return new Promise(resolve => {

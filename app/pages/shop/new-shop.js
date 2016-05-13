@@ -77,6 +77,7 @@ export class NewShopPage {
 
     this.gallery = null;
     this.route = null;
+    this.photo = null;
 
     this.loadGalleries();
     this.loadRoutes();
@@ -172,7 +173,8 @@ export class NewShopPage {
         position: this.position,
         categories: this.selectedCategories,
         obs: this.obsModel,
-        place: placeId;
+        photo: this.photo,
+        place: placeId,
       }
 
       let alert = Alert.create({
@@ -311,6 +313,10 @@ export class NewShopPage {
 
   categoriesChange(selected) {
     this.selectedCategories = selected;
+  }
+
+  uploadedPhoto(photo) {
+    this.photo = photo;
   }
 
 }

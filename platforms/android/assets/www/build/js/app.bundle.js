@@ -63496,6 +63496,8 @@
 	        this.gmaps_timeout = 100000;
 	        this.gmaps_accuracy = true;
 	        this.gmaps_sensor = ''; // '&sensor=true';
+	        this.cloudinary_preset = 'trxpib6n';
+	        this.cloudinary_api_url = 'https://api.cloudinary.com/v1_1/feira-up';
 	    }
 	    Options = __decorate([
 	        core_1.Component(), 
@@ -65345,19 +65347,21 @@
 	var core_1 = __webpack_require__(7);
 	var index_1 = __webpack_require__(5);
 	var ionic_native_1 = __webpack_require__(383);
+	var image_data_1 = __webpack_require__(451);
 	var PhotoUpload = (function () {
-	    function PhotoUpload(nav) {
+	    function PhotoUpload(nav, imageData) {
 	        this.nav = nav;
+	        this.imageData = imageData;
 	        this.photo = null;
 	    }
 	    Object.defineProperty(PhotoUpload, "parameters", {
 	        get: function () {
-	            return [[index_1.NavController]];
+	            return [[index_1.NavController], [image_data_1.ImageData]];
 	        },
 	        enumerable: true,
 	        configurable: true
 	    });
-	    PhotoUpload.prototype.onUploadPhoto = function () {
+	    PhotoUpload.prototype.onClickButton = function () {
 	        var _this = this;
 	        var actionSheet = index_1.ActionSheet.create({
 	            title: 'Escolha uma opção',
@@ -65404,19 +65408,28 @@
 	        this.startCameraPlugin(options);
 	    };
 	    PhotoUpload.prototype.startCameraPlugin = function (options) {
+	        var _this = this;
 	        ionic_native_1.Camera.getPicture(options).then(function (imageData) {
-	            var base64Image = "data:image/jpeg;base64," + imageData;
-	            console.log(base64Image);
+	            _this.uploadPhoto(imageData);
+	            // console.log(imageData);
+	            // let ft = new FileTransfer();
+	            // let base64Image = "data:image/jpeg;base64," + imageData;
+	            // console.log(base64Image);
+	        });
+	    };
+	    PhotoUpload.prototype.uploadPhoto = function (imageData) {
+	        this.imageData.uploadImage(imageData).then(function (res) {
+	            console.log('retornouuu', res);
 	        });
 	    };
 	    PhotoUpload = __decorate([
 	        core_1.Component({
 	            selector: 'photo-upload',
-	            template: "\n  <button primary (click)=\"onUploadPhoto()\">Foto</button>\n  ",
+	            template: "\n  <button primary (click)=\"onClickButton()\">Foto</button>\n  ",
 	            styles: ["\n  "],
 	            directives: [index_1.IONIC_DIRECTIVES],
 	        }), 
-	        __metadata('design:paramtypes', [Object])
+	        __metadata('design:paramtypes', [Object, Object])
 	    ], PhotoUpload);
 	    return PhotoUpload;
 	})();
@@ -73188,6 +73201,56 @@
 	}());
 	exports.WebIntent = WebIntent;
 	//# sourceMappingURL=webintent.js.map
+
+/***/ },
+/* 451 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+	    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+	    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+	    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+	    return c > 3 && r && Object.defineProperty(target, key, r), r;
+	};
+	var __metadata = (this && this.__metadata) || function (k, v) {
+	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+	};
+	var core_1 = __webpack_require__(7);
+	var options_1 = __webpack_require__(367);
+	var ImageData = (function () {
+	    function ImageData(options) {
+	        this.options = options;
+	    }
+	    Object.defineProperty(ImageData, "parameters", {
+	        get: function () {
+	            return [[options_1.Options]];
+	        },
+	        enumerable: true,
+	        configurable: true
+	    });
+	    ImageData.prototype.uploadImage = function (fileURI) {
+	        var _this = this;
+	        return new Promise(function (resolve) {
+	            var options = new FileUploadOptions();
+	            options.fileKey = "file";
+	            options.fileName = fileURI.substr(fileURI.lastIndexOf('/') + 1);
+	            options.mimeType = 'image/jpeg';
+	            options.params = { 'upload_preset': _this.options.cloudinary_preset };
+	            var ft = new FileTransfer();
+	            ft.upload(fileURI, _this.options.cloudinary_api_url, function (res) {
+	                console.log(res);
+	                resolve(res);
+	            }, function () { }, options);
+	        });
+	    };
+	    ImageData = __decorate([
+	        core_1.Injectable(), 
+	        __metadata('design:paramtypes', [Object])
+	    ], ImageData);
+	    return ImageData;
+	})();
+	exports.ImageData = ImageData;
+
 
 /***/ }
 /******/ ]);

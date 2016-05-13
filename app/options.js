@@ -16,6 +16,8 @@ export class Options {
     this.gmaps_timeout = 100000;
     this.gmaps_accuracy = true;
     this.gmaps_sensor =  ''; // '&sensor=true';
+    this.cloudinary_preset = 'trxpib6n';
+    this.cloudinary_api_url = 'https://api.cloudinary.com/v1_1/feira-up/image/upload';
   }
 
 }
