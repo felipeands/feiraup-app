@@ -6,13 +6,10 @@ import {ImageData} from '../services/image-data';
 @Component({
   selector: 'photo-upload',
   template: `
-  <button primary (click)="onClickButton()">Foto</button>
-  <div *ngIf="photoPreview">
-    <img class="preview" src="{{photoPreview}}"/>
+  <div text-center>
+    <img (click)="onClickButton()" src="{{photoPreview}}"/>
   </div>
   `,
-  styles: [`
-  `]
   directives: [IONIC_DIRECTIVES],
 })
 
@@ -28,7 +25,7 @@ export class PhotoUpload {
     this.platform = platform;
     this.imageData = imageData;
     this.photo = null;
-    this.photoPreview = null;
+    this.photoPreview = 'build/images/no-photo.png';
   }
 
   onClickButton() {
@@ -58,7 +55,7 @@ export class PhotoUpload {
   onOpenPhotoLibrary() {
     let options = {
       quality: 80,
-      saveToPhotoAlbum: false
+      saveToPhotoAlbum: true
       destinationType: Camera.DestinationType.DATA_URL,
       sourceType: Camera.PictureSourceType.PHOTOLIBRARY,
       allowEdit: false,
@@ -99,7 +96,7 @@ export class PhotoUpload {
   uploadPhoto(image) {
     this.imageData.uploadImage(image).then((res) => {
       this.photo = res;
-      this.photoPreview = this.imageData.getCloudinaryPreview(res);
+      this.photoPreview = this.imageData.getImageUrlPreview(res);
       this.photoChange.emit(res);
     });
   }

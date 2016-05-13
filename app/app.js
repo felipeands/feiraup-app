@@ -73,7 +73,6 @@ export class MyApp {
     ];
 
     this.loggedOutPages = [
-      {title: 'Caminhos e Galerias', component: ShowPlacePage, icon: 'map'},
       {title: 'Entrar', component: LoginPage, icon: 'log-in'}
     ];
 

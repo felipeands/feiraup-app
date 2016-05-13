@@ -107,7 +107,7 @@
         </ion-item>
       </div>
 
-       <photo-upload></photo-upload>
+      <photo-upload (photoChange)="uploadedPhoto($event)"></photo-upload>
 
       <button (click)="onFinish()" type="submit" class="submit" block large>ADICIONAR</button>
 

@@ -29,7 +29,7 @@ export class ImageData {
     })
   }
 
-  getCloudinaryPreview(public_id) {
+  getImageUrlPreview(public_id) {
     return `http://res.cloudinary.com/feira-up/image/upload/t_shops/${public_id}.jpg`;
   }
 }

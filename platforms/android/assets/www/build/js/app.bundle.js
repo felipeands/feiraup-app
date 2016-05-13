@@ -3202,6 +3202,7 @@
 	var gallery_data_1 = __webpack_require__(376);
 	var shop_data_1 = __webpack_require__(378);
 	var category_data_1 = __webpack_require__(381);
+	var image_data_1 = __webpack_require__(451);
 	var options_1 = __webpack_require__(367);
 	var MyApp = (function () {
 	    function MyApp(app, events, userData) {
@@ -3291,6 +3292,7 @@
 	                gallery_data_1.GalleryData,
 	                shop_data_1.ShopData,
 	                category_data_1.CategoryData,
+	                image_data_1.ImageData,
 	                options_1.Options
 	            ],
 	            config: {
@@ -63497,7 +63499,7 @@
 	        this.gmaps_accuracy = true;
 	        this.gmaps_sensor = ''; // '&sensor=true';
 	        this.cloudinary_preset = 'trxpib6n';
-	        this.cloudinary_api_url = 'https://api.cloudinary.com/v1_1/feira-up';
+	        this.cloudinary_api_url = 'https://api.cloudinary.com/v1_1/feira-up/image/upload';
 	    }
 	    Options = __decorate([
 	        core_1.Component(), 
@@ -64885,7 +64887,8 @@
 	            ("position=" + JSON.stringify(data.position)),
 	            ("categories=" + JSON.stringify(data.categories)),
 	            ("place_id=" + data.place),
-	            ("obs=" + data.obs)
+	            ("obs=" + data.obs),
+	            ("photo=" + data.photo)
 	        ];
 	        return new Promise(function (resolve) {
 	            _this.setHeaders();
@@ -64954,6 +64957,7 @@
 	        this.routes = null;
 	        this.gallery = null;
 	        this.route = null;
+	        this.photo = null;
 	        this.loadGalleries();
 	        this.loadRoutes();
 	        this.prepareMap();
@@ -65042,7 +65046,8 @@
 	                position: _this.position,
 	                categories: _this.selectedCategories,
 	                obs: _this.obsModel,
-	                place: placeId
+	                photo: _this.photo,
+	                place: placeId,
 	            };
 	            var alert = index_1.Alert.create({
 	                title: 'Finalizando',
@@ -65168,6 +65173,9 @@
 	    };
 	    NewShopPage.prototype.categoriesChange = function (selected) {
 	        this.selectedCategories = selected;
+	    };
+	    NewShopPage.prototype.uploadedPhoto = function (photo) {
+	        this.photo = photo;
 	    };
 	    NewShopPage = __decorate([
 	        index_1.Page({
@@ -65349,14 +65357,17 @@
 	var ionic_native_1 = __webpack_require__(383);
 	var image_data_1 = __webpack_require__(451);
 	var PhotoUpload = (function () {
-	    function PhotoUpload(nav, imageData) {
+	    function PhotoUpload(nav, platform, imageData) {
+	        this.photoChange = new core_1.EventEmitter();
 	        this.nav = nav;
+	        this.platform = platform;
 	        this.imageData = imageData;
 	        this.photo = null;
+	        this.photoPreview = null;
 	    }
 	    Object.defineProperty(PhotoUpload, "parameters", {
 	        get: function () {
-	            return [[index_1.NavController], [image_data_1.ImageData]];
+	            return [[index_1.NavController], [index_1.Platform], [image_data_1.ImageData]];
 	        },
 	        enumerable: true,
 	        configurable: true
@@ -65409,27 +65420,40 @@
 	    };
 	    PhotoUpload.prototype.startCameraPlugin = function (options) {
 	        var _this = this;
-	        ionic_native_1.Camera.getPicture(options).then(function (imageData) {
-	            _this.uploadPhoto(imageData);
-	            // console.log(imageData);
-	            // let ft = new FileTransfer();
-	            // let base64Image = "data:image/jpeg;base64," + imageData;
-	            // console.log(base64Image);
+	        options = this.preparePlatform(options);
+	        ionic_native_1.Camera.getPicture(options).then(function (image) {
+	            _this.uploadPhoto(image);
 	        });
 	    };
-	    PhotoUpload.prototype.uploadPhoto = function (imageData) {
-	        this.imageData.uploadImage(imageData).then(function (res) {
-	            console.log('retornouuu', res);
+	    PhotoUpload.prototype.preparePlatform = function (options) {
+	        if (this.platform.is('ios')) {
+	            options.destinationType = ionic_native_1.Camera.DestinationType.NATIVE_URI;
+	        }
+	        if (this.platform.is('android')) {
+	            options.destinationType = ionic_native_1.Camera.DestinationType.FILE_URI;
+	        }
+	        return options;
+	    };
+	    PhotoUpload.prototype.uploadPhoto = function (image) {
+	        var _this = this;
+	        this.imageData.uploadImage(image).then(function (res) {
+	            _this.photo = res;
+	            _this.photoPreview = _this.imageData.getImageUrlPreview(res);
+	            _this.photoChange.emit(res);
 	        });
 	    };
+	    __decorate([
+	        core_1.Output(), 
+	        __metadata('design:type', Object)
+	    ], PhotoUpload.prototype, "photoChange", void 0);
 	    PhotoUpload = __decorate([
 	        core_1.Component({
 	            selector: 'photo-upload',
-	            template: "\n  <button primary (click)=\"onClickButton()\">Foto</button>\n  ",
+	            template: "\n  <button primary (click)=\"onClickButton()\">Foto</button>\n  <div *ngIf=\"photoPreview\">\n    <img class=\"preview\" src=\"{{photoPreview}}\"/>\n  </div>\n  ",
 	            styles: ["\n  "],
 	            directives: [index_1.IONIC_DIRECTIVES],
 	        }), 
-	        __metadata('design:paramtypes', [Object, Object])
+	        __metadata('design:paramtypes', [Object, Object, Object])
 	    ], PhotoUpload);
 	    return PhotoUpload;
 	})();
@@ -73228,20 +73252,22 @@
 	        enumerable: true,
 	        configurable: true
 	    });
-	    ImageData.prototype.uploadImage = function (fileURI) {
+	    ImageData.prototype.uploadImage = function (fileURL) {
 	        var _this = this;
 	        return new Promise(function (resolve) {
-	            var options = new FileUploadOptions();
-	            options.fileKey = "file";
-	            options.fileName = fileURI.substr(fileURI.lastIndexOf('/') + 1);
-	            options.mimeType = 'image/jpeg';
-	            options.params = { 'upload_preset': _this.options.cloudinary_preset };
+	            var options = {
+	                params: { 'upload_preset': _this.options.cloudinary_preset }
+	            };
+	            var uri = encodeURI(_this.options.cloudinary_api_url);
 	            var ft = new FileTransfer();
-	            ft.upload(fileURI, _this.options.cloudinary_api_url, function (res) {
-	                console.log(res);
-	                resolve(res);
+	            ft.upload(fileURL, uri, function (data) {
+	                var res = JSON.parse(data.response);
+	                resolve(res.public_id);
 	            }, function () { }, options);
 	        });
+	    };
+	    ImageData.prototype.getImageUrlPreview = function (public_id) {
+	        return "http://res.cloudinary.com/feira-up/image/upload/t_shops/" + public_id + ".jpg";
 	    };
 	    ImageData = __decorate([
 	        core_1.Injectable(), 
