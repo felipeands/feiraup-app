@@ -3,6 +3,7 @@ import {Storage, LocalStorage, Events} from 'ionic-framework/index';
 import {Http, Headers} from 'angular2/http';
 
 import {UserData} from './user-data';
+import {ImageData} from './image-data';
 import {Options} from './../options';
 
 @Injectable()
@@ -11,12 +12,13 @@ export class ShopData {
   public headers: Headers;
 
   static get parameters() {
-    return [[Http], [UserData], [Options]];
+    return [[Http], [UserData], [ImageData], [Options]];
   }
 
-  constructor(http, user, options) {
+  constructor(http, user, image, options) {
     this.http = http;
     this.userData = user;
+    this.imageData = image;
     this.options = options;
   }
 
@@ -52,7 +54,7 @@ export class ShopData {
       `photo=${data.photo}`
     ];
 
-    return new Promise(resolve => {
+    return new Promise((resolve) => {
       this.setHeaders();
       this.http.post(`${this.options.base_url}/shop/add`, data.join('&'), {
         headers: this.headers
@@ -68,4 +70,27 @@ export class ShopData {
     })
 
   }
+
+  searchShop(query) {
+
+    let data = [
+      `q=${query}`
+    ];
+
+    return new Promise((resolve) => {
+      this.http.get(`${this.options.base_url}/shop/search/?${data.join('&')}`).subscribe((res) => {
+        let obj = this.processData(res.json());
+        resolve(obj);
+      });
+    })
+  }
+
+  processData(obj) {
+    obj.shops.map((shop) => {
+      shop.image = this.imageData.getImageUrlPreview(shop.photo);
+      return shop;
+    });
+    return obj;
+  }
+
 }

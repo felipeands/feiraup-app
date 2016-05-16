@@ -1,4 +1,5 @@
 import {Page} from 'ionic-framework/index';
+import {ShopData} from '../../services/shop-data';
 
 @Page ({
   templateUrl: 'build/pages/search/search.html',
@@ -19,18 +20,28 @@ import {Page} from 'ionic-framework/index';
 export class SearchPage {
   searchQuery;
 
-  constructor() {
+  static get parameters() {
+    return [[ShopData]];
+  }
+
+  constructor(shopData) {
+    this.shopData = shopData;
+
     this.shops = [
-    {image: 'http://ionicframework.com/dist/preview-app/www/img/badu-live.png'},
-    {image: 'http://ionicframework.com/dist/preview-app/www/img/advance-card-map-mario.png'},
-    {image: 'http://ionicframework.com/dist/preview-app/www/img/card-sf.png'},
-    {image: 'http://ionicframework.com/dist/preview-app/www/img/badu-live.png'},
-    {image: 'http://ionicframework.com/dist/preview-app/www/img/advance-card-map-mario.png'},
-    {image: 'http://ionicframework.com/dist/preview-app/www/img/card-sf.png'},
+    {name: 'teste', image: 'http://ionicframework.com/dist/preview-app/www/img/badu-live.png'},
+    {name: 'teste', image: 'http://ionicframework.com/dist/preview-app/www/img/advance-card-map-mario.png'},
+    {name: 'teste', image: 'http://ionicframework.com/dist/preview-app/www/img/card-sf.png'},
+    {name: 'teste', image: 'http://ionicframework.com/dist/preview-app/www/img/badu-live.png'},
+    {name: 'teste', image: 'http://ionicframework.com/dist/preview-app/www/img/advance-card-map-mario.png'},
+    {name: 'teste', image: 'http://ionicframework.com/dist/preview-app/www/img/card-sf.png'},
     ];
   }
 
   onGetShops(searchBar) {
-    alert(searchBar.value);
+    if (searchBar.value && searchBar.value != ""){
+      this.shopData.searchShop(searchBar.value).then((data) => {
+        this.shops = data.shops;
+      });
+    }
   }
 }
