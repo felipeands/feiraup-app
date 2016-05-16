@@ -153,7 +153,7 @@ export class ShowPlacePage {
   initMap() {
     let mapOptions = {
       center: this.latLng,
-      zoom: 20,
+      zoom: 18,
       mapTypeId: google.maps.MapTypeId.ROADMAP
     }
     this.map = new google.maps.Map(document.getElementById('map'), mapOptions);

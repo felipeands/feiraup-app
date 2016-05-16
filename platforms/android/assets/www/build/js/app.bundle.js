@@ -63243,12 +63243,12 @@
 	    function SearchPage(shopData) {
 	        this.shopData = shopData;
 	        this.shops = [
-	            { image: 'http://ionicframework.com/dist/preview-app/www/img/badu-live.png' },
-	            { image: 'http://ionicframework.com/dist/preview-app/www/img/advance-card-map-mario.png' },
-	            { image: 'http://ionicframework.com/dist/preview-app/www/img/card-sf.png' },
-	            { image: 'http://ionicframework.com/dist/preview-app/www/img/badu-live.png' },
-	            { image: 'http://ionicframework.com/dist/preview-app/www/img/advance-card-map-mario.png' },
-	            { image: 'http://ionicframework.com/dist/preview-app/www/img/card-sf.png' },
+	            { name: 'teste', image: 'http://ionicframework.com/dist/preview-app/www/img/badu-live.png' },
+	            { name: 'teste', image: 'http://ionicframework.com/dist/preview-app/www/img/advance-card-map-mario.png' },
+	            { name: 'teste', image: 'http://ionicframework.com/dist/preview-app/www/img/card-sf.png' },
+	            { name: 'teste', image: 'http://ionicframework.com/dist/preview-app/www/img/badu-live.png' },
+	            { name: 'teste', image: 'http://ionicframework.com/dist/preview-app/www/img/advance-card-map-mario.png' },
+	            { name: 'teste', image: 'http://ionicframework.com/dist/preview-app/www/img/card-sf.png' },
 	        ];
 	    }
 	    Object.defineProperty(SearchPage, "parameters", {
@@ -63359,15 +63359,17 @@
 	        ];
 	        return new Promise(function (resolve) {
 	            _this.http.get(_this.options.base_url + "/shop/search/?" + data.join('&')).subscribe(function (res) {
-	                var obj = res.json();
-	                resolve(_this.processData(obj));
+	                var obj = _this.processData(res.json());
+	                resolve(obj);
 	            });
 	        });
 	    };
 	    ShopData.prototype.processData = function (obj) {
-	        for (var shop in obj.shops) {
-	            shop.image = this.imageData.getUrlPreview(shop.image);
-	        }
+	        var _this = this;
+	        obj.shops.map(function (shop) {
+	            shop.image = _this.imageData.getImageUrlPreview(shop.photo);
+	            return shop;
+	        });
 	        return obj;
 	    };
 	    ShopData = __decorate([
@@ -64963,7 +64965,7 @@
 	    ShowPlacePage.prototype.initMap = function () {
 	        var mapOptions = {
 	            center: this.latLng,
-	            zoom: 20,
+	            zoom: 18,
 	            mapTypeId: google.maps.MapTypeId.ROADMAP
 	        };
 	        this.map = new google.maps.Map(document.getElementById('map'), mapOptions);
@@ -65208,6 +65210,7 @@
 	        this.gallery = new google.maps.Polygon({
 	            map: this.map,
 	            path: this.getPositions(positions),
+	            strokeColor: "#5fba7d",
 	            clickable: false
 	        });
 	    };
@@ -65222,6 +65225,7 @@
 	        this.route = new google.maps.Polyline({
 	            map: this.map,
 	            path: this.getPositions(positions),
+	            strokeColor: "#5fba7d",
 	            clickable: false
 	        });
 	    };

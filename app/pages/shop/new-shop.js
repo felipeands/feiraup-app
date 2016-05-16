@@ -259,6 +259,7 @@ export class NewShopPage {
     this.gallery = new google.maps.Polygon({
       map: this.map,
       path: this.getPositions(positions),
+      strokeColor: "#5fba7d",
       clickable: false
     });
   }
@@ -274,6 +275,7 @@ export class NewShopPage {
     this.route = new google.maps.Polyline({
       map: this.map,
       path: this.getPositions(positions),
+      strokeColor: "#5fba7d",
       clickable: false
     });
   }
