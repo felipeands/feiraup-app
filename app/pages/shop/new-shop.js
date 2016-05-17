@@ -317,4 +317,12 @@ export class NewShopPage {
     this.photo = photo;
   }
 
+  onPageDidEnter() {
+    this.showMap = true;
+  }
+
+  onPageWillLeave() {
+    this.showMap = false;
+  }
+
 }

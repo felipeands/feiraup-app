@@ -178,4 +178,12 @@ export class NewPlacePage {
     this.updated = true;
   }
 
+  onPageDidEnter() {
+    this.showMap = true;
+  }
+
+  onPageWillLeave() {
+    this.showMap = false;
+  }
+
 }

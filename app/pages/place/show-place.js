@@ -175,4 +175,12 @@ export class ShowPlacePage {
     });
   }
 
+  onPageDidEnter() {
+    this.showMap = true;
+  }
+
+  onPageWillLeave() {
+    this.showMap = false;
+  }
+
 }

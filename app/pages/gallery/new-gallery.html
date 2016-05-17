@@ -45,7 +45,7 @@
 
   </div>
 
-  <div id="map"></div>
+  <div id="map" *ngIf="showMap"></div>
 
   <ion-list padding>
     <ion-item *ngFor="#position of positions.slice().reverse()">{{position.latitude}}, {{position.longitude}}</ion-item>

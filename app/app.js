@@ -66,10 +66,10 @@ export class MyApp {
 
     this.adminPages = [
       {title: 'Caminhos e Galerias', component: ShowPlacePage, icon: 'map'}
-      {title: 'Novo Local', component: NewPlacePage, icon: 'map'},
-      {title: 'Nova Galeria', component: NewGalleryPage, icon: 'map'},
-      {title: 'Novo Caminho', component: NewRoutePage, icon: 'git-branch'},
-      {title: 'Nova Loja', component: NewShopPage, icon: 'flag'},
+      {title: 'Novo Local', component: NewPlacePage, icon: 'ios-add-circle-outline'},
+      {title: 'Nova Galeria', component: NewGalleryPage, icon: 'ios-add-circle-outline'},
+      {title: 'Novo Caminho', component: NewRoutePage, icon: 'ios-add-circle-outline'},
+      {title: 'Nova Loja', component: NewShopPage, icon: 'ios-add-circle-outline'},
     ];
 
     this.loggedOutPages = [

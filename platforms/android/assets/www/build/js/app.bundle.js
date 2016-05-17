@@ -3220,10 +3220,10 @@
 	        ];
 	        this.adminPages = [
 	            { title: 'Caminhos e Galerias', component: show_place_1.ShowPlacePage, icon: 'map' },
-	            { title: 'Novo Local', component: new_place_1.NewPlacePage, icon: 'map' },
-	            { title: 'Nova Galeria', component: new_gallery_1.NewGalleryPage, icon: 'map' },
-	            { title: 'Novo Caminho', component: new_route_1.NewRoutePage, icon: 'git-branch' },
-	            { title: 'Nova Loja', component: new_shop_1.NewShopPage, icon: 'flag' },
+	            { title: 'Novo Local', component: new_place_1.NewPlacePage, icon: 'ios-add-circle-outline' },
+	            { title: 'Nova Galeria', component: new_gallery_1.NewGalleryPage, icon: 'ios-add-circle-outline' },
+	            { title: 'Novo Caminho', component: new_route_1.NewRoutePage, icon: 'ios-add-circle-outline' },
+	            { title: 'Nova Loja', component: new_shop_1.NewShopPage, icon: 'ios-add-circle-outline' },
 	        ];
 	        this.loggedOutPages = [
 	            { title: 'Entrar', component: login_1.LoginPage, icon: 'log-in' }
@@ -64033,16 +64033,13 @@
 	    });
 	    NewPlacePage.prototype.prepareMap = function () {
 	        var _this = this;
+	        this.mapData.loadMap();
 	        this.mapData.waitGoogleMaps().then(function (win) {
 	            _this.mapData.getCurPlaceLatLng().then(function (latLng) {
 	                _this.updatePosition(latLng.latitude, latLng.longitude);
 	                _this.initMap();
 	            });
 	        });
-	        var sdk = this.mapData.loadSdk();
-	        if (sdk == false) {
-	            window.initMap();
-	        }
 	    };
 	    NewPlacePage.prototype.initMap = function () {
 	        var mapOptions = {
@@ -64149,6 +64146,12 @@
 	        this.updating = false;
 	        this.updated = true;
 	    };
+	    NewPlacePage.prototype.onPageDidEnter = function () {
+	        this.showMap = true;
+	    };
+	    NewPlacePage.prototype.onPageWillLeave = function () {
+	        this.showMap = false;
+	    };
 	    NewPlacePage = __decorate([
 	        index_1.Page({
 	            templateUrl: 'build/pages/place/new-place.html',
@@ -64227,6 +64230,14 @@
 	            });
 	        });
 	    };
+	    MapData.prototype.loadMap = function () {
+	        var sdk = this.loadSdk();
+	        if (sdk == false) {
+	            setTimeout(function () {
+	                window.initMap();
+	            }, 2000);
+	        }
+	    };
 	    MapData = __decorate([
 	        core_1.Injectable(), 
 	        __metadata('design:paramtypes', [Object, Object])
@@ -64278,16 +64289,13 @@
 	    });
 	    NewRoutePage.prototype.prepareMap = function () {
 	        var _this = this;
+	        this.mapData.loadMap();
 	        this.mapData.waitGoogleMaps().then(function (win) {
 	            _this.mapData.getCurPlaceLatLng().then(function (latLng) {
 	                _this.updatePosition(latLng.latitude, latLng.longitude);
 	                _this.initMap();
 	            });
 	        });
-	        var sdk = this.mapData.loadSdk();
-	        if (sdk == false) {
-	            window.initMap();
-	        }
 	    };
 	    NewRoutePage.prototype.initMap = function () {
 	        var mapOptions = {
@@ -64408,6 +64416,12 @@
 	        this.latLng = new google.maps.LatLng(latitude, longitude);
 	        this.updating = false;
 	        this.updated = true;
+	    };
+	    NewRoutePage.prototype.onPageDidEnter = function () {
+	        this.showMap = true;
+	    };
+	    NewRoutePage.prototype.onPageWillLeave = function () {
+	        this.showMap = false;
 	    };
 	    NewRoutePage = __decorate([
 	        index_1.Page({
@@ -64553,16 +64567,13 @@
 	    });
 	    NewGalleryPage.prototype.prepareMap = function () {
 	        var _this = this;
+	        this.mapData.loadMap();
 	        this.mapData.waitGoogleMaps().then(function (win) {
 	            _this.mapData.getCurPlaceLatLng().then(function (latLng) {
 	                _this.updatePosition(latLng.latitude, latLng.longitude);
 	                _this.initMap();
 	            });
 	        });
-	        var sdk = this.mapData.loadSdk();
-	        if (sdk == false) {
-	            window.initMap();
-	        }
 	    };
 	    NewGalleryPage.prototype.initMap = function () {
 	        var mapOptions = {
@@ -64714,6 +64725,12 @@
 	        this.latLng = new google.maps.LatLng(latitude, longitude);
 	        this.updating = false;
 	        this.updated = true;
+	    };
+	    NewGalleryPage.prototype.onPageDidEnter = function () {
+	        this.showMap = true;
+	    };
+	    NewGalleryPage.prototype.onPageWillLeave = function () {
+	        this.showMap = false;
 	    };
 	    NewGalleryPage = __decorate([
 	        index_1.Page({
@@ -64949,6 +64966,7 @@
 	    };
 	    ShowPlacePage.prototype.prepareMap = function () {
 	        var _this = this;
+	        this.mapData.loadMap();
 	        this.mapData.waitGoogleMaps().then(function (win) {
 	            _this.mapData.getCurPlaceLatLng().then(function (latLng) {
 	                _this.latLng = new google.maps.LatLng(latLng.latitude, latLng.longitude);
@@ -64957,10 +64975,6 @@
 	                _this.initPlaces();
 	            });
 	        });
-	        var sdk = this.mapData.loadSdk();
-	        if (sdk == false) {
-	            window.initMap();
-	        }
 	    };
 	    ShowPlacePage.prototype.initMap = function () {
 	        var mapOptions = {
@@ -64984,6 +64998,12 @@
 	        google.maps.event.addListener(el, 'click', function () {
 	            el.info.open(this.map, el);
 	        });
+	    };
+	    ShowPlacePage.prototype.onPageDidEnter = function () {
+	        this.showMap = true;
+	    };
+	    ShowPlacePage.prototype.onPageWillLeave = function () {
+	        this.showMap = false;
 	    };
 	    ShowPlacePage = __decorate([
 	        index_1.Page({
@@ -65058,16 +65078,13 @@
 	    });
 	    NewShopPage.prototype.prepareMap = function () {
 	        var _this = this;
+	        this.mapData.loadMap();
 	        this.mapData.waitGoogleMaps().then(function (win) {
 	            _this.mapData.getCurPlaceLatLng().then(function (latLng) {
 	                _this.updatePosition(latLng.latitude, latLng.longitude);
 	                _this.initMap();
 	            });
 	        });
-	        var sdk = this.mapData.loadSdk();
-	        if (sdk == false) {
-	            window.initMap();
-	        }
 	    };
 	    NewShopPage.prototype.initMap = function () {
 	        var mapOptions = {
@@ -65265,6 +65282,12 @@
 	    };
 	    NewShopPage.prototype.uploadedPhoto = function (photo) {
 	        this.photo = photo;
+	    };
+	    NewShopPage.prototype.onPageDidEnter = function () {
+	        this.showMap = true;
+	    };
+	    NewShopPage.prototype.onPageWillLeave = function () {
+	        this.showMap = false;
 	    };
 	    NewShopPage = __decorate([
 	        index_1.Page({

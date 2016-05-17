@@ -238,4 +238,12 @@ export class NewGalleryPage {
     this.updated = true;
   }
 
+  onPageDidEnter() {
+    this.showMap = true;
+  }
+
+  onPageWillLeave() {
+    this.showMap = false;
+  }
+
 }
