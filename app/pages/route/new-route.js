@@ -44,17 +44,13 @@ export class NewRoutePage {
   }
 
   prepareMap() {
+    this.mapData.loadMap();
     this.mapData.waitGoogleMaps().then((win) => {
       this.mapData.getCurPlaceLatLng().then((latLng) => {
         this.updatePosition(latLng.latitude, latLng.longitude);
         this.initMap();
       })
     });
-
-    let sdk = this.mapData.loadSdk();
-    if (sdk==false) {
-      window.initMap();
-    }
   }
 
   initMap() {

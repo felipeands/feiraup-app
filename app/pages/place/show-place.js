@@ -137,6 +137,7 @@ export class ShowPlacePage {
   }
 
   prepareMap() {
+    this.mapData.loadMap();
     this.mapData.waitGoogleMaps().then((win) => {
       this.mapData.getCurPlaceLatLng().then((latLng) => {
         this.latLng = new google.maps.LatLng(latLng.latitude, latLng.longitude);;
@@ -144,10 +145,6 @@ export class ShowPlacePage {
         this.initPlaces();
       })
     });
-    let sdk = this.mapData.loadSdk();
-    if (sdk==false) {
-      window.initMap();
-    }
   }
 
   initMap() {

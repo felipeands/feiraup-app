@@ -55,4 +55,13 @@ export class MapData {
     });
   }
 
+  loadMap() {
+    let sdk = this.loadSdk();
+    if (sdk==false) {
+      setTimeout(() => {
+        window.initMap();
+      }, 2000);
+    }
+  }
+
 }
