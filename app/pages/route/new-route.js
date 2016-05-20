@@ -201,7 +201,7 @@ export class NewRoutePage {
     this.showMap = true;
   }
 
-  onPageWillLeave() {
+  onPageWillUnload() {
     this.showMap = false;
   }
 

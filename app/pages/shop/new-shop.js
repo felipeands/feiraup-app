@@ -321,7 +321,7 @@ export class NewShopPage {
     this.showMap = true;
   }
 
-  onPageWillLeave() {
+  onPageWillUnload() {
     this.showMap = false;
   }
 

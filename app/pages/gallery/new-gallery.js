@@ -242,7 +242,7 @@ export class NewGalleryPage {
     this.showMap = true;
   }
 
-  onPageWillLeave() {
+  onPageWillUnload() {
     this.showMap = false;
   }
 

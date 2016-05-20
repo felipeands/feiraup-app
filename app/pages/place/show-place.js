@@ -179,7 +179,7 @@ export class ShowPlacePage {
     this.showMap = true;
   }
 
-  onPageWillLeave() {
+  onPageWillUnload() {
     this.showMap = false;
   }
 

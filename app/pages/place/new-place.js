@@ -182,7 +182,7 @@ export class NewPlacePage {
     this.showMap = true;
   }
 
-  onPageWillLeave() {
+  onPageWillUnload() {
     this.showMap = false;
   }
 
