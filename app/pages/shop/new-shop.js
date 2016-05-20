@@ -42,6 +42,7 @@ export class NewShopPage {
   floorModel;
   routeModel;
   selectedCategories: array = [];
+  descriptionModel;
   obsModel;
 
   static get parameters() {
@@ -169,6 +170,7 @@ export class NewShopPage {
         position: this.position,
         categories: this.selectedCategories,
         obs: this.obsModel,
+        description: this.descriptionModel,
         photo: this.photo,
         place: placeId,
       }

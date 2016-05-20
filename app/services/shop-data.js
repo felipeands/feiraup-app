@@ -51,6 +51,7 @@ export class ShopData {
       `categories=${JSON.stringify(data.categories)}`,
       `place_id=${data.place}`,
       `obs=${data.obs}`,
+      `description=${data.description}`,
       `photo=${data.photo}`
     ];
 

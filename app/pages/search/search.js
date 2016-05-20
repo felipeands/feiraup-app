@@ -28,12 +28,12 @@ export class SearchPage {
     this.shopData = shopData;
 
     this.shops = [
-    {name: 'teste', image: 'http://ionicframework.com/dist/preview-app/www/img/badu-live.png'},
-    {name: 'teste', image: 'http://ionicframework.com/dist/preview-app/www/img/advance-card-map-mario.png'},
-    {name: 'teste', image: 'http://ionicframework.com/dist/preview-app/www/img/card-sf.png'},
-    {name: 'teste', image: 'http://ionicframework.com/dist/preview-app/www/img/badu-live.png'},
-    {name: 'teste', image: 'http://ionicframework.com/dist/preview-app/www/img/advance-card-map-mario.png'},
-    {name: 'teste', image: 'http://ionicframework.com/dist/preview-app/www/img/card-sf.png'},
+      {
+        id: 1,
+        name: 'teste',
+        description: 'alguma descrição',
+        image: 'http://ionicframework.com/dist/preview-app/www/img/badu-live.png'
+      }
     ];
   }
 
