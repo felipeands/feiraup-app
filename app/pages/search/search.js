@@ -1,5 +1,6 @@
-import {Page} from 'ionic-framework/index';
+import {Page, NavController} from 'ionic-framework/index';
 import {ShopData} from '../../services/shop-data';
+import {ShowShopPage} from '../shop/show-shop';
 
 @Page ({
   templateUrl: 'build/pages/search/search.html',
@@ -21,10 +22,11 @@ export class SearchPage {
   searchQuery;
 
   static get parameters() {
-    return [[ShopData]];
+    return [[NavController],[ShopData]];
   }
 
-  constructor(shopData) {
+  constructor(nav, shopData) {
+    this.nav = nav;
     this.shopData = shopData;
 
     this.shops = [
@@ -43,5 +45,11 @@ export class SearchPage {
         this.shops = data.shops;
       });
     }
+  }
+
+  onOpenShop(shop) {
+    this.nav.push(ShowShopPage, {
+      shopId: shop.id
+    });
   }
 }
