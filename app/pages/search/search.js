@@ -49,7 +49,7 @@ export class SearchPage {
 
   onOpenShop(shop) {
     this.nav.push(ShowShopPage, {
-      shopId: shop.id
+      id: shop.id
     });
   }
 }

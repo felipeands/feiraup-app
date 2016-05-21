@@ -1,4 +1,4 @@
-import {Page, NavController} from 'ionic-framework/index';
+import {Page, NavController, NavParams} from 'ionic-framework/index';
 import {ShopData} from '../../services/shop-data';
 
 @Page({
@@ -7,11 +7,20 @@ import {ShopData} from '../../services/shop-data';
 
 export class ShowShopPage {
   static get parameters() {
-    return [[NavController],[ShopData]];
+    return [[NavController],[NavParams],[ShopData]];
   }
 
-  constructor(nav, shopData) {
+  constructor(nav, navParams, shopData) {
     this.nav = nav;
+    this.id = navParams.get('id');
     this.shopData = shopData;
+    this.shop = null;
+    this.loadShop();
+  }
+
+  loadShop() {
+    this.shopData.loadShop(this.id).then((data) => {
+      this.shop = data.shop;
+    });
   }
 }

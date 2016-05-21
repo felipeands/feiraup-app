@@ -80,18 +80,31 @@ export class ShopData {
 
     return new Promise((resolve) => {
       this.http.get(`${this.options.base_url}/shop/search/?${data.join('&')}`).subscribe((res) => {
-        let obj = this.processData(res.json());
+        let obj = this.processSearch(res.json());
         resolve(obj);
       });
     })
   }
 
-  processData(obj) {
+  processSearch(obj) {
     obj.shops.map((shop) => {
-      shop.image = this.imageData.getImageUrlPreview(shop.photo);
-      return shop;
+      return this.processShop(shop);
     });
     return obj;
+  }
+
+  loadShop(id) {
+    return new Promise((resolve) => {
+      this.http.get(`${this.options.base_url}/shop/${id}`).subscribe((res) => {
+        let obj = this.processShop(res.json().shop);
+        resolve(obj);
+      })
+    })
+  }
+
+  processShop(shop) {
+    shop.image = this.imageData.getImageUrlPreview(shop.photo);
+    return shop;
   }
 
 }

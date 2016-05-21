@@ -3186,22 +3186,22 @@
 	};
 	var index_1 = __webpack_require__(5);
 	var random_1 = __webpack_require__(361);
-	var cart_1 = __webpack_require__(368);
-	var location_1 = __webpack_require__(369);
-	var login_1 = __webpack_require__(372);
-	var new_place_1 = __webpack_require__(373);
-	var new_route_1 = __webpack_require__(375);
-	var new_gallery_1 = __webpack_require__(377);
-	var show_place_1 = __webpack_require__(379);
-	var new_shop_1 = __webpack_require__(380);
+	var cart_1 = __webpack_require__(369);
+	var location_1 = __webpack_require__(370);
+	var login_1 = __webpack_require__(373);
+	var new_place_1 = __webpack_require__(374);
+	var new_route_1 = __webpack_require__(376);
+	var new_gallery_1 = __webpack_require__(378);
+	var show_place_1 = __webpack_require__(380);
+	var new_shop_1 = __webpack_require__(381);
 	var user_data_1 = __webpack_require__(365);
-	var city_data_1 = __webpack_require__(370);
-	var place_data_1 = __webpack_require__(371);
-	var map_data_1 = __webpack_require__(374);
-	var route_data_1 = __webpack_require__(376);
-	var gallery_data_1 = __webpack_require__(378);
+	var city_data_1 = __webpack_require__(371);
+	var place_data_1 = __webpack_require__(372);
+	var map_data_1 = __webpack_require__(375);
+	var route_data_1 = __webpack_require__(377);
+	var gallery_data_1 = __webpack_require__(379);
 	var shop_data_1 = __webpack_require__(364);
-	var category_data_1 = __webpack_require__(382);
+	var category_data_1 = __webpack_require__(383);
 	var image_data_1 = __webpack_require__(367);
 	var options_1 = __webpack_require__(366);
 	var MyApp = (function () {
@@ -63239,21 +63239,23 @@
 	};
 	var index_1 = __webpack_require__(5);
 	var shop_data_1 = __webpack_require__(364);
+	var show_shop_1 = __webpack_require__(368);
 	var SearchPage = (function () {
-	    function SearchPage(shopData) {
+	    function SearchPage(nav, shopData) {
+	        this.nav = nav;
 	        this.shopData = shopData;
 	        this.shops = [
-	            { name: 'teste', image: 'http://ionicframework.com/dist/preview-app/www/img/badu-live.png' },
-	            { name: 'teste', image: 'http://ionicframework.com/dist/preview-app/www/img/advance-card-map-mario.png' },
-	            { name: 'teste', image: 'http://ionicframework.com/dist/preview-app/www/img/card-sf.png' },
-	            { name: 'teste', image: 'http://ionicframework.com/dist/preview-app/www/img/badu-live.png' },
-	            { name: 'teste', image: 'http://ionicframework.com/dist/preview-app/www/img/advance-card-map-mario.png' },
-	            { name: 'teste', image: 'http://ionicframework.com/dist/preview-app/www/img/card-sf.png' },
+	            {
+	                id: 1,
+	                name: 'teste',
+	                description: 'alguma descrição',
+	                image: 'http://ionicframework.com/dist/preview-app/www/img/badu-live.png'
+	            }
 	        ];
 	    }
 	    Object.defineProperty(SearchPage, "parameters", {
 	        get: function () {
-	            return [[shop_data_1.ShopData]];
+	            return [[index_1.NavController], [shop_data_1.ShopData]];
 	        },
 	        enumerable: true,
 	        configurable: true
@@ -63266,12 +63268,17 @@
 	            });
 	        }
 	    };
+	    SearchPage.prototype.onOpenShop = function (shop) {
+	        this.nav.push(show_shop_1.ShowShopPage, {
+	            shopId: shop.id
+	        });
+	    };
 	    SearchPage = __decorate([
 	        index_1.Page({
 	            templateUrl: 'build/pages/search/search.html',
 	            styles: ["\n  .icon {\n    position: relative;\n    z-index: 10;\n  }\n  [fab-top] {\n    top: -34px;\n  }\n  .results {\n    margin: 20px 0 50px;\n  }\n  "]
 	        }), 
-	        __metadata('design:paramtypes', [Object])
+	        __metadata('design:paramtypes', [Object, Object])
 	    ], SearchPage);
 	    return SearchPage;
 	})();
@@ -63338,6 +63345,7 @@
 	            ("categories=" + JSON.stringify(data.categories)),
 	            ("place_id=" + data.place),
 	            ("obs=" + data.obs),
+	            ("description=" + data.description),
 	            ("photo=" + data.photo)
 	        ];
 	        return new Promise(function (resolve) {
@@ -63512,7 +63520,7 @@
 	var Options = (function () {
 	    function Options() {
 	        this.base_url = 'http://feiraup.herokuapp.com';
-	        // this.base_url = 'http://f3f3e631.ngrok.io';
+	        // this.base_url = 'http://8bffc25a.ngrok.io';
 	        this.gmaps_key = 'AIzaSyDEdVkgms32J_TZad9VJO-XJHWvaQRUDqg';
 	        this.gmaps_timeout = 100000;
 	        this.gmaps_accuracy = true;
@@ -63595,6 +63603,44 @@
 	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 	};
 	var index_1 = __webpack_require__(5);
+	var shop_data_1 = __webpack_require__(364);
+	var ShowShopPage = (function () {
+	    function ShowShopPage(nav, shopData) {
+	        this.nav = nav;
+	        this.shopData = shopData;
+	    }
+	    Object.defineProperty(ShowShopPage, "parameters", {
+	        get: function () {
+	            return [[index_1.NavController], [shop_data_1.ShopData]];
+	        },
+	        enumerable: true,
+	        configurable: true
+	    });
+	    ShowShopPage = __decorate([
+	        index_1.Page({
+	            templateUrl: 'build/pages/shop/show-shop.html'
+	        }), 
+	        __metadata('design:paramtypes', [Object, Object])
+	    ], ShowShopPage);
+	    return ShowShopPage;
+	})();
+	exports.ShowShopPage = ShowShopPage;
+
+
+/***/ },
+/* 369 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+	    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+	    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+	    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+	    return c > 3 && r && Object.defineProperty(target, key, r), r;
+	};
+	var __metadata = (this && this.__metadata) || function (k, v) {
+	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+	};
+	var index_1 = __webpack_require__(5);
 	var button_search_1 = __webpack_require__(362);
 	var CartPage = (function () {
 	    function CartPage(nav) {
@@ -63619,7 +63665,7 @@
 
 
 /***/ },
-/* 369 */
+/* 370 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -63632,8 +63678,8 @@
 	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 	};
 	var index_1 = __webpack_require__(5);
-	var city_data_1 = __webpack_require__(370);
-	var place_data_1 = __webpack_require__(371);
+	var city_data_1 = __webpack_require__(371);
+	var place_data_1 = __webpack_require__(372);
 	var button_search_1 = __webpack_require__(362);
 	var LocationPage = (function () {
 	    function LocationPage(nav, cityData, placeData) {
@@ -63721,7 +63767,7 @@
 
 
 /***/ },
-/* 370 */
+/* 371 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -63793,7 +63839,7 @@
 
 
 /***/ },
-/* 371 */
+/* 372 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -63809,7 +63855,7 @@
 	var index_1 = __webpack_require__(5);
 	var http_1 = __webpack_require__(145);
 	var user_data_1 = __webpack_require__(365);
-	var city_data_1 = __webpack_require__(370);
+	var city_data_1 = __webpack_require__(371);
 	var options_1 = __webpack_require__(366);
 	var PlaceData = (function () {
 	    function PlaceData(http, user, city, options) {
@@ -63911,7 +63957,7 @@
 
 
 /***/ },
-/* 372 */
+/* 373 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -63993,7 +64039,7 @@
 
 
 /***/ },
-/* 373 */
+/* 374 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -64006,8 +64052,8 @@
 	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 	};
 	var index_1 = __webpack_require__(5);
-	var map_data_1 = __webpack_require__(374);
-	var place_data_1 = __webpack_require__(371);
+	var map_data_1 = __webpack_require__(375);
+	var place_data_1 = __webpack_require__(372);
 	var button_search_1 = __webpack_require__(362);
 	var NewPlacePage = (function () {
 	    function NewPlacePage(nav, mapData, placeData) {
@@ -64149,7 +64195,7 @@
 	    NewPlacePage.prototype.onPageDidEnter = function () {
 	        this.showMap = true;
 	    };
-	    NewPlacePage.prototype.onPageWillLeave = function () {
+	    NewPlacePage.prototype.onPageWillUnload = function () {
 	        this.showMap = false;
 	    };
 	    NewPlacePage = __decorate([
@@ -64166,7 +64212,7 @@
 
 
 /***/ },
-/* 374 */
+/* 375 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -64179,7 +64225,7 @@
 	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 	};
 	var core_1 = __webpack_require__(7);
-	var place_data_1 = __webpack_require__(371);
+	var place_data_1 = __webpack_require__(372);
 	var options_1 = __webpack_require__(366);
 	var MapData = (function () {
 	    function MapData(options, placeData) {
@@ -64248,7 +64294,7 @@
 
 
 /***/ },
-/* 375 */
+/* 376 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -64261,8 +64307,8 @@
 	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 	};
 	var index_1 = __webpack_require__(5);
-	var map_data_1 = __webpack_require__(374);
-	var route_data_1 = __webpack_require__(376);
+	var map_data_1 = __webpack_require__(375);
+	var route_data_1 = __webpack_require__(377);
 	var button_search_1 = __webpack_require__(362);
 	var NewRoutePage = (function () {
 	    function NewRoutePage(nav, mapData, routeData) {
@@ -64420,7 +64466,7 @@
 	    NewRoutePage.prototype.onPageDidEnter = function () {
 	        this.showMap = true;
 	    };
-	    NewRoutePage.prototype.onPageWillLeave = function () {
+	    NewRoutePage.prototype.onPageWillUnload = function () {
 	        this.showMap = false;
 	    };
 	    NewRoutePage = __decorate([
@@ -64437,7 +64483,7 @@
 
 
 /***/ },
-/* 376 */
+/* 377 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -64452,7 +64498,7 @@
 	var core_1 = __webpack_require__(7);
 	var http_1 = __webpack_require__(145);
 	var user_data_1 = __webpack_require__(365);
-	var place_data_1 = __webpack_require__(371);
+	var place_data_1 = __webpack_require__(372);
 	var options_1 = __webpack_require__(366);
 	var RouteData = (function () {
 	    function RouteData(http, user, place, options) {
@@ -64524,7 +64570,7 @@
 
 
 /***/ },
-/* 377 */
+/* 378 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -64537,8 +64583,8 @@
 	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 	};
 	var index_1 = __webpack_require__(5);
-	var map_data_1 = __webpack_require__(374);
-	var gallery_data_1 = __webpack_require__(378);
+	var map_data_1 = __webpack_require__(375);
+	var gallery_data_1 = __webpack_require__(379);
 	var button_search_1 = __webpack_require__(362);
 	var NewGalleryPage = (function () {
 	    function NewGalleryPage(nav, mapData, galleryData) {
@@ -64729,7 +64775,7 @@
 	    NewGalleryPage.prototype.onPageDidEnter = function () {
 	        this.showMap = true;
 	    };
-	    NewGalleryPage.prototype.onPageWillLeave = function () {
+	    NewGalleryPage.prototype.onPageWillUnload = function () {
 	        this.showMap = false;
 	    };
 	    NewGalleryPage = __decorate([
@@ -64746,7 +64792,7 @@
 
 
 /***/ },
-/* 378 */
+/* 379 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -64761,7 +64807,7 @@
 	var core_1 = __webpack_require__(7);
 	var http_1 = __webpack_require__(145);
 	var user_data_1 = __webpack_require__(365);
-	var place_data_1 = __webpack_require__(371);
+	var place_data_1 = __webpack_require__(372);
 	var options_1 = __webpack_require__(366);
 	var GalleryData = (function () {
 	    function GalleryData(http, user, place, options) {
@@ -64836,7 +64882,7 @@
 
 
 /***/ },
-/* 379 */
+/* 380 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -64849,8 +64895,8 @@
 	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 	};
 	var index_1 = __webpack_require__(5);
-	var map_data_1 = __webpack_require__(374);
-	var place_data_1 = __webpack_require__(371);
+	var map_data_1 = __webpack_require__(375);
+	var place_data_1 = __webpack_require__(372);
 	var shop_data_1 = __webpack_require__(364);
 	var button_search_1 = __webpack_require__(362);
 	var ShowPlacePage = (function () {
@@ -65002,7 +65048,7 @@
 	    ShowPlacePage.prototype.onPageDidEnter = function () {
 	        this.showMap = true;
 	    };
-	    ShowPlacePage.prototype.onPageWillLeave = function () {
+	    ShowPlacePage.prototype.onPageWillUnload = function () {
 	        this.showMap = false;
 	    };
 	    ShowPlacePage = __decorate([
@@ -65019,7 +65065,7 @@
 
 
 /***/ },
-/* 380 */
+/* 381 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -65032,14 +65078,14 @@
 	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 	};
 	var index_1 = __webpack_require__(5);
-	var map_data_1 = __webpack_require__(374);
-	var gallery_data_1 = __webpack_require__(378);
-	var route_data_1 = __webpack_require__(376);
+	var map_data_1 = __webpack_require__(375);
+	var gallery_data_1 = __webpack_require__(379);
+	var route_data_1 = __webpack_require__(377);
 	var shop_data_1 = __webpack_require__(364);
-	var place_data_1 = __webpack_require__(371);
-	var field_categories_1 = __webpack_require__(381);
+	var place_data_1 = __webpack_require__(372);
+	var field_categories_1 = __webpack_require__(382);
 	var button_search_1 = __webpack_require__(362);
-	var photo_upload_1 = __webpack_require__(383);
+	var photo_upload_1 = __webpack_require__(384);
 	var NewShopPage = (function () {
 	    function NewShopPage(nav, mapData, shopData, galleryData, routeData, placeData) {
 	        this.selectedCategories = [];
@@ -65150,6 +65196,7 @@
 	                position: _this.position,
 	                categories: _this.selectedCategories,
 	                obs: _this.obsModel,
+	                description: _this.descriptionModel,
 	                photo: _this.photo,
 	                place: placeId,
 	            };
@@ -65286,7 +65333,7 @@
 	    NewShopPage.prototype.onPageDidEnter = function () {
 	        this.showMap = true;
 	    };
-	    NewShopPage.prototype.onPageWillLeave = function () {
+	    NewShopPage.prototype.onPageWillUnload = function () {
 	        this.showMap = false;
 	    };
 	    NewShopPage = __decorate([
@@ -65303,7 +65350,7 @@
 
 
 /***/ },
-/* 381 */
+/* 382 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -65317,7 +65364,7 @@
 	};
 	var core_1 = __webpack_require__(7);
 	var index_1 = __webpack_require__(5);
-	var category_data_1 = __webpack_require__(382);
+	var category_data_1 = __webpack_require__(383);
 	var FieldCategories = (function () {
 	    function FieldCategories(categoryData) {
 	        this.selectedCategoriesChange = new core_1.EventEmitter();
@@ -65398,7 +65445,7 @@
 
 
 /***/ },
-/* 382 */
+/* 383 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -65452,7 +65499,7 @@
 
 
 /***/ },
-/* 383 */
+/* 384 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -65466,7 +65513,7 @@
 	};
 	var core_1 = __webpack_require__(7);
 	var index_1 = __webpack_require__(5);
-	var ionic_native_1 = __webpack_require__(384);
+	var ionic_native_1 = __webpack_require__(385);
 	var image_data_1 = __webpack_require__(367);
 	var PhotoUpload = (function () {
 	    function PhotoUpload(nav, platform, imageData) {
@@ -65572,120 +65619,120 @@
 
 
 /***/ },
-/* 384 */
+/* 385 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	function __export(m) {
 	    for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
 	}
-	var ng1_1 = __webpack_require__(385);
+	var ng1_1 = __webpack_require__(386);
 	ng1_1.initAngular1();
 	var DEVICE_READY_TIMEOUT = 2000;
-	var actionsheet_1 = __webpack_require__(386);
+	var actionsheet_1 = __webpack_require__(387);
 	exports.ActionSheet = actionsheet_1.ActionSheet;
-	var admob_1 = __webpack_require__(402);
+	var admob_1 = __webpack_require__(403);
 	exports.AdMob = admob_1.AdMob;
-	var appavailability_1 = __webpack_require__(403);
+	var appavailability_1 = __webpack_require__(404);
 	exports.AppAvailability = appavailability_1.AppAvailability;
-	var apprate_1 = __webpack_require__(404);
+	var apprate_1 = __webpack_require__(405);
 	exports.AppRate = apprate_1.AppRate;
-	var appversion_1 = __webpack_require__(405);
+	var appversion_1 = __webpack_require__(406);
 	exports.AppVersion = appversion_1.AppVersion;
-	var badge_1 = __webpack_require__(406);
+	var badge_1 = __webpack_require__(407);
 	exports.Badge = badge_1.Badge;
-	var barcodescanner_1 = __webpack_require__(407);
+	var barcodescanner_1 = __webpack_require__(408);
 	exports.BarcodeScanner = barcodescanner_1.BarcodeScanner;
-	var base64togallery_1 = __webpack_require__(408);
+	var base64togallery_1 = __webpack_require__(409);
 	exports.Base64ToGallery = base64togallery_1.Base64ToGallery;
-	var batterystatus_1 = __webpack_require__(409);
+	var batterystatus_1 = __webpack_require__(410);
 	exports.BatteryStatus = batterystatus_1.BatteryStatus;
-	var ble_1 = __webpack_require__(410);
+	var ble_1 = __webpack_require__(411);
 	exports.BLE = ble_1.BLE;
-	var bluetoothserial_1 = __webpack_require__(411);
+	var bluetoothserial_1 = __webpack_require__(412);
 	exports.BluetoothSerial = bluetoothserial_1.BluetoothSerial;
-	var calendar_1 = __webpack_require__(412);
+	var calendar_1 = __webpack_require__(413);
 	exports.Calendar = calendar_1.Calendar;
-	var camera_1 = __webpack_require__(413);
+	var camera_1 = __webpack_require__(414);
 	exports.Camera = camera_1.Camera;
-	var clipboard_1 = __webpack_require__(414);
+	var clipboard_1 = __webpack_require__(415);
 	exports.Clipboard = clipboard_1.Clipboard;
-	var contacts_1 = __webpack_require__(415);
+	var contacts_1 = __webpack_require__(416);
 	exports.Contacts = contacts_1.Contacts;
-	var datepicker_1 = __webpack_require__(416);
+	var datepicker_1 = __webpack_require__(417);
 	exports.DatePicker = datepicker_1.DatePicker;
-	var dbmeter_1 = __webpack_require__(417);
+	var dbmeter_1 = __webpack_require__(418);
 	exports.DBMeter = dbmeter_1.DBMeter;
-	var device_1 = __webpack_require__(418);
+	var device_1 = __webpack_require__(419);
 	exports.Device = device_1.Device;
-	var deviceaccounts_1 = __webpack_require__(419);
+	var deviceaccounts_1 = __webpack_require__(420);
 	exports.DeviceAccounts = deviceaccounts_1.DeviceAccounts;
-	var devicemotion_1 = __webpack_require__(420);
+	var devicemotion_1 = __webpack_require__(421);
 	exports.DeviceMotion = devicemotion_1.DeviceMotion;
-	var deviceorientation_1 = __webpack_require__(421);
+	var deviceorientation_1 = __webpack_require__(422);
 	exports.DeviceOrientation = deviceorientation_1.DeviceOrientation;
-	var diagnostic_1 = __webpack_require__(422);
+	var diagnostic_1 = __webpack_require__(423);
 	exports.Diagnostic = diagnostic_1.Diagnostic;
-	var dialogs_1 = __webpack_require__(423);
+	var dialogs_1 = __webpack_require__(424);
 	exports.Dialogs = dialogs_1.Dialogs;
-	var emailcomposer_1 = __webpack_require__(424);
+	var emailcomposer_1 = __webpack_require__(425);
 	exports.EmailComposer = emailcomposer_1.EmailComposer;
-	var facebook_1 = __webpack_require__(425);
+	var facebook_1 = __webpack_require__(426);
 	exports.Facebook = facebook_1.Facebook;
-	var file_1 = __webpack_require__(426);
+	var file_1 = __webpack_require__(427);
 	exports.File = file_1.File;
-	var flashlight_1 = __webpack_require__(427);
+	var flashlight_1 = __webpack_require__(428);
 	exports.Flashlight = flashlight_1.Flashlight;
-	var geolocation_1 = __webpack_require__(428);
+	var geolocation_1 = __webpack_require__(429);
 	exports.Geolocation = geolocation_1.Geolocation;
-	var globalization_1 = __webpack_require__(429);
+	var globalization_1 = __webpack_require__(430);
 	exports.Globalization = globalization_1.Globalization;
-	var googlemaps_1 = __webpack_require__(430);
+	var googlemaps_1 = __webpack_require__(431);
 	exports.GoogleMaps = googlemaps_1.GoogleMaps;
-	var googleanalytics_1 = __webpack_require__(431);
+	var googleanalytics_1 = __webpack_require__(432);
 	exports.GoogleAnalytics = googleanalytics_1.GoogleAnalytics;
-	var hotspot_1 = __webpack_require__(432);
+	var hotspot_1 = __webpack_require__(433);
 	exports.Hotspot = hotspot_1.Hotspot;
-	var imagepicker_1 = __webpack_require__(433);
+	var imagepicker_1 = __webpack_require__(434);
 	exports.ImagePicker = imagepicker_1.ImagePicker;
-	var inappbrowser_1 = __webpack_require__(434);
+	var inappbrowser_1 = __webpack_require__(435);
 	exports.InAppBrowser = inappbrowser_1.InAppBrowser;
-	var keyboard_1 = __webpack_require__(435);
+	var keyboard_1 = __webpack_require__(436);
 	exports.Keyboard = keyboard_1.Keyboard;
-	var launchnavigator_1 = __webpack_require__(436);
+	var launchnavigator_1 = __webpack_require__(437);
 	exports.LaunchNavigator = launchnavigator_1.LaunchNavigator;
-	var localnotifications_1 = __webpack_require__(437);
+	var localnotifications_1 = __webpack_require__(438);
 	exports.LocalNotifications = localnotifications_1.LocalNotifications;
-	var media_1 = __webpack_require__(438);
+	var media_1 = __webpack_require__(439);
 	exports.MediaPlugin = media_1.MediaPlugin;
-	var network_1 = __webpack_require__(439);
+	var network_1 = __webpack_require__(440);
 	exports.Network = network_1.Network;
 	exports.Connection = network_1.Connection;
-	var push_1 = __webpack_require__(440);
+	var push_1 = __webpack_require__(441);
 	exports.Push = push_1.Push;
-	var screenshot_1 = __webpack_require__(441);
+	var screenshot_1 = __webpack_require__(442);
 	exports.Screenshot = screenshot_1.Screenshot;
-	var sms_1 = __webpack_require__(442);
+	var sms_1 = __webpack_require__(443);
 	exports.SMS = sms_1.SMS;
-	var socialsharing_1 = __webpack_require__(443);
+	var socialsharing_1 = __webpack_require__(444);
 	exports.SocialSharing = socialsharing_1.SocialSharing;
-	var spinnerdialog_1 = __webpack_require__(444);
+	var spinnerdialog_1 = __webpack_require__(445);
 	exports.SpinnerDialog = spinnerdialog_1.SpinnerDialog;
-	var splashscreen_1 = __webpack_require__(445);
+	var splashscreen_1 = __webpack_require__(446);
 	exports.Splashscreen = splashscreen_1.Splashscreen;
-	var sqlite_1 = __webpack_require__(446);
+	var sqlite_1 = __webpack_require__(447);
 	exports.SQLite = sqlite_1.SQLite;
-	var statusbar_1 = __webpack_require__(447);
+	var statusbar_1 = __webpack_require__(448);
 	exports.StatusBar = statusbar_1.StatusBar;
-	var toast_1 = __webpack_require__(448);
+	var toast_1 = __webpack_require__(449);
 	exports.Toast = toast_1.Toast;
-	var touchid_1 = __webpack_require__(449);
+	var touchid_1 = __webpack_require__(450);
 	exports.TouchID = touchid_1.TouchID;
-	var vibration_1 = __webpack_require__(450);
+	var vibration_1 = __webpack_require__(451);
 	exports.Vibration = vibration_1.Vibration;
-	var webintent_1 = __webpack_require__(451);
+	var webintent_1 = __webpack_require__(452);
 	exports.WebIntent = webintent_1.WebIntent;
-	__export(__webpack_require__(387));
+	__export(__webpack_require__(388));
 	// Window export to use outside of a module loading system
 	window['IonicNative'] = {
 	    ActionSheet: actionsheet_1.ActionSheet,
@@ -65759,7 +65806,7 @@
 	//# sourceMappingURL=index.js.map
 
 /***/ },
-/* 385 */
+/* 386 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -65789,7 +65836,7 @@
 	//# sourceMappingURL=ng1.js.map
 
 /***/ },
-/* 386 */
+/* 387 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -65799,7 +65846,7 @@
 	    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
 	    return c > 3 && r && Object.defineProperty(target, key, r), r;
 	};
-	var plugin_1 = __webpack_require__(387);
+	var plugin_1 = __webpack_require__(388);
 	/**
 	 * @name Action Sheet
 	 * @description
@@ -65869,12 +65916,12 @@
 	//# sourceMappingURL=actionsheet.js.map
 
 /***/ },
-/* 387 */
+/* 388 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
-	var util_1 = __webpack_require__(388);
-	var Observable_1 = __webpack_require__(389);
+	var util_1 = __webpack_require__(389);
+	var Observable_1 = __webpack_require__(390);
 	/**
 	 * @private
 	 * @param pluginRef
@@ -66218,7 +66265,7 @@
 	//# sourceMappingURL=plugin.js.map
 
 /***/ },
-/* 388 */
+/* 389 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -66236,15 +66283,15 @@
 	//# sourceMappingURL=util.js.map
 
 /***/ },
-/* 389 */
+/* 390 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
-	var root_1 = __webpack_require__(390);
-	var SymbolShim_1 = __webpack_require__(391);
-	var toSubscriber_1 = __webpack_require__(392);
-	var tryCatch_1 = __webpack_require__(398);
-	var errorObject_1 = __webpack_require__(399);
+	var root_1 = __webpack_require__(391);
+	var SymbolShim_1 = __webpack_require__(392);
+	var toSubscriber_1 = __webpack_require__(393);
+	var tryCatch_1 = __webpack_require__(399);
+	var errorObject_1 = __webpack_require__(400);
 	/**
 	 * A representation of any set of values over any amount of time. This the most basic building block
 	 * of RxJS.
@@ -66365,7 +66412,7 @@
 	//# sourceMappingURL=Observable.js.map
 
 /***/ },
-/* 390 */
+/* 391 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(module, global) {"use strict";
@@ -66389,11 +66436,11 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(65)(module), (function() { return this; }())))
 
 /***/ },
-/* 391 */
+/* 392 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
-	var root_1 = __webpack_require__(390);
+	var root_1 = __webpack_require__(391);
 	function polyfillSymbol(root) {
 	    var Symbol = ensureSymbol(root);
 	    ensureIterator(Symbol, root);
@@ -66463,12 +66510,12 @@
 	//# sourceMappingURL=SymbolShim.js.map
 
 /***/ },
-/* 392 */
+/* 393 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
-	var Subscriber_1 = __webpack_require__(393);
-	var rxSubscriber_1 = __webpack_require__(400);
+	var Subscriber_1 = __webpack_require__(394);
+	var rxSubscriber_1 = __webpack_require__(401);
 	function toSubscriber(nextOrObserver, error, complete) {
 	    if (nextOrObserver && typeof nextOrObserver === 'object') {
 	        if (nextOrObserver instanceof Subscriber_1.Subscriber) {
@@ -66484,7 +66531,7 @@
 	//# sourceMappingURL=toSubscriber.js.map
 
 /***/ },
-/* 393 */
+/* 394 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -66493,10 +66540,10 @@
 	    function __() { this.constructor = d; }
 	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 	};
-	var isFunction_1 = __webpack_require__(394);
-	var Subscription_1 = __webpack_require__(395);
-	var rxSubscriber_1 = __webpack_require__(400);
-	var Observer_1 = __webpack_require__(401);
+	var isFunction_1 = __webpack_require__(395);
+	var Subscription_1 = __webpack_require__(396);
+	var rxSubscriber_1 = __webpack_require__(401);
+	var Observer_1 = __webpack_require__(402);
 	var Subscriber = (function (_super) {
 	    __extends(Subscriber, _super);
 	    function Subscriber(destinationOrNext, error, complete) {
@@ -66681,7 +66728,7 @@
 	//# sourceMappingURL=Subscriber.js.map
 
 /***/ },
-/* 394 */
+/* 395 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -66692,7 +66739,7 @@
 	//# sourceMappingURL=isFunction.js.map
 
 /***/ },
-/* 395 */
+/* 396 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -66701,11 +66748,11 @@
 	    function __() { this.constructor = d; }
 	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 	};
-	var isArray_1 = __webpack_require__(396);
-	var isObject_1 = __webpack_require__(397);
-	var isFunction_1 = __webpack_require__(394);
-	var tryCatch_1 = __webpack_require__(398);
-	var errorObject_1 = __webpack_require__(399);
+	var isArray_1 = __webpack_require__(397);
+	var isObject_1 = __webpack_require__(398);
+	var isFunction_1 = __webpack_require__(395);
+	var tryCatch_1 = __webpack_require__(399);
+	var errorObject_1 = __webpack_require__(400);
 	var Subscription = (function () {
 	    function Subscription(_unsubscribe) {
 	        this.isUnsubscribed = false;
@@ -66817,7 +66864,7 @@
 	//# sourceMappingURL=Subscription.js.map
 
 /***/ },
-/* 396 */
+/* 397 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -66825,7 +66872,7 @@
 	//# sourceMappingURL=isArray.js.map
 
 /***/ },
-/* 397 */
+/* 398 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -66836,11 +66883,11 @@
 	//# sourceMappingURL=isObject.js.map
 
 /***/ },
-/* 398 */
+/* 399 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
-	var errorObject_1 = __webpack_require__(399);
+	var errorObject_1 = __webpack_require__(400);
 	var tryCatchTarget;
 	function tryCatcher() {
 	    try {
@@ -66860,7 +66907,7 @@
 	//# sourceMappingURL=tryCatch.js.map
 
 /***/ },
-/* 399 */
+/* 400 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -66869,11 +66916,11 @@
 	//# sourceMappingURL=errorObject.js.map
 
 /***/ },
-/* 400 */
+/* 401 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
-	var SymbolShim_1 = __webpack_require__(391);
+	var SymbolShim_1 = __webpack_require__(392);
 	/**
 	 * rxSubscriber symbol is a symbol for retreiving an "Rx safe" Observer from an object
 	 * "Rx safety" can be defined as an object that has all of the traits of an Rx Subscriber,
@@ -66884,7 +66931,7 @@
 	//# sourceMappingURL=rxSubscriber.js.map
 
 /***/ },
-/* 401 */
+/* 402 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -66897,7 +66944,7 @@
 	//# sourceMappingURL=Observer.js.map
 
 /***/ },
-/* 402 */
+/* 403 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -66907,7 +66954,7 @@
 	    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
 	    return c > 3 && r && Object.defineProperty(target, key, r), r;
 	};
-	var plugin_1 = __webpack_require__(387);
+	var plugin_1 = __webpack_require__(388);
 	/**
 	 * @name AdMob
 	 * @description
@@ -67105,7 +67152,7 @@
 	//# sourceMappingURL=admob.js.map
 
 /***/ },
-/* 403 */
+/* 404 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -67115,7 +67162,7 @@
 	    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
 	    return c > 3 && r && Object.defineProperty(target, key, r), r;
 	};
-	var plugin_1 = __webpack_require__(387);
+	var plugin_1 = __webpack_require__(388);
 	/**
 	 * @name App Availability
 	 * @description
@@ -67169,7 +67216,7 @@
 	//# sourceMappingURL=appavailability.js.map
 
 /***/ },
-/* 404 */
+/* 405 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -67179,7 +67226,7 @@
 	    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
 	    return c > 3 && r && Object.defineProperty(target, key, r), r;
 	};
-	var plugin_1 = __webpack_require__(387);
+	var plugin_1 = __webpack_require__(388);
 	/**
 	 * @name App Rate
 	 * @description
@@ -67254,7 +67301,7 @@
 	//# sourceMappingURL=apprate.js.map
 
 /***/ },
-/* 405 */
+/* 406 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -67264,7 +67311,7 @@
 	    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
 	    return c > 3 && r && Object.defineProperty(target, key, r), r;
 	};
-	var plugin_1 = __webpack_require__(387);
+	var plugin_1 = __webpack_require__(388);
 	/**
 	 * @name App Version
 	 * @description
@@ -67332,7 +67379,7 @@
 	//# sourceMappingURL=appversion.js.map
 
 /***/ },
-/* 406 */
+/* 407 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -67342,7 +67389,7 @@
 	    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
 	    return c > 3 && r && Object.defineProperty(target, key, r), r;
 	};
-	var plugin_1 = __webpack_require__(387);
+	var plugin_1 = __webpack_require__(388);
 	/**
 	 * @name Badge
 	 * @description
@@ -67434,7 +67481,7 @@
 	//# sourceMappingURL=badge.js.map
 
 /***/ },
-/* 407 */
+/* 408 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -67444,7 +67491,7 @@
 	    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
 	    return c > 3 && r && Object.defineProperty(target, key, r), r;
 	};
-	var plugin_1 = __webpack_require__(387);
+	var plugin_1 = __webpack_require__(388);
 	/**
 	 * @name Barcode Scanner
 	 * @description
@@ -67489,7 +67536,7 @@
 	//# sourceMappingURL=barcodescanner.js.map
 
 /***/ },
-/* 408 */
+/* 409 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -67499,7 +67546,7 @@
 	    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
 	    return c > 3 && r && Object.defineProperty(target, key, r), r;
 	};
-	var plugin_1 = __webpack_require__(387);
+	var plugin_1 = __webpack_require__(388);
 	/**
 	 * @name Base64 To Gallery
 	 * @description This plugin allows you to save base64 data as a png image into the device
@@ -67542,7 +67589,7 @@
 	//# sourceMappingURL=base64togallery.js.map
 
 /***/ },
-/* 409 */
+/* 410 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -67552,7 +67599,7 @@
 	    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
 	    return c > 3 && r && Object.defineProperty(target, key, r), r;
 	};
-	var plugin_1 = __webpack_require__(387);
+	var plugin_1 = __webpack_require__(388);
 	/**
 	 * @name Battery Status
 	 * @description
@@ -67625,7 +67672,7 @@
 	//# sourceMappingURL=batterystatus.js.map
 
 /***/ },
-/* 410 */
+/* 411 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -67635,7 +67682,7 @@
 	    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
 	    return c > 3 && r && Object.defineProperty(target, key, r), r;
 	};
-	var plugin_1 = __webpack_require__(387);
+	var plugin_1 = __webpack_require__(388);
 	/**
 	 * @name BLE
 	 * @description
@@ -68053,7 +68100,7 @@
 	//# sourceMappingURL=ble.js.map
 
 /***/ },
-/* 411 */
+/* 412 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -68063,7 +68110,7 @@
 	    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
 	    return c > 3 && r && Object.defineProperty(target, key, r), r;
 	};
-	var plugin_1 = __webpack_require__(387);
+	var plugin_1 = __webpack_require__(388);
 	/**
 	 * @name Bluetooth Serial
 	 * @description This plugin enables serial communication over Bluetooth. It was written for communicating between Android or iOS and an Arduino.
@@ -68314,7 +68361,7 @@
 	//# sourceMappingURL=bluetoothserial.js.map
 
 /***/ },
-/* 412 */
+/* 413 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -68324,7 +68371,7 @@
 	    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
 	    return c > 3 && r && Object.defineProperty(target, key, r), r;
 	};
-	var plugin_1 = __webpack_require__(387);
+	var plugin_1 = __webpack_require__(388);
 	/**
 	 * @name Calendar
 	 * @description
@@ -68625,7 +68672,7 @@
 	//# sourceMappingURL=calendar.js.map
 
 /***/ },
-/* 413 */
+/* 414 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -68635,7 +68682,7 @@
 	    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
 	    return c > 3 && r && Object.defineProperty(target, key, r), r;
 	};
-	var plugin_1 = __webpack_require__(387);
+	var plugin_1 = __webpack_require__(388);
 	/**
 	 * @name Camera
 	 * @description
@@ -68757,7 +68804,7 @@
 	//# sourceMappingURL=camera.js.map
 
 /***/ },
-/* 414 */
+/* 415 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -68767,7 +68814,7 @@
 	    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
 	    return c > 3 && r && Object.defineProperty(target, key, r), r;
 	};
-	var plugin_1 = __webpack_require__(387);
+	var plugin_1 = __webpack_require__(388);
 	/**
 	 * @name Clipboard
 	 * @description
@@ -68829,7 +68876,7 @@
 	//# sourceMappingURL=clipboard.js.map
 
 /***/ },
-/* 415 */
+/* 416 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -68839,7 +68886,7 @@
 	    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
 	    return c > 3 && r && Object.defineProperty(target, key, r), r;
 	};
-	var plugin_1 = __webpack_require__(387);
+	var plugin_1 = __webpack_require__(388);
 	/**
 	 * @name Contacts
 	 * @description
@@ -68925,7 +68972,7 @@
 	//# sourceMappingURL=contacts.js.map
 
 /***/ },
-/* 416 */
+/* 417 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -68935,7 +68982,7 @@
 	    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
 	    return c > 3 && r && Object.defineProperty(target, key, r), r;
 	};
-	var plugin_1 = __webpack_require__(387);
+	var plugin_1 = __webpack_require__(388);
 	/**
 	 * @name Date Picker
 	 * @description
@@ -68986,7 +69033,7 @@
 	//# sourceMappingURL=datepicker.js.map
 
 /***/ },
-/* 417 */
+/* 418 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -68996,7 +69043,7 @@
 	    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
 	    return c > 3 && r && Object.defineProperty(target, key, r), r;
 	};
-	var plugin_1 = __webpack_require__(387);
+	var plugin_1 = __webpack_require__(388);
 	/**
 	 * @name DB Meter
 	 * @description This plugin defines a global DBMeter object, which permits to get the decibel values from the microphone.
@@ -69078,7 +69125,7 @@
 	//# sourceMappingURL=dbmeter.js.map
 
 /***/ },
-/* 418 */
+/* 419 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -69088,7 +69135,7 @@
 	    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
 	    return c > 3 && r && Object.defineProperty(target, key, r), r;
 	};
-	var plugin_1 = __webpack_require__(387);
+	var plugin_1 = __webpack_require__(388);
 	/**
 	 * @name Device
 	 * @description
@@ -69132,7 +69179,7 @@
 	//# sourceMappingURL=device.js.map
 
 /***/ },
-/* 419 */
+/* 420 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -69142,7 +69189,7 @@
 	    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
 	    return c > 3 && r && Object.defineProperty(target, key, r), r;
 	};
-	var plugin_1 = __webpack_require__(387);
+	var plugin_1 = __webpack_require__(388);
 	var DeviceAccounts = (function () {
 	    function DeviceAccounts() {
 	    }
@@ -69188,7 +69235,7 @@
 	//# sourceMappingURL=deviceaccounts.js.map
 
 /***/ },
-/* 420 */
+/* 421 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -69198,7 +69245,7 @@
 	    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
 	    return c > 3 && r && Object.defineProperty(target, key, r), r;
 	};
-	var plugin_1 = __webpack_require__(387);
+	var plugin_1 = __webpack_require__(388);
 	/**
 	 * @name Device Motion
 	 * @description
@@ -69278,7 +69325,7 @@
 	//# sourceMappingURL=devicemotion.js.map
 
 /***/ },
-/* 421 */
+/* 422 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -69288,7 +69335,7 @@
 	    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
 	    return c > 3 && r && Object.defineProperty(target, key, r), r;
 	};
-	var plugin_1 = __webpack_require__(387);
+	var plugin_1 = __webpack_require__(388);
 	/**
 	 * @name Device Orientation
 	 * @description
@@ -69354,7 +69401,7 @@
 	//# sourceMappingURL=deviceorientation.js.map
 
 /***/ },
-/* 422 */
+/* 423 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -69364,7 +69411,7 @@
 	    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
 	    return c > 3 && r && Object.defineProperty(target, key, r), r;
 	};
-	var plugin_1 = __webpack_require__(387);
+	var plugin_1 = __webpack_require__(388);
 	var Diagnostic = (function () {
 	    function Diagnostic() {
 	    }
@@ -69569,7 +69616,7 @@
 	//# sourceMappingURL=diagnostic.js.map
 
 /***/ },
-/* 423 */
+/* 424 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -69579,7 +69626,7 @@
 	    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
 	    return c > 3 && r && Object.defineProperty(target, key, r), r;
 	};
-	var plugin_1 = __webpack_require__(387);
+	var plugin_1 = __webpack_require__(388);
 	/**
 	 * @name Dialogs
 	 * @description
@@ -69678,7 +69725,7 @@
 	//# sourceMappingURL=dialogs.js.map
 
 /***/ },
-/* 424 */
+/* 425 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -69688,7 +69735,7 @@
 	    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
 	    return c > 3 && r && Object.defineProperty(target, key, r), r;
 	};
-	var plugin_1 = __webpack_require__(387);
+	var plugin_1 = __webpack_require__(388);
 	/**
 	 * @name Email Composer
 	 * @description
@@ -69779,7 +69826,7 @@
 	//# sourceMappingURL=emailcomposer.js.map
 
 /***/ },
-/* 425 */
+/* 426 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -69789,7 +69836,7 @@
 	    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
 	    return c > 3 && r && Object.defineProperty(target, key, r), r;
 	};
-	var plugin_1 = __webpack_require__(387);
+	var plugin_1 = __webpack_require__(388);
 	/**
 	 * @name Facebook
 	 * @description
@@ -70041,7 +70088,7 @@
 	//# sourceMappingURL=facebook.js.map
 
 /***/ },
-/* 426 */
+/* 427 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -70051,7 +70098,7 @@
 	    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
 	    return c > 3 && r && Object.defineProperty(target, key, r), r;
 	};
-	var plugin_1 = __webpack_require__(387);
+	var plugin_1 = __webpack_require__(388);
 	/**
 	 * @name File
 	 * @description
@@ -70568,7 +70615,7 @@
 	//# sourceMappingURL=file.js.map
 
 /***/ },
-/* 427 */
+/* 428 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -70578,7 +70625,7 @@
 	    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
 	    return c > 3 && r && Object.defineProperty(target, key, r), r;
 	};
-	var plugin_1 = __webpack_require__(387);
+	var plugin_1 = __webpack_require__(388);
 	/**
 	 * @name Flashlight
 	 * @description This plugin allows you to switch the flashlight / torch of the device on and off.
@@ -70651,7 +70698,7 @@
 	//# sourceMappingURL=flashlight.js.map
 
 /***/ },
-/* 428 */
+/* 429 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -70661,7 +70708,7 @@
 	    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
 	    return c > 3 && r && Object.defineProperty(target, key, r), r;
 	};
-	var plugin_1 = __webpack_require__(387);
+	var plugin_1 = __webpack_require__(388);
 	/**
 	 * @name Geolocation
 	 * @description
@@ -70740,7 +70787,7 @@
 	//# sourceMappingURL=geolocation.js.map
 
 /***/ },
-/* 429 */
+/* 430 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -70750,7 +70797,7 @@
 	    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
 	    return c > 3 && r && Object.defineProperty(target, key, r), r;
 	};
-	var plugin_1 = __webpack_require__(387);
+	var plugin_1 = __webpack_require__(388);
 	/**
 	 * @name Globalization
 	 * @description
@@ -70895,7 +70942,7 @@
 	//# sourceMappingURL=globalization.js.map
 
 /***/ },
-/* 430 */
+/* 431 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -70905,8 +70952,8 @@
 	    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
 	    return c > 3 && r && Object.defineProperty(target, key, r), r;
 	};
-	var plugin_1 = __webpack_require__(387);
-	var plugin_2 = __webpack_require__(387);
+	var plugin_1 = __webpack_require__(388);
+	var plugin_2 = __webpack_require__(388);
 	/**
 	 * @name Google Maps
 	 */
@@ -70941,7 +70988,7 @@
 	//# sourceMappingURL=googlemaps.js.map
 
 /***/ },
-/* 431 */
+/* 432 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -70951,7 +70998,7 @@
 	    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
 	    return c > 3 && r && Object.defineProperty(target, key, r), r;
 	};
-	var plugin_1 = __webpack_require__(387);
+	var plugin_1 = __webpack_require__(388);
 	/**
 	 * @name Google Analytics
 	 * @description
@@ -71092,7 +71139,7 @@
 	//# sourceMappingURL=googleanalytics.js.map
 
 /***/ },
-/* 432 */
+/* 433 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -71102,7 +71149,7 @@
 	    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
 	    return c > 3 && r && Object.defineProperty(target, key, r), r;
 	};
-	var plugin_1 = __webpack_require__(387);
+	var plugin_1 = __webpack_require__(388);
 	/**
 	 * @name Hotspot
 	 * @description
@@ -71354,7 +71401,7 @@
 	//# sourceMappingURL=hotspot.js.map
 
 /***/ },
-/* 433 */
+/* 434 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -71364,7 +71411,7 @@
 	    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
 	    return c > 3 && r && Object.defineProperty(target, key, r), r;
 	};
-	var plugin_1 = __webpack_require__(387);
+	var plugin_1 = __webpack_require__(388);
 	/**
 	 * @name Image Picker
 	 * @description
@@ -71415,7 +71462,7 @@
 	//# sourceMappingURL=imagepicker.js.map
 
 /***/ },
-/* 434 */
+/* 435 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -71425,7 +71472,7 @@
 	    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
 	    return c > 3 && r && Object.defineProperty(target, key, r), r;
 	};
-	var plugin_1 = __webpack_require__(387);
+	var plugin_1 = __webpack_require__(388);
 	var InAppBrowser = (function () {
 	    function InAppBrowser() {
 	    }
@@ -71455,7 +71502,7 @@
 	//# sourceMappingURL=inappbrowser.js.map
 
 /***/ },
-/* 435 */
+/* 436 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -71465,7 +71512,7 @@
 	    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
 	    return c > 3 && r && Object.defineProperty(target, key, r), r;
 	};
-	var plugin_1 = __webpack_require__(387);
+	var plugin_1 = __webpack_require__(388);
 	/**
 	 * @name Keyboard
 	 * @description
@@ -71553,7 +71600,7 @@
 	//# sourceMappingURL=keyboard.js.map
 
 /***/ },
-/* 436 */
+/* 437 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -71563,7 +71610,7 @@
 	    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
 	    return c > 3 && r && Object.defineProperty(target, key, r), r;
 	};
-	var plugin_1 = __webpack_require__(387);
+	var plugin_1 = __webpack_require__(388);
 	/**
 	 * @name Launch Navigator
 	 * @description
@@ -71615,7 +71662,7 @@
 	//# sourceMappingURL=launchnavigator.js.map
 
 /***/ },
-/* 437 */
+/* 438 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -71625,7 +71672,7 @@
 	    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
 	    return c > 3 && r && Object.defineProperty(target, key, r), r;
 	};
-	var plugin_1 = __webpack_require__(387);
+	var plugin_1 = __webpack_require__(388);
 	/**
 	 * @name Local Notifications
 	 * @description
@@ -71843,7 +71890,7 @@
 	//# sourceMappingURL=localnotifications.js.map
 
 /***/ },
-/* 438 */
+/* 439 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -71853,7 +71900,7 @@
 	    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
 	    return c > 3 && r && Object.defineProperty(target, key, r), r;
 	};
-	var plugin_1 = __webpack_require__(387);
+	var plugin_1 = __webpack_require__(388);
 	/**
 	 * @name MediaPlugin
 	 * @description
@@ -72042,7 +72089,7 @@
 	//# sourceMappingURL=media.js.map
 
 /***/ },
-/* 439 */
+/* 440 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -72052,7 +72099,7 @@
 	    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
 	    return c > 3 && r && Object.defineProperty(target, key, r), r;
 	};
-	var plugin_1 = __webpack_require__(387);
+	var plugin_1 = __webpack_require__(388);
 	/**
 	 * @name Network
 	 * @description
@@ -72189,7 +72236,7 @@
 	//# sourceMappingURL=network.js.map
 
 /***/ },
-/* 440 */
+/* 441 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -72199,7 +72246,7 @@
 	    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
 	    return c > 3 && r && Object.defineProperty(target, key, r), r;
 	};
-	var plugin_1 = __webpack_require__(387);
+	var plugin_1 = __webpack_require__(388);
 	/**
 	 * @name Push
 	 * @description
@@ -72267,7 +72314,7 @@
 	//# sourceMappingURL=push.js.map
 
 /***/ },
-/* 441 */
+/* 442 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -72277,7 +72324,7 @@
 	    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
 	    return c > 3 && r && Object.defineProperty(target, key, r), r;
 	};
-	var plugin_1 = __webpack_require__(387);
+	var plugin_1 = __webpack_require__(388);
 	var Screenshot = (function () {
 	    function Screenshot() {
 	    }
@@ -72323,7 +72370,7 @@
 	//# sourceMappingURL=screenshot.js.map
 
 /***/ },
-/* 442 */
+/* 443 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -72333,7 +72380,7 @@
 	    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
 	    return c > 3 && r && Object.defineProperty(target, key, r), r;
 	};
-	var plugin_1 = __webpack_require__(387);
+	var plugin_1 = __webpack_require__(388);
 	/**
 	 * @name SMS
 	 * @description
@@ -72379,7 +72426,7 @@
 	//# sourceMappingURL=sms.js.map
 
 /***/ },
-/* 443 */
+/* 444 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -72389,7 +72436,7 @@
 	    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
 	    return c > 3 && r && Object.defineProperty(target, key, r), r;
 	};
-	var plugin_1 = __webpack_require__(387);
+	var plugin_1 = __webpack_require__(388);
 	/**
 	 * @name Social Sharing
 	 * @description
@@ -72542,7 +72589,7 @@
 	//# sourceMappingURL=socialsharing.js.map
 
 /***/ },
-/* 444 */
+/* 445 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -72552,7 +72599,7 @@
 	    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
 	    return c > 3 && r && Object.defineProperty(target, key, r), r;
 	};
-	var plugin_1 = __webpack_require__(387);
+	var plugin_1 = __webpack_require__(388);
 	/**
 	 * @name Spinner Dialog
 	 * @description
@@ -72606,7 +72653,7 @@
 	//# sourceMappingURL=spinnerdialog.js.map
 
 /***/ },
-/* 445 */
+/* 446 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -72616,7 +72663,7 @@
 	    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
 	    return c > 3 && r && Object.defineProperty(target, key, r), r;
 	};
-	var plugin_1 = __webpack_require__(387);
+	var plugin_1 = __webpack_require__(388);
 	/**
 	 * @name Splashscreen
 	 * @description This plugin displays and hides a splash screen during application launch. The methods below allows showing and hiding the splashscreen after the app has loaded.
@@ -72665,7 +72712,7 @@
 	//# sourceMappingURL=splashscreen.js.map
 
 /***/ },
-/* 446 */
+/* 447 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -72675,7 +72722,7 @@
 	    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
 	    return c > 3 && r && Object.defineProperty(target, key, r), r;
 	};
-	var plugin_1 = __webpack_require__(387);
+	var plugin_1 = __webpack_require__(388);
 	/**
 	 * @name SQLite
 	 */
@@ -72798,7 +72845,7 @@
 	//# sourceMappingURL=sqlite.js.map
 
 /***/ },
-/* 447 */
+/* 448 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -72808,7 +72855,7 @@
 	    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
 	    return c > 3 && r && Object.defineProperty(target, key, r), r;
 	};
-	var plugin_1 = __webpack_require__(387);
+	var plugin_1 = __webpack_require__(388);
 	/**
 	 * @name Status Bar
 	 * @description
@@ -72957,7 +73004,7 @@
 	//# sourceMappingURL=statusbar.js.map
 
 /***/ },
-/* 448 */
+/* 449 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -72967,7 +73014,7 @@
 	    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
 	    return c > 3 && r && Object.defineProperty(target, key, r), r;
 	};
-	var plugin_1 = __webpack_require__(387);
+	var plugin_1 = __webpack_require__(388);
 	/**
 	 * @name Toast
 	 * @description
@@ -73111,7 +73158,7 @@
 	//# sourceMappingURL=toast.js.map
 
 /***/ },
-/* 449 */
+/* 450 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -73121,7 +73168,7 @@
 	    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
 	    return c > 3 && r && Object.defineProperty(target, key, r), r;
 	};
-	var plugin_1 = __webpack_require__(387);
+	var plugin_1 = __webpack_require__(388);
 	/**
 	 * @name TouchID
 	 * @description
@@ -73205,7 +73252,7 @@
 	//# sourceMappingURL=touchid.js.map
 
 /***/ },
-/* 450 */
+/* 451 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -73215,7 +73262,7 @@
 	    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
 	    return c > 3 && r && Object.defineProperty(target, key, r), r;
 	};
-	var plugin_1 = __webpack_require__(387);
+	var plugin_1 = __webpack_require__(388);
 	/**
 	 * @name Vibration
 	 * @description Vibrates the device
@@ -73265,7 +73312,7 @@
 	//# sourceMappingURL=vibration.js.map
 
 /***/ },
-/* 451 */
+/* 452 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -73275,7 +73322,7 @@
 	    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
 	    return c > 3 && r && Object.defineProperty(target, key, r), r;
 	};
-	var plugin_1 = __webpack_require__(387);
+	var plugin_1 = __webpack_require__(388);
 	var WebIntent = (function () {
 	    function WebIntent() {
 	    }

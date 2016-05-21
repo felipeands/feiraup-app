@@ -19,7 +19,7 @@
       <img src="{{shop.image}}">
 
       <div class="icon">
-        <button fab fab-right fab-top>
+        <button (click)="onOpenShop(shop)" fab fab-right fab-top>
           <ion-icon name="return-right"></ion-icon>
         </button>
       </div>
@@ -28,7 +28,7 @@
         <ion-card-title>
           {{shop.name}}
         </ion-card-title>
-        <p>Algo sobre a loja</p>
+        <p>{{shop.description}}</p>
       </ion-card-content>
     </ion-card>
   </div>
