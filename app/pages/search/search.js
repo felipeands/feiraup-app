@@ -28,23 +28,19 @@ export class SearchPage {
   constructor(nav, shopData) {
     this.nav = nav;
     this.shopData = shopData;
-
-    this.shops = [
-      {
-        id: 1,
-        name: 'teste',
-        description: 'alguma descrição',
-        image: 'http://ionicframework.com/dist/preview-app/www/img/badu-live.png'
-      }
-    ];
+    this.shops = [];
   }
 
   onGetShops(searchBar) {
     if (searchBar.value && searchBar.value != ""){
-      this.shopData.searchShop(searchBar.value).then((data) => {
-        this.shops = data.shops;
-      });
+      this.search(searchBar.value);
     }
+  }
+
+  search(query) {
+    this.shopData.searchShop(query).then((data) => {
+      this.shops = data.shops;
+    });
   }
 
   onOpenShop(shop) {
