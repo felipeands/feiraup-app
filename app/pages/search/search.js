@@ -44,8 +44,6 @@ export class SearchPage {
   }
 
   onOpenShop(shop) {
-    this.nav.push(ShowShopPage, {
-      id: shop.id
-    });
+    this.nav.push(ShowShopPage, {shop: shop});
   }
 }

@@ -12,16 +12,14 @@ export class ShowShopPage {
 
   constructor(nav, navParams, shopData) {
     this.nav = nav;
-    this.id = navParams.get('id');
     this.shopData = shopData;
-    this.shop = null;
+    this.shop = navParams.get('shop');
     this.loadShop();
   }
 
   loadShop() {
-    this.shopData.loadShop(this.id).then((data) => {
+    this.shopData.loadShop(this.shop.id).then((data) => {
       this.shop = data.shop;
-      console.log(this.shop);
     });
   }
 }

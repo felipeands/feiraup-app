@@ -63244,14 +63244,7 @@
 	    function SearchPage(nav, shopData) {
 	        this.nav = nav;
 	        this.shopData = shopData;
-	        this.shops = [
-	            {
-	                id: 1,
-	                name: 'teste',
-	                description: 'alguma descrição',
-	                image: 'http://ionicframework.com/dist/preview-app/www/img/badu-live.png'
-	            }
-	        ];
+	        this.shops = [];
 	    }
 	    Object.defineProperty(SearchPage, "parameters", {
 	        get: function () {
@@ -63261,17 +63254,18 @@
 	        configurable: true
 	    });
 	    SearchPage.prototype.onGetShops = function (searchBar) {
-	        var _this = this;
 	        if (searchBar.value && searchBar.value != "") {
-	            this.shopData.searchShop(searchBar.value).then(function (data) {
-	                _this.shops = data.shops;
-	            });
+	            this.search(searchBar.value);
 	        }
 	    };
-	    SearchPage.prototype.onOpenShop = function (shop) {
-	        this.nav.push(show_shop_1.ShowShopPage, {
-	            shopId: shop.id
+	    SearchPage.prototype.search = function (query) {
+	        var _this = this;
+	        this.shopData.searchShop(query).then(function (data) {
+	            _this.shops = data.shops;
 	        });
+	    };
+	    SearchPage.prototype.onOpenShop = function (shop) {
+	        this.nav.push(show_shop_1.ShowShopPage, shop);
 	    };
 	    SearchPage = __decorate([
 	        index_1.Page({
@@ -63367,17 +63361,30 @@
 	        ];
 	        return new Promise(function (resolve) {
 	            _this.http.get(_this.options.base_url + "/shop/search/?" + data.join('&')).subscribe(function (res) {
-	                var obj = _this.processData(res.json());
+	                var obj = _this.processSearch(res.json());
 	                resolve(obj);
 	            });
 	        });
 	    };
-	    ShopData.prototype.processData = function (obj) {
+	    ShopData.prototype.processSearch = function (obj) {
 	        var _this = this;
 	        obj.shops.map(function (shop) {
 	            shop.image = _this.imageData.getImageUrlPreview(shop.photo);
 	            return shop;
 	        });
+	        return obj;
+	    };
+	    ShopData.prototype.loadShop = function (id) {
+	        var _this = this;
+	        return new Promise(function (resolve) {
+	            _this.http.get(_this.options.base_url + "/shop/" + id).subscribe(function (res) {
+	                var obj = _this.processShop(res.json());
+	                resolve(obj);
+	            });
+	        });
+	    };
+	    ShopData.prototype.processShop = function (obj) {
+	        obj.shop.image = this.imageData.getImageUrlPreview(obj.shop.photo);
 	        return obj;
 	    };
 	    ShopData = __decorate([
@@ -63605,22 +63612,30 @@
 	var index_1 = __webpack_require__(5);
 	var shop_data_1 = __webpack_require__(364);
 	var ShowShopPage = (function () {
-	    function ShowShopPage(nav, shopData) {
+	    function ShowShopPage(nav, navParams, shopData) {
 	        this.nav = nav;
 	        this.shopData = shopData;
+	        this.shop = navParams.get('shop');
+	        this.loadShop();
 	    }
 	    Object.defineProperty(ShowShopPage, "parameters", {
 	        get: function () {
-	            return [[index_1.NavController], [shop_data_1.ShopData]];
+	            return [[index_1.NavController], [index_1.NavParams], [shop_data_1.ShopData]];
 	        },
 	        enumerable: true,
 	        configurable: true
 	    });
+	    ShowShopPage.prototype.loadShop = function () {
+	        this.shopData.loadShop(this.id).then(function (data) {
+	            // this.shop = data.shop;
+	            console.log(data.shop);
+	        });
+	    };
 	    ShowShopPage = __decorate([
 	        index_1.Page({
 	            templateUrl: 'build/pages/shop/show-shop.html'
 	        }), 
-	        __metadata('design:paramtypes', [Object, Object])
+	        __metadata('design:paramtypes', [Object, Object, Object])
 	    ], ShowShopPage);
 	    return ShowShopPage;
 	})();
