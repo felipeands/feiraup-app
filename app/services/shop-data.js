@@ -88,7 +88,8 @@ export class ShopData {
 
   processSearch(obj) {
     obj.shops.map((shop) => {
-      return this.processShop(shop);
+      shop.image = this.imageData.getImageUrlPreview(shop.photo);
+      return shop;
     });
     return obj;
   }
@@ -96,15 +97,15 @@ export class ShopData {
   loadShop(id) {
     return new Promise((resolve) => {
       this.http.get(`${this.options.base_url}/shop/${id}`).subscribe((res) => {
-        let obj = this.processShop(res.json().shop);
+        let obj = this.processShop(res.json());
         resolve(obj);
       })
     })
   }
 
-  processShop(shop) {
-    shop.image = this.imageData.getImageUrlPreview(shop.photo);
-    return shop;
+  processShop(obj) {
+    obj.shop.image = this.imageData.getImageUrlPreview(obj.shop.photo);
+    return obj;
   }
 
 }

@@ -21,6 +21,7 @@ export class ShowShopPage {
   loadShop() {
     this.shopData.loadShop(this.id).then((data) => {
       this.shop = data.shop;
+      console.log(this.shop);
     });
   }
 }
