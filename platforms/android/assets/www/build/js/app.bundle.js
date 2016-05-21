@@ -3186,22 +3186,22 @@
 	};
 	var index_1 = __webpack_require__(5);
 	var random_1 = __webpack_require__(361);
-	var cart_1 = __webpack_require__(369);
-	var location_1 = __webpack_require__(370);
-	var login_1 = __webpack_require__(373);
-	var new_place_1 = __webpack_require__(374);
-	var new_route_1 = __webpack_require__(376);
-	var new_gallery_1 = __webpack_require__(378);
-	var show_place_1 = __webpack_require__(380);
-	var new_shop_1 = __webpack_require__(381);
+	var cart_1 = __webpack_require__(371);
+	var location_1 = __webpack_require__(372);
+	var login_1 = __webpack_require__(375);
+	var new_place_1 = __webpack_require__(376);
+	var new_route_1 = __webpack_require__(378);
+	var new_gallery_1 = __webpack_require__(380);
+	var show_place_1 = __webpack_require__(382);
+	var new_shop_1 = __webpack_require__(383);
 	var user_data_1 = __webpack_require__(365);
-	var city_data_1 = __webpack_require__(371);
-	var place_data_1 = __webpack_require__(372);
-	var map_data_1 = __webpack_require__(375);
-	var route_data_1 = __webpack_require__(377);
-	var gallery_data_1 = __webpack_require__(379);
+	var city_data_1 = __webpack_require__(373);
+	var place_data_1 = __webpack_require__(374);
+	var map_data_1 = __webpack_require__(377);
+	var route_data_1 = __webpack_require__(379);
+	var gallery_data_1 = __webpack_require__(381);
 	var shop_data_1 = __webpack_require__(364);
-	var category_data_1 = __webpack_require__(383);
+	var category_data_1 = __webpack_require__(370);
 	var image_data_1 = __webpack_require__(367);
 	var options_1 = __webpack_require__(366);
 	var MyApp = (function () {
@@ -63240,11 +63240,13 @@
 	var index_1 = __webpack_require__(5);
 	var shop_data_1 = __webpack_require__(364);
 	var show_shop_1 = __webpack_require__(368);
+	var field_categories_1 = __webpack_require__(369);
 	var SearchPage = (function () {
 	    function SearchPage(nav, shopData) {
 	        this.nav = nav;
 	        this.shopData = shopData;
 	        this.shops = [];
+	        this.isAdvancedSearch = false;
 	    }
 	    Object.defineProperty(SearchPage, "parameters", {
 	        get: function () {
@@ -63265,12 +63267,20 @@
 	        });
 	    };
 	    SearchPage.prototype.onOpenShop = function (shop) {
-	        this.nav.push(show_shop_1.ShowShopPage, shop);
+	        this.nav.push(show_shop_1.ShowShopPage, { shop: shop });
+	    };
+	    SearchPage.prototype.categoriesChange = function (selected) {
+	        this.selectedCategories = selected;
+	        console.log(this.selectedCategories);
+	    };
+	    SearchPage.prototype.onAdvancedSearch = function () {
+	        this.isAdvancedSearch = this.isAdvancedSearch ? false : true;
 	    };
 	    SearchPage = __decorate([
 	        index_1.Page({
 	            templateUrl: 'build/pages/search/search.html',
-	            styles: ["\n  .icon {\n    position: relative;\n    z-index: 10;\n  }\n  [fab-top] {\n    top: -34px;\n  }\n  .results {\n    margin: 20px 0 50px;\n  }\n  "]
+	            styles: ["\n  .icon {\n    position: relative;\n    z-index: 10;\n  }\n  [fab-top] {\n    top: -34px;\n  }\n  .results {\n    margin: 20px 0 50px;\n  }\n  "],
+	            directives: [field_categories_1.FieldCategories]
 	        }), 
 	        __metadata('design:paramtypes', [Object, Object])
 	    ], SearchPage);
@@ -63626,9 +63636,9 @@
 	        configurable: true
 	    });
 	    ShowShopPage.prototype.loadShop = function () {
-	        this.shopData.loadShop(this.id).then(function (data) {
-	            // this.shop = data.shop;
-	            console.log(data.shop);
+	        var _this = this;
+	        this.shopData.loadShop(this.shop.id).then(function (data) {
+	            _this.shop = data.shop;
 	        });
 	    };
 	    ShowShopPage = __decorate([
@@ -63644,6 +63654,155 @@
 
 /***/ },
 /* 369 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+	    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+	    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+	    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+	    return c > 3 && r && Object.defineProperty(target, key, r), r;
+	};
+	var __metadata = (this && this.__metadata) || function (k, v) {
+	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+	};
+	var core_1 = __webpack_require__(7);
+	var index_1 = __webpack_require__(5);
+	var category_data_1 = __webpack_require__(370);
+	var FieldCategories = (function () {
+	    function FieldCategories(categoryData) {
+	        this.selectedCategoriesChange = new core_1.EventEmitter();
+	        this.selectedCategories = [];
+	        this.categoryData = categoryData;
+	        this.categories = [];
+	        this.getCategories();
+	        this.genreOpen = null;
+	        this.groupOpen = null;
+	    }
+	    Object.defineProperty(FieldCategories, "parameters", {
+	        get: function () {
+	            return [[category_data_1.CategoryData]];
+	        },
+	        enumerable: true,
+	        configurable: true
+	    });
+	    FieldCategories.prototype.getCategories = function () {
+	        var _this = this;
+	        this.categoryData.loadCategories().then(function (categories) {
+	            _this.categories = categories;
+	        });
+	    };
+	    FieldCategories.prototype.onClickGenre = function (genre) {
+	        this.genreOpen = this.genreOpen == genre.id ? null : genre.id;
+	    };
+	    FieldCategories.prototype.onClickGroup = function (group) {
+	        this.groupOpen = this.groupOpen == group.id ? null : group.id;
+	    };
+	    FieldCategories.prototype.onChangeCategory = function (event, category) {
+	        if (event.checked) {
+	            this.add(category);
+	        }
+	        else {
+	            this.remove(category);
+	        }
+	        this.selectedCategoriesChange.emit(this.selectedCategories);
+	    };
+	    FieldCategories.prototype.add = function (category) {
+	        if (!this.existsCategoryInSelecteds(category)) {
+	            this.selectedCategories.push(category.id);
+	        }
+	    };
+	    FieldCategories.prototype.remove = function (category) {
+	        if (this.existsCategoryInSelecteds(category)) {
+	            var index = this.selectedCategories.indexOf(category.id);
+	            this.selectedCategories.splice(index, 1);
+	        }
+	    };
+	    FieldCategories.prototype.existsCategoryInSelecteds = function (category) {
+	        return (this.selectedCategories.find(function (i) { return i == category.id; }));
+	    };
+	    FieldCategories.prototype.genreIcon = function (genre) {
+	        return (genre.id == this.genreOpen) ? 'arrow-dropup' : 'arrow-dropdown';
+	    };
+	    FieldCategories.prototype.groupIcon = function (group) {
+	        return (group.id == this.groupOpen) ? 'arrow-dropup' : 'arrow-dropdown';
+	    };
+	    FieldCategories.prototype.getSelecteds = function () {
+	        return this.selectedCategories;
+	    };
+	    __decorate([
+	        core_1.Output(), 
+	        __metadata('design:type', Object)
+	    ], FieldCategories.prototype, "selectedCategoriesChange", void 0);
+	    FieldCategories = __decorate([
+	        core_1.Component({
+	            selector: 'field-categories',
+	            template: "\n  <div class=\"categories\">\n    <div>Categorias de produtos</div>\n    <div>\n      <div *ngFor=\"#genre of categories\" class=\"genres\">\n\n        <div class=\"title\" (click)=\"onClickGenre(genre)\" [ngClass]=\"{active: genre.id == genreOpen}\">\n          <ion-icon [name]=\"genreIcon(genre)\"></ion-icon> {{genre.name}}\n        </div>\n        <div [ngClass]=\"{hide: genreOpen != genre.id}\" class=\"groups\">\n          <div *ngFor=\"#group of genre.children\">\n\n            <div class=\"title\" (click)=\"onClickGroup(group)\" [ngClass]=\"{active: group.id == groupOpen}\">\n              <ion-icon [name]=\"groupIcon(group)\"></ion-icon> {{group.name}}\n            </div>\n            <ion-list [ngClass]=\"{hide: groupOpen != group.id}\">\n              <ion-item *ngFor=\"#category of group.children\">\n\n                <ion-label>{{category.name}}</ion-label>\n                <ion-checkbox [checked]=\"existsCategoryInSelecteds(category)\" (change)=\"onChangeCategory($event,category)\"></ion-checkbox>\n\n              </ion-item>\n            </ion-list>\n            <!-- #categories -->\n\n          </div>\n        </div>\n        <!-- #groups -->\n\n      </div>\n    </div>\n    <!-- #genres -->\n\n  </div>\n  ",
+	            styles: ["\n  * {\n    color: #fff;\n  }\n  .title {\n    padding: 10px 0;\n    border-bottom: 1px solid #CCC;\n  }\n  .groups {\n    padding-left: 20px;\n  }\n  .categories {\n    margin-top: 40px;\n  }\n  "],
+	            directives: [index_1.IONIC_DIRECTIVES],
+	        }), 
+	        __metadata('design:paramtypes', [Object])
+	    ], FieldCategories);
+	    return FieldCategories;
+	})();
+	exports.FieldCategories = FieldCategories;
+
+
+/***/ },
+/* 370 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+	    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+	    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+	    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+	    return c > 3 && r && Object.defineProperty(target, key, r), r;
+	};
+	var __metadata = (this && this.__metadata) || function (k, v) {
+	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+	};
+	var core_1 = __webpack_require__(7);
+	var http_1 = __webpack_require__(145);
+	var options_1 = __webpack_require__(366);
+	var CategoryData = (function () {
+	    function CategoryData(http, options) {
+	        this.http = http;
+	        this.options = options;
+	        this.selected = [];
+	        this.categories = null;
+	    }
+	    Object.defineProperty(CategoryData, "parameters", {
+	        get: function () {
+	            return [[http_1.Http], [options_1.Options]];
+	        },
+	        enumerable: true,
+	        configurable: true
+	    });
+	    CategoryData.prototype.loadCategories = function () {
+	        var _this = this;
+	        if (this.categories) {
+	            return Promise.resolve(this.categories);
+	        }
+	        return new Promise(function (resolve) {
+	            _this.http.get(_this.options.base_url + "/category/list").subscribe(function (res) {
+	                _this.categories = _this.processData(res.json());
+	                resolve(_this.categories);
+	            });
+	        });
+	    };
+	    CategoryData.prototype.processData = function (data) {
+	        return data.data;
+	    };
+	    CategoryData = __decorate([
+	        core_1.Injectable(), 
+	        __metadata('design:paramtypes', [Object, Object])
+	    ], CategoryData);
+	    return CategoryData;
+	})();
+	exports.CategoryData = CategoryData;
+
+
+/***/ },
+/* 371 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -63680,7 +63839,7 @@
 
 
 /***/ },
-/* 370 */
+/* 372 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -63693,8 +63852,8 @@
 	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 	};
 	var index_1 = __webpack_require__(5);
-	var city_data_1 = __webpack_require__(371);
-	var place_data_1 = __webpack_require__(372);
+	var city_data_1 = __webpack_require__(373);
+	var place_data_1 = __webpack_require__(374);
 	var button_search_1 = __webpack_require__(362);
 	var LocationPage = (function () {
 	    function LocationPage(nav, cityData, placeData) {
@@ -63782,7 +63941,7 @@
 
 
 /***/ },
-/* 371 */
+/* 373 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -63854,7 +64013,7 @@
 
 
 /***/ },
-/* 372 */
+/* 374 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -63870,7 +64029,7 @@
 	var index_1 = __webpack_require__(5);
 	var http_1 = __webpack_require__(145);
 	var user_data_1 = __webpack_require__(365);
-	var city_data_1 = __webpack_require__(371);
+	var city_data_1 = __webpack_require__(373);
 	var options_1 = __webpack_require__(366);
 	var PlaceData = (function () {
 	    function PlaceData(http, user, city, options) {
@@ -63972,7 +64131,7 @@
 
 
 /***/ },
-/* 373 */
+/* 375 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -64054,7 +64213,7 @@
 
 
 /***/ },
-/* 374 */
+/* 376 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -64067,8 +64226,8 @@
 	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 	};
 	var index_1 = __webpack_require__(5);
-	var map_data_1 = __webpack_require__(375);
-	var place_data_1 = __webpack_require__(372);
+	var map_data_1 = __webpack_require__(377);
+	var place_data_1 = __webpack_require__(374);
 	var button_search_1 = __webpack_require__(362);
 	var NewPlacePage = (function () {
 	    function NewPlacePage(nav, mapData, placeData) {
@@ -64227,7 +64386,7 @@
 
 
 /***/ },
-/* 375 */
+/* 377 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -64240,7 +64399,7 @@
 	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 	};
 	var core_1 = __webpack_require__(7);
-	var place_data_1 = __webpack_require__(372);
+	var place_data_1 = __webpack_require__(374);
 	var options_1 = __webpack_require__(366);
 	var MapData = (function () {
 	    function MapData(options, placeData) {
@@ -64309,7 +64468,7 @@
 
 
 /***/ },
-/* 376 */
+/* 378 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -64322,8 +64481,8 @@
 	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 	};
 	var index_1 = __webpack_require__(5);
-	var map_data_1 = __webpack_require__(375);
-	var route_data_1 = __webpack_require__(377);
+	var map_data_1 = __webpack_require__(377);
+	var route_data_1 = __webpack_require__(379);
 	var button_search_1 = __webpack_require__(362);
 	var NewRoutePage = (function () {
 	    function NewRoutePage(nav, mapData, routeData) {
@@ -64498,7 +64657,7 @@
 
 
 /***/ },
-/* 377 */
+/* 379 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -64513,7 +64672,7 @@
 	var core_1 = __webpack_require__(7);
 	var http_1 = __webpack_require__(145);
 	var user_data_1 = __webpack_require__(365);
-	var place_data_1 = __webpack_require__(372);
+	var place_data_1 = __webpack_require__(374);
 	var options_1 = __webpack_require__(366);
 	var RouteData = (function () {
 	    function RouteData(http, user, place, options) {
@@ -64585,7 +64744,7 @@
 
 
 /***/ },
-/* 378 */
+/* 380 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -64598,8 +64757,8 @@
 	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 	};
 	var index_1 = __webpack_require__(5);
-	var map_data_1 = __webpack_require__(375);
-	var gallery_data_1 = __webpack_require__(379);
+	var map_data_1 = __webpack_require__(377);
+	var gallery_data_1 = __webpack_require__(381);
 	var button_search_1 = __webpack_require__(362);
 	var NewGalleryPage = (function () {
 	    function NewGalleryPage(nav, mapData, galleryData) {
@@ -64807,7 +64966,7 @@
 
 
 /***/ },
-/* 379 */
+/* 381 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -64822,7 +64981,7 @@
 	var core_1 = __webpack_require__(7);
 	var http_1 = __webpack_require__(145);
 	var user_data_1 = __webpack_require__(365);
-	var place_data_1 = __webpack_require__(372);
+	var place_data_1 = __webpack_require__(374);
 	var options_1 = __webpack_require__(366);
 	var GalleryData = (function () {
 	    function GalleryData(http, user, place, options) {
@@ -64897,7 +65056,7 @@
 
 
 /***/ },
-/* 380 */
+/* 382 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -64910,8 +65069,8 @@
 	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 	};
 	var index_1 = __webpack_require__(5);
-	var map_data_1 = __webpack_require__(375);
-	var place_data_1 = __webpack_require__(372);
+	var map_data_1 = __webpack_require__(377);
+	var place_data_1 = __webpack_require__(374);
 	var shop_data_1 = __webpack_require__(364);
 	var button_search_1 = __webpack_require__(362);
 	var ShowPlacePage = (function () {
@@ -65080,7 +65239,7 @@
 
 
 /***/ },
-/* 381 */
+/* 383 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -65093,12 +65252,12 @@
 	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 	};
 	var index_1 = __webpack_require__(5);
-	var map_data_1 = __webpack_require__(375);
-	var gallery_data_1 = __webpack_require__(379);
-	var route_data_1 = __webpack_require__(377);
+	var map_data_1 = __webpack_require__(377);
+	var gallery_data_1 = __webpack_require__(381);
+	var route_data_1 = __webpack_require__(379);
 	var shop_data_1 = __webpack_require__(364);
-	var place_data_1 = __webpack_require__(372);
-	var field_categories_1 = __webpack_require__(382);
+	var place_data_1 = __webpack_require__(374);
+	var field_categories_1 = __webpack_require__(369);
 	var button_search_1 = __webpack_require__(362);
 	var photo_upload_1 = __webpack_require__(384);
 	var NewShopPage = (function () {
@@ -65362,155 +65521,6 @@
 	    return NewShopPage;
 	})();
 	exports.NewShopPage = NewShopPage;
-
-
-/***/ },
-/* 382 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-	    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-	    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-	    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-	    return c > 3 && r && Object.defineProperty(target, key, r), r;
-	};
-	var __metadata = (this && this.__metadata) || function (k, v) {
-	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-	};
-	var core_1 = __webpack_require__(7);
-	var index_1 = __webpack_require__(5);
-	var category_data_1 = __webpack_require__(383);
-	var FieldCategories = (function () {
-	    function FieldCategories(categoryData) {
-	        this.selectedCategoriesChange = new core_1.EventEmitter();
-	        this.selectedCategories = [];
-	        this.categoryData = categoryData;
-	        this.categories = [];
-	        this.getCategories();
-	        this.genreOpen = null;
-	        this.groupOpen = null;
-	    }
-	    Object.defineProperty(FieldCategories, "parameters", {
-	        get: function () {
-	            return [[category_data_1.CategoryData]];
-	        },
-	        enumerable: true,
-	        configurable: true
-	    });
-	    FieldCategories.prototype.getCategories = function () {
-	        var _this = this;
-	        this.categoryData.loadCategories().then(function (categories) {
-	            _this.categories = categories;
-	        });
-	    };
-	    FieldCategories.prototype.onClickGenre = function (genre) {
-	        this.genreOpen = this.genreOpen == genre.id ? null : genre.id;
-	    };
-	    FieldCategories.prototype.onClickGroup = function (group) {
-	        this.groupOpen = this.groupOpen == group.id ? null : group.id;
-	    };
-	    FieldCategories.prototype.onChangeCategory = function (event, category) {
-	        if (event.checked) {
-	            this.add(category);
-	        }
-	        else {
-	            this.remove(category);
-	        }
-	        this.selectedCategoriesChange.emit(this.selectedCategories);
-	    };
-	    FieldCategories.prototype.add = function (category) {
-	        if (!this.existsCategoryInSelecteds(category)) {
-	            this.selectedCategories.push(category.id);
-	        }
-	    };
-	    FieldCategories.prototype.remove = function (category) {
-	        if (this.existsCategoryInSelecteds(category)) {
-	            var index = this.selectedCategories.indexOf(category.id);
-	            this.selectedCategories.splice(index, 1);
-	        }
-	    };
-	    FieldCategories.prototype.existsCategoryInSelecteds = function (category) {
-	        return (this.selectedCategories.find(function (i) { return i == category.id; }));
-	    };
-	    FieldCategories.prototype.genreIcon = function (genre) {
-	        return (genre.id == this.genreOpen) ? 'arrow-dropup' : 'arrow-dropdown';
-	    };
-	    FieldCategories.prototype.groupIcon = function (group) {
-	        return (group.id == this.groupOpen) ? 'arrow-dropup' : 'arrow-dropdown';
-	    };
-	    FieldCategories.prototype.getSelecteds = function () {
-	        return this.selectedCategories;
-	    };
-	    __decorate([
-	        core_1.Output(), 
-	        __metadata('design:type', Object)
-	    ], FieldCategories.prototype, "selectedCategoriesChange", void 0);
-	    FieldCategories = __decorate([
-	        core_1.Component({
-	            selector: 'field-categories',
-	            template: "\n  <div class=\"categories\">\n    <div>Categorias de produtos</div>\n    <div>\n      <div *ngFor=\"#genre of categories\" class=\"genres\">\n\n        <div class=\"title\" (click)=\"onClickGenre(genre)\" [ngClass]=\"{active: genre.id == genreOpen}\">\n          <ion-icon [name]=\"genreIcon(genre)\"></ion-icon> {{genre.name}}\n        </div>\n        <div [ngClass]=\"{hide: genreOpen != genre.id}\" class=\"groups\">\n          <div *ngFor=\"#group of genre.children\">\n\n            <div class=\"title\" (click)=\"onClickGroup(group)\" [ngClass]=\"{active: group.id == groupOpen}\">\n              <ion-icon [name]=\"groupIcon(group)\"></ion-icon> {{group.name}}\n            </div>\n            <ion-list [ngClass]=\"{hide: groupOpen != group.id}\">\n              <ion-item *ngFor=\"#category of group.children\">\n\n                <ion-label>{{category.name}}</ion-label>\n                <ion-checkbox [checked]=\"existsCategoryInSelecteds(category)\" (change)=\"onChangeCategory($event,category)\"></ion-checkbox>\n\n              </ion-item>\n            </ion-list>\n            <!-- #categories -->\n\n          </div>\n        </div>\n        <!-- #groups -->\n\n      </div>\n    </div>\n    <!-- #genres -->\n\n  </div>\n  ",
-	            styles: ["\n  .title {\n    padding: 10px 0;\n    border-bottom: 1px solid #CCC;\n  }\n  .groups {\n    padding-left: 20px;\n  }\n  .categories {\n    margin-top: 40px;\n  }\n  "],
-	            directives: [index_1.IONIC_DIRECTIVES],
-	        }), 
-	        __metadata('design:paramtypes', [Object])
-	    ], FieldCategories);
-	    return FieldCategories;
-	})();
-	exports.FieldCategories = FieldCategories;
-
-
-/***/ },
-/* 383 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-	    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-	    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-	    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-	    return c > 3 && r && Object.defineProperty(target, key, r), r;
-	};
-	var __metadata = (this && this.__metadata) || function (k, v) {
-	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-	};
-	var core_1 = __webpack_require__(7);
-	var http_1 = __webpack_require__(145);
-	var options_1 = __webpack_require__(366);
-	var CategoryData = (function () {
-	    function CategoryData(http, options) {
-	        this.http = http;
-	        this.options = options;
-	        this.selected = [];
-	        this.categories = null;
-	    }
-	    Object.defineProperty(CategoryData, "parameters", {
-	        get: function () {
-	            return [[http_1.Http], [options_1.Options]];
-	        },
-	        enumerable: true,
-	        configurable: true
-	    });
-	    CategoryData.prototype.loadCategories = function () {
-	        var _this = this;
-	        if (this.categories) {
-	            return Promise.resolve(this.categories);
-	        }
-	        return new Promise(function (resolve) {
-	            _this.http.get(_this.options.base_url + "/category/list").subscribe(function (res) {
-	                _this.categories = _this.processData(res.json());
-	                resolve(_this.categories);
-	            });
-	        });
-	    };
-	    CategoryData.prototype.processData = function (data) {
-	        return data.data;
-	    };
-	    CategoryData = __decorate([
-	        core_1.Injectable(), 
-	        __metadata('design:paramtypes', [Object, Object])
-	    ], CategoryData);
-	    return CategoryData;
-	})();
-	exports.CategoryData = CategoryData;
 
 
 /***/ },

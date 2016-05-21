@@ -40,6 +40,9 @@ import {CategoryData} from '../services/category-data';
   </div>
   `,
   styles: [`
+  * {
+    color: #fff;
+  }
   .title {
     padding: 10px 0;
     border-bottom: 1px solid #CCC;
