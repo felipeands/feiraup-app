@@ -9,8 +9,13 @@
 
   <form>
     <ion-searchbar (input)="onGetShops($event)"></ion-searchbar>
-    <div text-center>
-      <a href="#">Busca avançada</a>
+    <div>
+      <div text-center>
+        <a (click)="onAdvancedSearch()">Busca avançada</a>
+      </div>
+      <div [ngClass]="{hide: !isAdvancedSearch}" padding>
+        <field-categories (selectedCategoriesChange)="categoriesChange($event);"></field-categories>
+      </div>
     </div>
   </form>
 
