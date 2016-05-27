@@ -72,10 +72,11 @@ export class ShopData {
 
   }
 
-  searchShop(query) {
+  searchShop(query, placeId) {
 
     let data = [
-      `q=${query}`
+      `q=${query}`,
+      `place=${placeId}`
     ];
 
     return new Promise((resolve) => {

@@ -1,5 +1,6 @@
 import {Page, NavController} from 'ionic-framework/index';
 import {ShopData} from '../../services/shop-data';
+import {PlaceData} from '../../services/place-data';
 import {ShowShopPage} from '../shop/show-shop';
 import {FieldCategories} from '../../components/field-categories';
 
@@ -24,14 +25,16 @@ export class SearchPage {
   searchQuery;
 
   static get parameters() {
-    return [[NavController],[ShopData]];
+    return [[NavController],[ShopData],[PlaceData]];
   }
 
-  constructor(nav, shopData) {
+  constructor(nav, shopData, placeData) {
     this.nav = nav;
     this.shopData = shopData;
+    this.placeData = placeData;
     this.shops = [];
     this.isAdvancedSearch = false;
+    this.getCurrentPlace();
   }
 
   onGetShops(searchBar) {
@@ -41,7 +44,7 @@ export class SearchPage {
   }
 
   search(query) {
-    this.shopData.searchShop(query).then((data) => {
+    this.shopData.searchShop(query, this.placeId).then((data) => {
       this.shops = data.shops;
     });
   }
@@ -57,5 +60,11 @@ export class SearchPage {
 
   onAdvancedSearch() {
     this.isAdvancedSearch = this.isAdvancedSearch ? false : true;
+  }
+
+  getCurrentPlace() {
+    this.placeData.getCurrent().then((data) => {
+      this.placeId = data;
+    })
   }
 }
