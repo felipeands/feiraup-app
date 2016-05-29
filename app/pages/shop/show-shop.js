@@ -7,6 +7,10 @@ import {ShopData} from '../../services/shop-data';
     .content {
       background: #fff;
     }
+    .categories {
+      margin-top: 20px;
+      font-weight: 700;
+    }
   `]
 })
 
@@ -17,7 +21,7 @@ export class ShowShopPage {
 
   constructor(nav, navParams, shopData) {
     this.nav = nav;
-    this.categories = [];
+    this.category_names = [];
     this.shopData = shopData;
     this.shop = navParams.get('shop');
     this.loadShop();
@@ -26,7 +30,9 @@ export class ShowShopPage {
   loadShop() {
     this.shopData.loadShop(this.shop.id).then((data) => {
       this.shop = data.shop;
-      this.categories = data.categories;
+      this.category_names = data.categories.map((cat) => {
+        return cat.name;
+      });
     });
   }
 }

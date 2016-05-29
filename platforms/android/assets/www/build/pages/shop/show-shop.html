@@ -6,6 +6,23 @@
 </ion-navbar>
 
 <ion-content class="shop">
-  <img src="{{shop.image}}" alt=""/>
-  hmm
+
+  <div class="content">
+    <img src="{{shop.image}}" alt=""/>
+    <div padding>
+
+      <h1>
+        {{shop.name}}
+      </h1>
+
+      <div class="description">
+        {{shop.description}}
+      </div>
+
+      <div class="categories">
+        {{categories.join(',')}}
+      </div>
+
+    </div>
+  </div>
 </ion-content>

@@ -21,7 +21,7 @@
 
   <div class="results">
     <ion-card *ngFor="#shop of shops">
-      <img src="{{shop.image}}">
+      <img src="{{shop.image}}" (click)="onOpenShop(shop)">
 
       <div class="icon">
         <button (click)="onOpenShop(shop)" fab fab-right fab-top>
