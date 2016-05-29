@@ -21,7 +21,7 @@ export class ShowShopPage {
 
   constructor(nav, navParams, shopData) {
     this.nav = nav;
-    this.category_names = [];
+    this.categoryNames = [];
     this.shopData = shopData;
     this.shop = navParams.get('shop');
     this.loadShop();
@@ -30,7 +30,7 @@ export class ShowShopPage {
   loadShop() {
     this.shopData.loadShop(this.shop.id).then((data) => {
       this.shop = data.shop;
-      this.category_names = data.categories.map((cat) => {
+      this.categoryNames = data.categories.map((cat) => {
         return cat.name;
       });
     });

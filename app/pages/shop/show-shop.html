@@ -19,9 +19,13 @@
         {{shop.description}}
       </div>
 
-      <div class="categories">
-        {{category_names.join(', ')}}
+      <div class="categories" *ngIf="categoryNames">
+        {{categoryNames.join(', ')}}
       </div>
+
+      <address *ngIf="shop.address">
+        {{shop.address}}
+      </address>
 
     </div>
   </div>
