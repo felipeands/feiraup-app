@@ -11,7 +11,7 @@
     <ion-searchbar (input)="onGetShops($event)"></ion-searchbar>
     <div>
       <div text-center>
-        <a (click)="onAdvancedSearch()">Busca simples</a>
+        <a (click)="onAdvancedSearch()">Mais opções</a>
       </div>
       <div *ngIf="isAdvancedSearch" padding>
         <field-categories (selectedCategoriesChange)="categoriesChange($event);"></field-categories>

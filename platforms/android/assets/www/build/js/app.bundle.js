@@ -63547,7 +63547,7 @@
 	var Options = (function () {
 	    function Options() {
 	        this.base_url = 'http://feiraup.herokuapp.com';
-	        this.base_url = 'http://f5dde8bb.ngrok.io';
+	        // this.base_url = 'http://4d27acf4.ngrok.io';
 	        this.gmaps_key = 'AIzaSyDEdVkgms32J_TZad9VJO-XJHWvaQRUDqg';
 	        this.gmaps_timeout = 100000;
 	        this.gmaps_accuracy = true;
@@ -63824,7 +63824,7 @@
 	var ShowShopPage = (function () {
 	    function ShowShopPage(nav, navParams, shopData) {
 	        this.nav = nav;
-	        this.categories = [];
+	        this.categoryNames = [];
 	        this.shopData = shopData;
 	        this.shop = navParams.get('shop');
 	        this.loadShop();
@@ -63840,13 +63840,15 @@
 	        var _this = this;
 	        this.shopData.loadShop(this.shop.id).then(function (data) {
 	            _this.shop = data.shop;
-	            _this.categories = data.categories;
+	            _this.categoryNames = data.categories.map(function (cat) {
+	                return cat.name;
+	            });
 	        });
 	    };
 	    ShowShopPage = __decorate([
 	        index_1.Page({
 	            templateUrl: 'build/pages/shop/show-shop.html',
-	            styles: ["\n    .content {\n      background: #fff;\n    }\n  "]
+	            styles: ["\n    .content {\n      background: #fff;\n    }\n    .categories {\n      margin-top: 20px;\n      font-weight: 700;\n    }\n  "]
 	        }), 
 	        __metadata('design:paramtypes', [Object, Object, Object])
 	    ], ShowShopPage);

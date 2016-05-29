@@ -51,6 +51,7 @@
 		DC6CEE3591554AE2A07D6A3D /* CDVLocalFilesystem.m in Sources */ = {isa = PBXBuildFile; fileRef = C51AF2FC85B94B74B17D11AE /* CDVLocalFilesystem.m */; };
 		0C18262FC56F4C428BB9DA0E /* CDVAssetLibraryFilesystem.m in Sources */ = {isa = PBXBuildFile; fileRef = B1C22A17AB104EB2B4BC5466 /* CDVAssetLibraryFilesystem.m */; };
 		46A735FC79374DD69AC98DA9 /* CDVFileTransfer.m in Sources */ = {isa = PBXBuildFile; fileRef = 79F7AD23EEAA4C8592D45EA9 /* CDVFileTransfer.m */; };
+		30530AE2A8FA46FD8318DAA1 /* CDVStatusBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 0FCFFA8B56F546958BCFBC73 /* CDVStatusBar.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -140,6 +141,8 @@
 		84622EDC145D4E039C7A1B63 /* CDVAssetLibraryFilesystem.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "CDVAssetLibraryFilesystem.h"; path = "cordova-plugin-file/CDVAssetLibraryFilesystem.h"; sourceTree = "<group>"; fileEncoding = 4; };
 		79F7AD23EEAA4C8592D45EA9 /* CDVFileTransfer.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = "CDVFileTransfer.m"; path = "cordova-plugin-file-transfer/CDVFileTransfer.m"; sourceTree = "<group>"; fileEncoding = 4; };
 		52387BA4F46047A784958120 /* CDVFileTransfer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "CDVFileTransfer.h"; path = "cordova-plugin-file-transfer/CDVFileTransfer.h"; sourceTree = "<group>"; fileEncoding = 4; };
+		0FCFFA8B56F546958BCFBC73 /* CDVStatusBar.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = "CDVStatusBar.m"; path = "cordova-plugin-statusbar/CDVStatusBar.m"; sourceTree = "<group>"; fileEncoding = 4; };
+		F01E8F3AAD644287932C2AF3 /* CDVStatusBar.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "CDVStatusBar.h"; path = "cordova-plugin-statusbar/CDVStatusBar.h"; sourceTree = "<group>"; fileEncoding = 4; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -287,6 +290,8 @@
 				84622EDC145D4E039C7A1B63 /* CDVAssetLibraryFilesystem.h */,
 				79F7AD23EEAA4C8592D45EA9 /* CDVFileTransfer.m */,
 				52387BA4F46047A784958120 /* CDVFileTransfer.h */,
+				0FCFFA8B56F546958BCFBC73 /* CDVStatusBar.m */,
+				F01E8F3AAD644287932C2AF3 /* CDVStatusBar.h */,
 			);
 			name = Plugins;
 			path = "FEIRA UP/Plugins";
@@ -497,6 +502,7 @@
 				DC6CEE3591554AE2A07D6A3D /* CDVLocalFilesystem.m in Sources */,
 				0C18262FC56F4C428BB9DA0E /* CDVAssetLibraryFilesystem.m in Sources */,
 				46A735FC79374DD69AC98DA9 /* CDVFileTransfer.m in Sources */,
+				30530AE2A8FA46FD8318DAA1 /* CDVStatusBar.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

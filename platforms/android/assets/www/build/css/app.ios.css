@@ -7750,19 +7750,19 @@ footer {
   bottom: 10px !important; }
 
 ion-content {
-  background: #f0a665;
+  background: #f69667;
   /* Old browsers */
   /* FF3.6-15 */
-  background: -webkit-linear-gradient(-45deg, #f0a665 0%, #f0a665 54%, #f87d86 100%);
+  background: -webkit-linear-gradient(-45deg, #f69667 0%, #f69667 54%, #f36e96 100%);
   /* Chrome10-25,Safari5.1-6 */
-  background: -webkit-linear-gradient(315deg, #f0a665 0%, #f0a665 54%, #f87d86 100%);
-  background: linear-gradient(135deg, #f0a665 0%, #f0a665 54%, #f87d86 100%);
+  background: -webkit-linear-gradient(315deg, #f69667 0%, #f69667 54%, #f36e96 100%);
+  background: linear-gradient(135deg, #f69667 0%, #f69667 54%, #f36e96 100%);
   /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f0a665', endColorstr='#f87d86',GradientType=1 );
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f69667', endColorstr='#f36e96',GradientType=1 );
   /* IE6-9 fallback on horizontal gradient */ }
 
 ion-navbar .toolbar-background {
-  background: #E37B48; }
+  background: #f37335; }
 
 ion-navbar .toolbar-title {
   color: #fff; }

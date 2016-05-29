@@ -72,8 +72,9 @@
   <preference name="BackupWebStorage" value="none"/>
   <preference name="SplashScreen" value="screen"/>
   <preference name="SplashScreenDelay" value="10000"/>
-  <preference name="ShowSplashScreenSpinner" value="true"/>
-  <preference name="FadeSplashScreenDuration" value="600"/>
+  <preference name="ShowSplashScreenSpinner" value="false"/>
+  <preference name="FadeSplashScreenDuration" value="1000"/>
+  <preference name="StatusBarBackgroundColor" value="#E64A20"/>
   <feature name="StatusBar">
     <param name="ios-package" onload="true" value="CDVStatusBar"/>
   </feature>

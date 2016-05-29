@@ -26,6 +26,10 @@
     <feature name="FileTransfer">
         <param name="android-package" value="org.apache.cordova.filetransfer.FileTransfer" />
     </feature>
+    <feature name="StatusBar">
+        <param name="android-package" value="org.apache.cordova.statusbar.StatusBar" />
+        <param name="onload" value="true" />
+    </feature>
     <allow-intent href="market:*" />
     <allow-intent href="*" />
     <icon density="ldpi" src="resources/android/icon/drawable-ldpi-icon.png" />
@@ -48,7 +52,7 @@
     <name>FEIRA UP</name>
     <description>Encontre o que deseja para sua próxima viagem.</description>
     <author email="felipe.andrada@gmail.com" href="http://felipeandrada.com.br/">Felipe A</author>
-    <content original-src="index.html" src="http://192.168.0.21:8100" />
+    <content src="index.html" />
     <access launch-external="yes" origin="*" />
     <allow-navigation href="*" />
     <allow-intent href="http://*/*" />
@@ -64,7 +68,8 @@
     <preference name="BackupWebStorage" value="none" />
     <preference name="SplashScreen" value="screen" />
     <preference name="SplashScreenDelay" value="10000" />
-    <preference name="ShowSplashScreenSpinner" value="true" />
-    <preference name="FadeSplashScreenDuration" value="600" />
+    <preference name="ShowSplashScreenSpinner" value="false" />
+    <preference name="FadeSplashScreenDuration" value="1000" />
+    <preference name="StatusBarBackgroundColor" value="#E64A20" />
     <icon density="xhdpi" src="resources/android/icon/drawable-xhdpi-icon.png" />
 </widget>

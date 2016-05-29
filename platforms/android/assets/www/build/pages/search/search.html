@@ -11,7 +11,7 @@
     <ion-searchbar (input)="onGetShops($event)"></ion-searchbar>
     <div>
       <div text-center>
-        <a (click)="onAdvancedSearch()">Busca simples</a>
+        <a (click)="onAdvancedSearch()">Mais opções</a>
       </div>
       <div *ngIf="isAdvancedSearch" padding>
         <field-categories (selectedCategoriesChange)="categoriesChange($event);"></field-categories>
@@ -21,7 +21,7 @@
 
   <div class="results">
     <ion-card *ngFor="#shop of shops">
-      <img src="{{shop.image}}">
+      <img src="{{shop.image}}" (click)="onOpenShop(shop)">
 
       <div class="icon">
         <button (click)="onOpenShop(shop)" fab fab-right fab-top>

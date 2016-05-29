@@ -75,6 +75,13 @@ module.exports = [
         ]
     },
     {
+        "file": "plugins/cordova-plugin-statusbar/www/statusbar.js",
+        "id": "cordova-plugin-statusbar.statusbar",
+        "clobbers": [
+            "window.StatusBar"
+        ]
+    },
+    {
         "file": "plugins/cordova-plugin-file/www/DirectoryEntry.js",
         "id": "cordova-plugin-file.DirectoryEntry",
         "clobbers": [
@@ -235,6 +242,7 @@ module.exports.metadata =
     "ionic-plugin-keyboard": "2.2.0",
     "cordova-plugin-camera": "2.2.0",
     "cordova-plugin-file-transfer": "1.5.1",
+    "cordova-plugin-statusbar": "2.1.3",
     "cordova-plugin-compat": "1.0.0",
     "cordova-plugin-file": "4.2.0"
 }
